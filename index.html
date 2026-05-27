@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的专属高级主页</title>
+    <title>Rene 的专属主页</title>
     <style>
+        /* 绚丽的高级渐变背景 */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -16,54 +17,99 @@
             padding: 20px;
             box-sizing: border-box;
         }
+        /* 磨砂玻璃质感的个人主页卡片 */
         .card { 
-            background: rgba(255, 255, 255, 0.85); 
+            background: rgba(255, 255, 255, 0.88); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 40px 30px; 
+            padding: 40px 25px; 
             border-radius: 24px; 
             text-align: center; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-            max-width: 380px; 
+            max-width: 360px; 
             width: 100%;
-            transition: transform 0.3s ease;
         }
-        .card:hover { transform: translateY(-5px); }
+        /* 头像精致边框 */
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid white;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-        h1 { color: #2d3748; margin: 10px 0; font-size: 26px; }
-        .bio { color: #718096; font-size: 15px; line-height: 1.6; margin-bottom: 25px; }
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        h1 { 
+            color: #2d3748; 
+            margin: 5px 0 20px 0;
+            font-size: 24px;
+        }
+        /* 三段式胶囊按钮组合空间 */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        /* 通用按钮基础样式 */
         .btn { 
-            display: block; padding: 14px; background: #667eea; color: white; 
-            text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); transition: all 0.2s ease;
+            display: block;
+            padding: 15px; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 14px; 
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
         }
-        .btn:hover { background: #5a6fd6; box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4); }
+        /* 第一个按钮：介绍自己（知性深邃蓝） */
+        .btn-about {
+            background: #4a5568;
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
+        }
+        .btn-about:hover {
+            background: #2d3748;
+            transform: translateY(-2px);
+        }
+        /* 中间第二个按钮：朋友圈动态（高级优雅紫） */
+        .btn-moments {
+            background: #805ad5;
+            box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
+        }
+        .btn-moments:hover {
+            background: #6b46c1;
+            transform: translateY(-2px);
+        }
+        /* 最下方第三个按钮：喜欢的音乐（动感活力红） */
+        .btn-music { 
+            background: #e53e3e; 
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+        }
+        .btn-music:hover { 
+            background: #e53e3e; 
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- 你的专属头像 -->
+        <!-- 你的专属头像（记得检查一下是不是大写的 JPG 名字哦！） -->
         <img src="toto01.JPG" alt="头像" class="avatar">
         
         <h1>Rene 的空间 ✨</h1>
         
-        <p class="bio">📱 100% 独立，完完全全属于我自己。<br>这里是我存放音乐与生活的小宇宙。</p>
-
-        <!-- 🎵 卢广仲《太阳与地球》官方半透明播放卡片 -->
-        <!-- 这个是由网易云官方服务器直接渲染的，绝对不会被浏览器当成垃圾垃圾拦截，点一下就能播！ -->
-<iframe border="0" frameborder="no" marginwidth="0" marginheight="0" width="100%" height="86" src="//music.163.com/outchain/player?type=2&id=36025175&auto=0&height=66" style="margin-bottom: 25px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05);"></iframe>        
+        <!-- 三段式功能传送门 -->
         <div class="btn-group">
-            <a href="about.html" class="btn">👉 去看看“关于我”页面</a>
+            
+            <!-- 1. 第一个：介绍自己 -->
+            <a href="about.html" class="btn btn-about">👤 第一步：关于我（了解 Rene）</a>
+            
+            <!-- 2. 中间：朋友圈之类的（目前先用 # 留空，以后你可以换成你建的新网页） -->
+            <a href="#" class="btn btn-moments">📸 第二步：朋友圈（日常动态碎片）</a>
+            
+            <!-- 3. 最下面：喜欢的音乐（直接精准连接到你的最新网易云歌单！） -->
+            <a href="https://163cn.tv/7SbEBgb" class="btn btn-music" target="_blank">🎵 第三步：Rren-_-喜欢的音乐</a>
+            
         </div>
     </div>
 
