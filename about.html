@@ -25,12 +25,21 @@
             max-width: 400px; 
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
         }
         .header { text-align: center; margin-bottom: 25px; }
+        .avatar {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-bottom: 12px;
+        }
         .title { font-size: 24px; color: #2d3748; margin: 10px 0 5px 0; font-weight: 800; }
         .subtitle { font-size: 14px; color: #9f7aea; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* ✨ 你的标志性个性签名样式 */
         .intro-text {
             color: #4a5568;
             font-size: 15px;
@@ -41,7 +50,7 @@
             font-weight: 500;
         }
 
-        .profile-list { margin-bottom: 25px; }
+        .profile-list { margin-bottom: 25px; text-align: left; }
         .profile-item {
             background: rgba(255, 255, 255, 0.6);
             padding: 12px 15px;
@@ -83,6 +92,8 @@
             cursor: pointer;
             border: none;
             width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
         }
         .social-btn:hover { transform: translateY(-2px); opacity: 0.9; }
         
@@ -101,17 +112,17 @@
 <body>
 
     <div class="container">
+        <img src="toto01.JPG" alt="头像" class="avatar">
+
         <div class="header">
             <div class="subtitle">Personal Files</div>
             <div class="title">Rene 的绝密档案 💾</div>
         </div>
 
-        <!-- ✨ 完美的文字回归：保留你最初最喜欢的那段话 -->
         <p class="intro-text">
             📱 100% 独立，完完全全属于我自己。<br>在这里记录生活，探索更有趣的世界。
         </p>
 
-        <!-- 奇奇怪怪的趣味档案部分 -->
         <div class="profile-list">
             <div class="profile-item">
                 <span class="label">😎 江湖外号</span>
@@ -127,28 +138,18 @@
             </div>
         </div>
 
-        <!-- 找到香港彭于晏的社交雷达 -->
         <div class="social-section">
             <div class="social-title">🌐 偶遇 Rene 的其他地方</div>
             <div class="social-grid">
-                
-                <!-- 抖音直达 -->
                 <a href="https://v.douyin.com/7PCp3ci9wo0/" target="_blank" class="social-btn btn-dy">🎵 戳这里看我的抖音作品</a>
-                
-                <!-- IG直达 -->
                 <a href="https://instagram.com/rr987604" target="_blank" class="social-btn btn-ig">📸 关注我的 Instagram (rr987604)</a>
-                
-                <!-- 微信一键复制 -->
                 <button onclick="copyWeChat()" class="social-btn btn-wx">💬 点击一键复制微信好友</button>
-                
             </div>
         </div>
 
-        <!-- 🏡 返回首页 -->
         <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
 
-    <!-- 负责一键复制微信的小脚本 -->
     <script>
         function copyWeChat() {
             const wxId = '987604';
