@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rene 的朋友圈</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); 
+            min-height: 100vh;
+            margin: 0; 
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container { 
+            max-width: 450px; 
+            width: 100%;
+        }
+        .header {
+            text-align: center;
+            margin: 20px 0 30px 0;
+            color: white;
+        }
+        .title { font-size: 24px; font-weight: 800; }
+        .subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+        /* ✨ 朋友圈纯净卡片 */
+        .moment-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        /* 精准发布日期与时间样式 */
+        .moment-time {
+            font-size: 13px;
+            color: #8a99ad;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 5px;
+        }
+        .moment-content {
+            font-size: 15px;
+            color: #2d3748;
+            line-height: 1.6;
+            white-space: pre-wrap; /* 允许文字换行 */
+        }
+
+        /* 返回主页按钮 */
+        .btn-back { 
+            display: block; padding: 14px; background: #4a5568; color: white; 
+            text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
+            text-align: center; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2); transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn-back:hover { background: #2d3748; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="title">Rene's Moments 📸</div>
+            <div class="subtitle">日常碎片动态记录</div>
+        </div>
+
+        <!-- 📌 朋友圈动态列表：最新发布的放在最上面 -->
+        
+        <!-- 示例动态 2 -->
+        <div class="moment-card">
+            <!-- 这里可以精准修改你的发布日期和具体时间 -->
+            <span class="moment-time">📅 2026年5月27日 22:50</span>
+            <div class="moment-content">
+                这里写你今天想发的朋友圈内容。比如今天天气不错，或者今天去哪里探店了，直接把这段字删掉换成你自己的话就行。
+            </div>
+        </div>
+
+        <!-- 示例动态 1 -->
+        <div class="moment-card">
+            <span class="moment-time">📅 2026年5月20日 14:15</span>
+            <div class="moment-content">
+                这是较早之前的一条朋友圈动态内容。
+            </div>
+        </div>
+
+        <!-- 🏡 返回首页 -->
+        <a href="index.html" class="btn-back">🏡 返回主页</a>
+    </div>
+
+</body>
+</html>
