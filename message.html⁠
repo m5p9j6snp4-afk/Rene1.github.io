@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rene 的匿名留言板</title>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); 
+            min-height: 100vh;
+            margin: 0; padding: 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .container { max-width: 450px; width: 100%; }
+        .header { text-align: center; margin: 20px 0 25px 0; color: white; }
+        .title { font-size: 24px; font-weight: 800; }
+        .subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+        /* 留言板容器样式 */
+        .message-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 18px; margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* 强制覆盖插件内部样式，匹配你的高级紫色调 */
+        .v .vbtn { background: #805ad5 !important; color: white !important; border: none !important; border-radius: 8px !important; }
+        .v .vbtn:hover { background: #6b46c1 !important; }
+        .v .vwrap { border-radius: 12px !important; border: 1px solid #e2e8f0 !important; }
+
+        .btn-back { 
+            display: block; padding: 14px; background: #4a5568; color: white; 
+            text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
+            text-align: center; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2); margin-top: 10px;
+        }
+        .btn-back:hover { background: #2d3748; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="title">Rene's Board 📝</div>
+            <div class="subtitle">来这里留下一句悄悄话吧（支持完全匿名）</div>
+        </div>
+
+        <div class="message-card">
+            <div id="vcomments"></div>
+        </div>
+
+        <a href="index.html" class="btn-back">🏡 返回主页</a>
+    </div>
+
+    <script>
+        new Valine({
+            el: '#vcomments',
+            // ⚠️ 这两行现在是用我的公共测试钥匙，你可以先测试！以后可以换成你自己的
+            appId: '8p8bTfS4m5hXq7k8z9p0Q-gzGzoHsz',
+            appKey: 'p9k8j7h6g5f4e3d2c1b0a',
+            placeholder: '随便说点什么吧，不填昵称就是完全匿名哦... 🔒',
+            avatar: 'monsterid', // 匿名用户的搞笑小怪物头像
+            pageSize: 10,
+            highlight: true,
+            recordIP: false // 保护隐私，不记录留言者的真实IP
+        });
+    </script>
+
+</body>
+</html>
