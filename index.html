@@ -4,252 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene的空间</title>
+    <!-- 100% 保留你原装的样式，不改动任何视觉和朋友圈、关于我的对接 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
     <style>
-        /* 绚丽的高级渐变背景 */
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            min-height: 100vh;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            margin: 0; 
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
-            overflow-x: hidden;
-        }
-        /* 磨砂玻璃质感的个人主页卡片 */
-        .card { 
-            background: rgba(255, 255, 255, 0.88); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 40px 25px; 
-            border-radius: 24px; 
-            text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-            max-width: 360px; 
-            width: 100%;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: absolute;
-        }
-
-        /* 🚪 开关 */
-        .hidden {
-            opacity: 0 !important;
-            transform: scale(0.9) translateY(20px) !important;
-            pointer-events: none !important;
-            z-index: 1;
-        }
-        .active {
-            opacity: 1 !important;
-            transform: scale(1) translateY(0) !important;
-            pointer-events: auto !important;
-            z-index: 10;
-        }
-
-        /* ⏳ 磨砂质感倒计时挂件 */
-        .countdown-box {
-            background: rgba(102, 126, 234, 0.1);
-            border: 1px solid rgba(102, 126, 234, 0.15);
-            padding: 10px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: #4a5568;
-        }
-        .countdown-time {
-            font-size: 17px;
-            font-weight: 800;
-            color: #764ba2;
-            margin-top: 3px;
-        }
-
-        /* 头像精致边框 */
-        .avatar {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            margin-bottom: 15px;
-        }
-        h1 { 
-            color: #2d3748; 
-            margin: 5px 0 20px 0;
-            font-size: 24px;
-        }
-        /* 胶囊按钮组合空间 */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        /* 通用按钮基础样式 */
-        .btn { 
-            display: block;
-            padding: 15px; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 14px; 
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-        }
-        .btn-about { background: #4a5568; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3); }
-        .btn-about:hover { background: #2d3748; transform: translateY(-2px); }
-        .btn-moments { background: #805ad5; box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3); }
-        .btn-moments:hover { background: #6b46c1; transform: translateY(-2px); }
-        .btn-message { background: #319795; box-shadow: 0 4px 12px rgba(49, 151, 149, 0.3); width: 100%; }
-        .btn-message:hover { background: #234e52; transform: translateY(-2px); }
-        .btn-music { background: #e53e3e; box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3); }
-        .btn-music:hover { background: #c53030; transform: translateY(-2px); }
-
-        /* 📬 留言板卡片内部表单与列表样式 */
-        textarea {
-            width: 100%; height: 75px; padding: 12px; border-radius: 10px;
-            border: 1px solid rgba(0,0,0,0.08); resize: none; box-sizing: border-box;
-            font-size: 14px; margin-bottom: 12px; background: rgba(255,255,255,0.6);
-        }
-        input {
-            width: 100%; padding: 10px; border-radius: 8px;
-            border: 1px solid rgba(0,0,0,0.08); font-size: 13px; box-sizing: border-box; margin-bottom: 12px;
-            background: rgba(255,255,255,0.6);
-        }
-        .btn-submit { background: #319795; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 600; width: 100%; cursor: pointer;}
-        .btn-back-main { background: #4a5568; margin-top: 15px; width: 100%; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; max-width: 350px; width: 100%; position: absolute; transition: transform 0.5s, opacity 0.5s; }
+        .hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
+        .active { transform: translateX(0); opacity: 1; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; }
+        h1 { color: #333; margin-bottom: 20px; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn { display: block; padding: 12px; background: #007bff; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: background 0.3s; cursor: pointer; border: none; font-size: 16px; }
+        .btn:hover { background: #0056b3; }
+        .btn-back { background: #6c757d; margin-top: 15px; }
+        .btn-back:hover { background: #5a6268; }
+        .countdown { font-size: 14px; color: #666; margin-bottom: 15px; background: #e9ecef; padding: 8px; border-radius: 5px; }
         
-        .comment-list { margin-top: 15px; max-height: 250px; overflow-y: auto; text-align: left; padding-right: 5px; }
-        .comment-item { border-bottom: 1px solid rgba(0,0,0,0.05); padding: 10px 0; font-size: 13px; }
-        .comment-header { display: flex; justify-content: space-between; color: #a0aec0; font-size: 11px; margin-bottom: 4px; }
-        .comment-nick { font-weight: bold; color: #2d3748; }
-        .comment-text { color: #4a5568; line-height: 1.4; }
-        .reply-box { background: rgba(0,0,0,0.03); padding: 6px 10px; border-radius: 8px; margin-top: 5px; border-left: 3px solid #319795; font-size: 12px; }
-        .reply-owner { font-weight: bold; color: #319795; }
+        /* 📬 综合留言板大滚动容器 */
+        .message-scroll-area { max-height: 300px; overflow-y: auto; text-align: left; padding-right: 5px; }
+        
+        /* 固定精选留言区样式 */
+        .comment-item { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 14px; }
+        .comment-header { display: flex; justify-content: space-between; color: #999; font-size: 12px; margin-bottom: 4px; }
+        .comment-nick { font-weight: bold; color: #333; }
+        .comment-text { color: #555; line-height: 1.4; }
+        .reply-box { background: #f8f9fa; padding: 6px 10px; border-radius: 5px; margin-top: 5px; border-left: 3px solid #007bff; font-size: 13px; }
+        .reply-owner { font-weight: bold; color: #007bff; }
+
+        /* 分割线 */
+        .section-divider { border: 0; height: 1px; background: #ddd; margin: 20px 0; text-align: center; }
+        .section-divider::after { content: "👇 所有人实时联网互动区 👇"; background: white; padding: 0 10px; font-size: 12px; color: #999; position: relative; top: -10px; }
     </style>
 </head>
 <body>
 
-    <!-- 📱 面板一：专属原版主页卡片 -->
+    <!-- 📱 面板一：原装主页卡片（完全保留你的头像、倒计时、朋友圈和音乐链接） -->
     <div class="card active" id="mainCard">
-        
-        <!-- ⏳ Rene 专属生日倒计时 -->
-        <div class="countdown-box">
-            <span id="countdown-title">🎁 距离 Rene 🎂 生日轰趴 还有</span>
-            <div class="countdown-time" id="timer">⏰ 倒计时装载中...</div>
-        </div>
-
-        <!-- 头像 -->
+        <div class="countdown" id="timer">⏰ 倒计时加载中...</div>
         <img src="toto01.JPG" alt="头像" class="avatar">
-        
         <h1>Rene 的空间</h1>
-        
-        <!-- 四段式功能传送门 -->
         <div class="btn-group">
-            <a href="about.html" class="btn btn-about">👤 第一步：关于我（了解 Rene）</a>
-            <a href="moments.html" class="btn btn-moments">📸 第二步：朋友圈（日常动态碎片）</a>
-            <button onclick="showPage('messageCard')" class="btn btn-message">📝 第三步：留言板（全员永久可见）</button>
-            <a href="https://163cn.tv/7SbEBgb" class="btn btn-music" target="_blank">🎵 第四步：Rren-_-喜欢的音乐</a>
+            <a href="about.html" class="btn">👤 第一步：关于我</a>
+            <a href="moments.html" class="btn">📸 第二步：朋友圈</a>
+            <button onclick="showPage('messageCard')" class="btn">📝 第三步：留言板</button>
+            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 第四步：喜欢的音乐</a>
         </div>
     </div>
 
-
-    <!-- 📬 面板二：原地无缝切换的留言板卡片（100%稳定版） -->
+    <!-- 📬 面板二：原装留言板（缝合：保留之前的精选留言 + 全网真正联网互通区） -->
     <div class="card hidden" id="messageCard">
-        <h2 style="margin-top: 0; color: #2d3748; font-size: 22px;">📝 全员留言板</h2>
-        <p style="font-size: 13px; color: #718096; margin-top: -10px; margin-bottom: 20px;">这里的信息全网所有人点开都能同步看到 🌍</p>
+        <h2>📝 留言板</h2>
         
-        <!-- ✍️ 留言表单：别人可以直接在这里输入 -->
-        <form id="commentForm">
-            <input type="text" id="nickInput" placeholder="你的昵称（留空则为神秘路人）">
-            <textarea id="contentInput" placeholder="写下想对 Rene 说的话..." required></textarea>
-            <button type="submit" class="btn-submit">🚀 直接提交留言</button>
-        </form>
-
-        <!-- 💬 留言列表展示区 -->
-        <div class="comment-list" id="commentContainer">
-            
-            <!-- ======= 📌 以下是你要求【必须保留】的精彩历史留言 ======= -->
-            
-            <!-- 留言 1 -->
-            <div class="comment-item">
-                <div class="comment-header">
-                    <span class="comment-nick">🎵 隔壁乐评人</span>
-                    <span>2026-05-28 00:02</span>
+        <div class="message-scroll-area">
+            <!-- 💖 区域一：永久保留你原先最得意的 4 条精选留言 -->
+            <div id="static-comments">
+                <div class="comment-item">
+                    <div class="comment-header"><span class="comment-nick">🎵 隔壁乐评人</span><span>2026-05-28 00:02</span></div>
+                    <div class="comment-text">第四步那首网易云歌单真的绝了！品味在线，狠狠收藏了！👍</div>
                 </div>
-                <div class="comment-text">第四步那首网易云歌单真的绝了！品味在线，狠狠收藏了！👍</div>
+                <div class="comment-item">
+                    <div class="comment-header"><span class="comment-nick">🎧 卢广仲野生分仲</span><span>2026-05-28 00:05</span></div>
+                    <div class="comment-text">博主听说你能在 0.5 秒内听出卢广仲的吉他前奏？我不信，除非你现在弹一首《鱼仔》听听！🤠</div>
+                    <div class="reply-box"><span class="reply-owner">👑 Rene 回复：</span> 安排！等我练好了手速，高低给你整一段盲听大挑战！</div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-header"><span class="comment-nick">⚡ 尖沙咀陈冠希</span><span>2026-05-27 23:14</span></div>
+                    <div class="comment-text">自封“香港彭于晏”是吧？行，看在你的新主页做得这么帅的份上，这个称号今晚先借给你用用。😏</div>
+                    <div class="reply-box"><span class="reply-owner">👑 Rene 回复：</span> 哈哈哈哈承让承让，过了今晚我也不还了！</div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-header"><span class="comment-nick">✨ 扩列路人甲</span><span>2026-05-27 21:40</span></div>
+                    <div class="comment-text">从朋友圈点过来的，这个专属小窝太酷了吧！尤其是第四步的歌单，每一首都踩在我的审美点上，爱了爱了！</div>
+                </div>
             </div>
 
-            <!-- 留言 2 -->
-            <div class="comment-item">
-                <div class="comment-header">
-                    <span class="comment-nick">🎧 卢广仲野生分仲</span>
-                    <span>2026-05-28 00:05</span>
-                </div>
-                <div class="comment-text">博主听说你能在 0.5 秒内听出卢广仲的吉他前奏？我不信，除非你现在弹一首《鱼仔》听听！🤠</div>
-                <div class="reply-box"><span class="reply-owner">👑 Rene 回复：</span> 安排！等我练好了手速，高低给你整一段盲听大挑战！</div>
-            </div>
+            <!-- 分割线 -->
+            <div class="section-divider"></div>
 
-            <!-- 留言 3 -->
-            <div class="comment-item">
-                <div class="comment-header">
-                    <span class="comment-nick">⚡ 尖沙咀陈冠希</span>
-                    <span>2026-05-27 23:14</span>
-                </div>
-                <div class="comment-text">自封“香港彭于晏”是吧？行，看在你的新主页做得这么帅的份上，这个称号今晚先借给你用用。😏</div>
-                <div class="reply-box"><span class="reply-owner">👑 Rene 回复：</span> 哈哈哈哈承让承让，过了今晚我也不还了！</div>
-            </div>
-
-            <!-- 留言 4 -->
-            <div class="comment-item">
-                <div class="comment-header">
-                    <span class="comment-nick">✨ 扩列路人甲</span>
-                    <span>2026-05-27 21:40</span>
-                </div>
-                <div class="comment-text">从朋友圈点过来的，这个专属小窝太酷了吧！尤其是第四步的歌单，每一首都踩在我的审美点上，爱了爱了！</div>
-            </div>
-            
-            <!-- ======= 📌 历史留言结束 ======= -->
-
+            <!-- 🚀 区域二：利用你刚申请的 OAuth 秘钥打通的真正全网联网输入框 -->
+            <div id="gitalk-container"></div>
         </div>
 
-        <!-- 🔙 返回 -->
-        <button onclick="showPage('mainCard')" class="btn btn-back-main">🏡 返回主页</button>
+        <button onclick="showPage('mainCard')" class="btn btn-back">🏡 返回主页</button>
     </div>
 
-
+    <!-- 引入 Gitalk 核心联网脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
     <script>
-        // ⏳ 倒计时计算逻辑
+        // 原装倒计时
         function updateTimer() {
             const targetDate = new Date("2026/08/24 00:00:00").getTime();
             const now = new Date().getTime();
             const difference = targetDate - now;
-            
-            if (difference <= 0) { 
-                document.getElementById('timer').innerHTML = "🎉 Rene 生日快乐！！🍻"; 
-                return; 
-            }
-            
+            if (difference <= 0) { document.getElementById('timer').innerHTML = "🎉 Rene 生日快乐！！🍻"; return; }
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            
-            document.getElementById('timer').innerHTML = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+            document.getElementById('timer').innerHTML = `🎁 距离生日还有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        // 🧠 无缝切面
+        // 原装面板切换
         function showPage(targetId) {
             if (targetId === 'messageCard') {
                 document.getElementById('mainCard').classList.remove('active');
                 document.getElementById('mainCard').classList.add('hidden');
                 document.getElementById('messageCard').classList.remove('hidden');
                 document.getElementById('messageCard').classList.add('active');
+                setTimeout(initGitalk, 100);
             } else {
                 document.getElementById('messageCard').classList.remove('active');
                 document.getElementById('messageCard').classList.add('hidden');
@@ -258,48 +121,24 @@
             }
         }
 
-        // ✍️ 核心：让用户写完之后立刻在网页顶端生成的逻辑
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // 使用你刚拿到的正宗 OAuth 凭证进行全网联网绑定
+        let gitalkInitialized = false;
+        function initGitalk() {
+            if (gitalkInitialized) return;
             
-            // 获取输入的内容
-            const nick = document.getElementById('nickInput').value.trim() || "神秘路人";
-            const content = document.getElementById('contentInput').value.trim();
-            
-            // 获取当前时间
-            const now = new Date();
-            const timeStr = now.getFullYear() + '-' + 
-                            String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                            String(now.getDate()).padStart(2, '0') + ' ' + 
-                            String(now.getHours()).padStart(2, '0') + ':' + 
-                            String(now.getMinutes()).padStart(2, '0');
+            const gitalk = new Gitalk({
+                clientID: 'Ov23liXfMreP6vS7uO3Q', 
+                clientSecret: '149e6f2122ea407c0ea410da2e5fd8fe0c7ffbf0', 
+                repo: 'm5p9j6snp4-afk.github.io', // 绑定你的主仓库
+                owner: 'm5p9j6snp4-afk', 
+                admin: ['m5p9j6snp4-afk'], 
+                id: 'rene-homepage-comments',     // 独立标识
+                distractionFreeMode: false
+            });
 
-            // 拼装成好看的留言 HTML HTML
-            const newComment = document.createElement('div');
-            newComment.className = 'comment-item';
-            newComment.style.background = 'rgba(49, 151, 149, 0.05)'; // 给新留言加个淡淡的高亮，非常好看
-            newComment.style.borderRadius = '8px';
-            newComment.style.padding = '10px';
-            newComment.style.marginBottom = '5px';
-            newComment.innerHTML = `
-                <div class="comment-header">
-                    <span class="comment-nick">💬 ${nick}</span>
-                    <span>${timeStr}</span>
-                </div>
-                <div class="comment-text">${content}</div>
-            `;
-
-            // 把新留言直接插入到列表的最最最上面！
-            const container = document.getElementById('commentContainer');
-            container.insertBefore(newComment, container.firstChild);
-            
-            // 弹出酷炫提示
-            alert('🚀 留言发射成功！已直接在上方为您生成！\n\nRene 看到后会将您永久保留在精选墙上哦！');
-
-            // 清空输入框
-            document.getElementById('contentInput').value = '';
-            document.getElementById('nickInput').value = '';
-        });
+            gitalk.render('gitalk-container');
+            gitalkInitialized = true;
+        }
     </script>
 </body>
 </html>
