@@ -25,10 +25,18 @@
             margin: 20px 0 30px 0;
             color: white;
         }
+        .header-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-bottom: 12px;
+        }
         .title { font-size: 24px; font-weight: 800; }
         .subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
 
-        /* ✨ 朋友圈纯净卡片 */
         .moment-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -38,7 +46,6 @@
             margin-bottom: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        /* 精准发布日期与时间样式 */
         .moment-time {
             font-size: 13px;
             color: #8a99ad;
@@ -52,10 +59,9 @@
             font-size: 15px;
             color: #2d3748;
             line-height: 1.6;
-            white-space: pre-wrap; /* 允许文字换行 */
+            white-space: pre-wrap;
         }
 
-        /* 返回主页按钮 */
         .btn-back { 
             display: block; padding: 14px; background: #4a5568; color: white; 
             text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
@@ -69,30 +75,21 @@
 
     <div class="container">
         <div class="header">
+            <img src="toto01.JPG" alt="头像" class="header-avatar">
             <div class="title">Rene's Moments 📸</div>
             <div class="subtitle">日常碎片动态记录</div>
         </div>
-
-        <!-- 📌 朋友圈动态列表：最新发布的放在最上面 -->
         
-        <!-- 示例动态 2 -->
         <div class="moment-card">
-            <!-- 这里可以精准修改你的发布日期和具体时间 -->
             <span class="moment-time">📅 2026年5月27日 23:34</span>
-            <div class="moment-content">
-                晚上好 你好吗
-            </div>
+            <div class="moment-content">晚上好 你好吗</div>
         </div>
 
-        <!-- 示例动态 1 -->
         <div class="moment-card">
             <span class="moment-time">📅 2026年5月20日 14:15</span>
-            <div class="moment-content">
-                这是较早之前的一条朋友圈动态内容。
-            </div>
+            <div class="moment-content">这是较早之前的一条朋友圈动态内容。</div>
         </div>
 
-        <!-- 🏡 返回首页 -->
         <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
 
