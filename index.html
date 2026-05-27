@@ -3,20 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的独立网站Im Rene</title>
-    <img src="toto01.jpg" style="width: 250px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <title>我的专属高级主页</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 80%; }
-        h1 { color: #0071e3; margin-bottom: 10px; }
-        p { color: #1d1d1f; font-size: 16px; }
+        /* 绚丽的渐变背景 + 丝滑的字体 */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin: 0; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* 磨砂玻璃质感的悬浮卡片 */
+        .card { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px 30px; 
+            border-radius: 24px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            max-width: 380px; 
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+        /* 鼠标放上去卡片会微微浮起 */
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        /* 头像动感特效：呼吸感微阴影 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+        }
+        h1 { 
+            color: #2d3748; 
+            margin: 10px 0;
+            font-size: 26px;
+        }
+        .bio { 
+            color: #718096; 
+            font-size: 15px; 
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        /* 高级感胶囊按钮组合 */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn { 
+            display: block;
+            padding: 14px; 
+            background: #667eea; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn:hover { 
+            background: #5a6fd6; 
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4);
+        }
+        /* 第二个按钮换个知性百搭色 */
+        .btn-secondary {
+            background: #2d3748;
+            box-shadow: 0 4px 12px rgba(45, 55, 72, 0.2);
+        }
+        .btn-secondary:hover {
+            background: #1a202c;
+            box-shadow: 0 6px 18px rgba(45, 55, 72, 0.3);
+        }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <h1>👋 你好呀！</h1>
-        <p>这是我完全用 iPhone 手机做出来的网站！</p>
-<p>100% 独立，完完全全属于我自己。</p><p><a href="about.html" style="color: #0071e3; text-decoration: none; font-weight: bold;">👉 去看看“关于我”页面</a></p>
+        <!-- 1. 你的专属头像（记得把名字改成你上传的那个JPG！） -->
+        <img src="这里改成你JPG图片的名字.jpg" alt="头像" class="avatar">
+        
+        <!-- 2. 你的名字/昵称 -->
+        <h1>Rene 的空间 ✨</h1>
+        
+        <!-- 3. 你的个性签名 -->
+        <p class="bio">📱 100% 独立，完完全全属于我自己。<br>在这里记录生活，探索更有趣的世界。</p>
+        
+        <!-- 4. 互动按钮传送门 -->
+        <div class="btn-group">
+            <a href="about.html" class="btn">👉 去看看“关于我”页面</a>
+            <!-- 预留的第二个按钮，以后可以链接到你的小红书、微博、或者音乐歌单 -->
+            <a href="#" class="btn btn-secondary">🎵 听听我喜欢的音乐</a>
+        </div>
     </div>
+
 </body>
 </html>
