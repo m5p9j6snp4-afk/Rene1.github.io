@@ -16,6 +16,8 @@
             margin: 0; 
             padding: 20px;
             box-sizing: border-box;
+            position: relative;
+            overflow-x: hidden;
         }
         /* 磨砂玻璃质感的个人主页卡片 */
         .card { 
@@ -28,7 +30,41 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
             max-width: 360px; 
             width: 100%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
         }
+
+        /* 🚪 开关 */
+        .hidden {
+            opacity: 0 !important;
+            transform: scale(0.9) translateY(20px) !important;
+            pointer-events: none !important;
+            z-index: 1;
+        }
+        .active {
+            opacity: 1 !important;
+            transform: scale(1) translateY(0) !important;
+            pointer-events: auto !important;
+            z-index: 10;
+        }
+
+        /* ⏳ 磨砂质感倒计时挂件 */
+        .countdown-box {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.15);
+            padding: 10px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+        .countdown-time {
+            font-size: 17px;
+            font-weight: 800;
+            color: #764ba2;
+            margin-top: 3px;
+        }
+
         /* 头像精致边框 */
         .avatar {
             width: 110px;
@@ -60,6 +96,9 @@
             font-weight: 600;
             font-size: 15px;
             transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
         }
         /* 第一个按钮：介绍自己（知性深邃灰） */
         .btn-about {
@@ -79,10 +118,11 @@
             background: #6b46c1;
             transform: translateY(-2px);
         }
-        /* ✨ 新增：第三个按钮：匿名留言板（高级时尚青） */
+        /* 第三个按钮：匿名留言板（高级时尚青） */
         .btn-message {
             background: #319795;
             box-shadow: 0 4px 12px rgba(49, 151, 149, 0.3);
+            width: 100%;
         }
         .btn-message:hover {
             background: #234e52;
@@ -97,33 +137,154 @@
             background: #c53030; 
             transform: translateY(-2px);
         }
+
+        /* 📬 留言板卡片内部表单与列表样式 */
+        textarea {
+            width: 100%; height: 75px; padding: 12px; border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.08); resize: none; box-sizing: border-box;
+            font-size: 14px; margin-bottom: 12px; background: rgba(255,255,255,0.6);
+        }
+        input {
+            width: 100%; padding: 10px; border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.08); font-size: 13px; box-sizing: border-box; margin-bottom: 12px;
+            background: rgba(255,255,255,0.6);
+        }
+        .btn-submit { background: #319795; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 600; width: 100%; cursor: pointer;}
+        .btn-back-main { background: #4a5568; margin-top: 15px; width: 100%; }
+        
+        .comment-list { margin-top: 15px; max-height: 220px; overflow-y: auto; text-align: left; }
+        .comment-item { border-bottom: 1px solid rgba(0,0,0,0.05); padding: 10px 0; font-size: 13px; }
+        .comment-header { display: flex; justify-content: space-between; color: #a0aec0; font-size: 11px; margin-bottom: 4px; }
+        .comment-nick { font-weight: bold; color: #2d3748; }
+        .comment-text { color: #4a5568; line-height: 1.4; }
+        .reply-box { background: rgba(0,0,0,0.03); padding: 6px 10px; border-radius: 8px; margin-top: 5px; border-left: 3px solid #319795; font-size: 12px; }
+        .reply-owner { font-weight: bold; color: #319795; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <!-- 你的专属头像（完好保留你的 toto01.JPG） -->
+    <!-- 📱 面板一：专属原版主页卡片 -->
+    <div class="card active" id="mainCard">
+        
+        <!-- ⏳ 盲选更新：根据域名绑定的 Rene 专属生日倒计时 -->
+        <div class="countdown-box">
+            <span id="countdown-title">🎁 距离 Rene 🎂 生日轰趴 还有</span>
+            <div class="countdown-time" id="timer">⏰ 倒计时装载中...</div>
+        </div>
+
+        <!-- 头像 -->
         <img src="toto01.JPG" alt="头像" class="avatar">
         
         <h1>Rene 的空间</h1>
         
         <!-- 四段式功能传送门 -->
         <div class="btn-group">
-            
-            <!-- 1. 第一个：介绍自己 -->
             <a href="about.html" class="btn btn-about">👤 第一步：关于我（了解 Rene）</a>
-            
-            <!-- 2. 中间：朋友圈（已精准连接到你的 moments.html 网页） -->
             <a href="moments.html" class="btn btn-moments">📸 第二步：朋友圈（日常动态碎片）</a>
-            
-            <!-- 3. ✨ 纯粹塞入：匿名留言板（连接到你的 message.html 网页） -->
-            <a href="message.html" class="btn btn-message">📝 第三步：留言板（来吹水或匿名吐槽）</a>
-            
-            <!-- 4. 最下面：喜欢的音乐（精准连接到你的网易云最新歌单） -->
+            <button onclick="showPage('messageCard')" class="btn btn-message">📝 第三步：留言板（来吹水或匿名吐槽）</button>
             <a href="https://163cn.tv/7SbEBgb" class="btn btn-music" target="_blank">🎵 第四步：Rren-_-喜欢的音乐</a>
-            
         </div>
     </div>
 
+
+    <!-- 📬 面板二：原地无缝切换的磨砂留言板卡片 -->
+    <div class="card hidden" id="messageCard">
+        <h2 style="margin-top: 0; color: #2d3748; font-size: 22px;">📝 匿名留言板</h2>
+        <p style="font-size: 13px; color: #718096; margin-top: -10px; margin-bottom: 20px;">无需注册，给香港彭于晏留句悄悄话 🔒</p>
+        
+        <form id="commentForm">
+            <input type="text" id="nickInput" placeholder="昵称（留空则为完全匿名）">
+            <textarea id="contentInput" placeholder="想对 Rene 说点什么..." required></textarea>
+            <button type="submit" class="btn-submit">🚀 提交留言</button>
+        </form>
+
+        <div class="comment-list" id="commentContainer">
+            <!-- 📌 盲选更新：预设了三条精选趣味留言 -->
+            <div class="comment-item">
+                <div class="comment-header">
+                    <span class="comment-nick">🎵 隔壁乐评人</span>
+                    <span>2026-05-28 00:02</span>
+                </div>
+                <div class="comment-text">第四步那首网易云歌单真的绝了！品味在线，狠狠收藏了！👍</div>
+            </div>
+
+            <div class="comment-item">
+                <div class="comment-header">
+                    <span class="comment-nick">🏃‍♂️ 尖沙咀陈冠希</span>
+                    <span>2026-05-27 23:45</span>
+                </div>
+                <div class="comment-text">听说有人自封香港彭于晏？我不服，出来单挑卢广仲吉他前奏！🎸</div>
+                <div class="reply-box"><span class="reply-owner">👑 Rene 回复：</span> 哈哈哈哈反驳无效！吉他前奏这块我全网无敌！</div>
+            </div>
+
+            <div class="comment-item">
+                <div class="comment-header">
+                    <span class="comment-nick">🤫 匿名路人</span>
+                    <span>2026-05-27 22:10</span>
+                </div>
+                <div class="comment-text">博主，新域名 rene0824.com 真的太帅了，毛玻璃质感吹爆！</div>
+            </div>
+        </div>
+
+        <!-- 🔙 返回 -->
+        <button onclick="showPage('mainCard')" class="btn btn-back-main">🏡 返回主页</button>
+    </div>
+
+
+    <script>
+        // ⏳ 倒计时核心计算逻辑（目标：2026年8月24日）
+        function updateTimer() {
+            const targetDate = new Date("2026/08/24 00:00:00").getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+            
+            if (difference <= 0) { 
+                document.getElementById('timer').innerHTML = "🎉 Rene 生日快乐！！🍻"; 
+                return; 
+            }
+            
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            
+            document.getElementById('timer').innerHTML = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+
+        // 🧠 无缝切面
+        function showPage(targetId) {
+            if (targetId === 'messageCard') {
+                document.getElementById('mainCard').classList.remove('active');
+                document.getElementById('mainCard').classList.add('hidden');
+                document.getElementById('messageCard').classList.remove('hidden');
+                document.getElementById('messageCard').classList.add('active');
+            } else {
+                document.getElementById('messageCard').classList.remove('active');
+                document.getElementById('messageCard').classList.add('hidden');
+                document.getElementById('mainCard').classList.remove('hidden');
+                document.getElementById('mainCard').classList.add('active');
+            }
+        }
+
+        // ✍️ 实时添加新留言
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nick = document.getElementById('nickInput').value.trim() || '🤫 匿名路人';
+            const content = document.getElementById('contentInput').value.trim();
+            const now = new Date();
+            const timeStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+            const item = document.createElement('div');
+            item.className = 'comment-item';
+            item.innerHTML = `<div class="comment-header"><span class="comment-nick">${nick}</span><span>${timeStr}</span></div><div class="comment-text">${content}</div>`;
+            const container = document.getElementById('commentContainer');
+            container.insertBefore(item, container.firstChild);
+            
+            // 清空输入框
+            document.getElementById('contentInput').value = '';
+            document.getElementById('nickInput').value = '';
+        });
+    </script>
 </body>
 </html>
