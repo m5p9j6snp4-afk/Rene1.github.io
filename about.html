@@ -20,72 +20,82 @@
             background: rgba(255, 255, 255, 0.9); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 40px 30px; 
+            padding: 35px 25px; 
             border-radius: 24px; 
             max-width: 400px; 
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
-        .header {
+        .header { text-align: center; margin-bottom: 25px; }
+        .title { font-size: 24px; color: #2d3748; margin: 10px 0 5px 0; font-weight: 800; }
+        .subtitle { font-size: 14px; color: #9f7aea; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* ✨ 你的标志性个性签名样式 */
+        .intro-text {
+            color: #4a5568;
+            font-size: 15px;
+            line-height: 1.6;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            padding: 0 10px;
+            font-weight: 500;
         }
-        .title {
-            font-size: 24px;
-            color: #2d3748;
-            margin: 10px 0 5px 0;
-            font-weight: 800;
-        }
-        .subtitle {
-            font-size: 14px;
-            color: #9f7aea;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        /* 奇奇怪怪的档案列表样式 */
-        .profile-list {
-            margin-bottom: 30px;
-        }
+
+        .profile-list { margin-bottom: 25px; }
         .profile-item {
             background: rgba(255, 255, 255, 0.6);
-            padding: 15px;
+            padding: 12px 15px;
             border-radius: 14px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border-left: 5px solid #667eea;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .label {
-            font-size: 12px;
-            color: #a0aec0;
+        .label { font-size: 12px; color: #a0aec0; font-weight: bold; margin-bottom: 4px; display: block; }
+        .value { font-size: 14px; color: #2d3748; font-weight: 600; line-height: 1.4; }
+
+        .social-section {
+            margin-bottom: 30px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 20px;
+        }
+        .social-title {
+            font-size: 13px;
+            color: #718096;
             font-weight: bold;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .value {
-            font-size: 15px;
-            color: #2d3748;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-        /* 底部返回按钮 */
-        .btn-back { 
-            display: block; 
-            padding: 14px; 
-            background: #4a5568; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 12px; 
-            font-weight: 600; 
-            font-size: 15px;
+            margin-bottom: 12px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2);
+        }
+        .social-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
             transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
         }
-        .btn-back:hover { 
-            background: #2d3748; 
-            transform: translateY(-2px);
+        .social-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        
+        .btn-dy { background: #1c1c1e; box-shadow: 0 4px 12px rgba(28,28,30,0.2); }
+        .btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 4px 12px rgba(220,39,67,0.2); }
+        .btn-wx { background: #07c160; box-shadow: 0 4px 12px rgba(7,193,96,0.2); }
+
+        .btn-back { 
+            display: block; padding: 14px; background: #4a5568; color: white; 
+            text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
+            text-align: center; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2); transition: all 0.2s ease;
         }
+        .btn-back:hover { background: #2d3748; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -96,30 +106,59 @@
             <div class="title">Rene 的绝密档案 💾</div>
         </div>
 
+        <!-- ✨ 完美的文字回归：保留你最初最喜欢的那段话 -->
+        <p class="intro-text">
+            📱 100% 独立，完完全全属于我自己。<br>在这里记录生活，探索更有趣的世界。
+        </p>
+
+        <!-- 奇奇怪怪的趣味档案部分 -->
         <div class="profile-list">
             <div class="profile-item">
                 <span class="label">😎 江湖外号</span>
                 <span class="value">香港彭于晏（自封的，但由于长得太帅，目前没人敢反驳）</span>
             </div>
-
             <div class="profile-item">
                 <span class="label">⚡ 特殊超能力</span>
-                <span class="value">能在 0.5 秒内精准识别出哪首是卢广仲的吉他前奏。</span>
+                <span class="value">能在 0.5 秒内精准识别出哪首是卢广仲的吉他前奏。（假的 嘻嘻</span>
             </div>
-
             <div class="profile-item">
                 <span class="label">🧠 每日精神状态</span>
                 <span class="value">一边高喊着“一定要相信自己”，一边在床上赖床半小时。</span>
             </div>
+        </div>
 
-            <div class="profile-item">
-                <span class="label">🌟 终极梦想</span>
-                <span class="value">把这个独立网页做成全网最酷的存在，然后惊艳所有人。</span>
+        <!-- 找到香港彭于晏的社交雷达 -->
+        <div class="social-section">
+            <div class="social-title">🌐 偶遇 Rene 的其他地方</div>
+            <div class="social-grid">
+                
+                <!-- 抖音直达 -->
+                <a href="https://v.douyin.com/7PCp3ci9wo0/" target="_blank" class="social-btn btn-dy">🎵 戳这里看我的抖音作品</a>
+                
+                <!-- IG直达 -->
+                <a href="https://instagram.com/rr987604" target="_blank" class="social-btn btn-ig">📸 关注我的 Instagram (rr987604)</a>
+                
+                <!-- 微信一键复制 -->
+                <button onclick="copyWeChat()" class="social-btn btn-wx">💬 点击一键复制微信好友</button>
+                
             </div>
         </div>
 
+        <!-- 🏡 返回首页 -->
         <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
+
+    <!-- 负责一键复制微信的小脚本 -->
+    <script>
+        function copyWeChat() {
+            const wxId = '987604';
+            navigator.clipboard.writeText(wxId).then(() => {
+                alert('🎉 微信账号 ' + wxId + ' 已成功复制！快去微信添加好友吧~');
+            }).catch(err => {
+                alert('复制失败，请手动添加微信号：' + wxId);
+            });
+        }
+    </script>
 
 </body>
 </html>
