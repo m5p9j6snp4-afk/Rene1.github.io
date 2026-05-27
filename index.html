@@ -44,7 +44,7 @@
             margin: 5px 0 20px 0;
             font-size: 24px;
         }
-        /* 三段式胶囊按钮组合空间 */
+        /* 胶囊按钮组合空间 */
         .btn-group {
             display: flex;
             flex-direction: column;
@@ -70,7 +70,7 @@
             background: #2d3748;
             transform: translateY(-2px);
         }
-        /* 中间第二个按钮：朋友圈动态（高级优雅紫） */
+        /* 第二个按钮：朋友圈动态（高级优雅紫） */
         .btn-moments {
             background: #805ad5;
             box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
@@ -79,7 +79,16 @@
             background: #6b46c1;
             transform: translateY(-2px);
         }
-        /* 最下方第三个按钮：喜欢的音乐（动感活力红） */
+        /* ✨ 新增：第三个按钮：匿名留言板（高级时尚青） */
+        .btn-message {
+            background: #319795;
+            box-shadow: 0 4px 12px rgba(49, 151, 149, 0.3);
+        }
+        .btn-message:hover {
+            background: #234e52;
+            transform: translateY(-2px);
+        }
+        /* 第四个按钮：喜欢的音乐（动感活力红） */
         .btn-music { 
             background: #e53e3e; 
             box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
@@ -93,12 +102,12 @@
 <body>
 
     <div class="card">
-        <!-- 你的专属头像 -->
+        <!-- 你的专属头像（完好保留你的 toto01.JPG） -->
         <img src="toto01.JPG" alt="头像" class="avatar">
         
         <h1>Rene 的空间 ✨</h1>
         
-        <!-- 三段式功能传送门 -->
+        <!-- 四段式功能传送门 -->
         <div class="btn-group">
             
             <!-- 1. 第一个：介绍自己 -->
@@ -107,12 +116,14 @@
             <!-- 2. 中间：朋友圈（已精准连接到你的 moments.html 网页） -->
             <a href="moments.html" class="btn btn-moments">📸 第二步：朋友圈（日常动态碎片）</a>
             
-            <!-- 3. 最下面：喜欢的音乐（精准连接到你的网易云最新歌单） -->
-            <a href="https://163cn.tv/7SbEBgb" class="btn btn-music" target="_blank">🎵 第三步：Rren-_-喜欢的音乐</a>
+            <!-- 3. ✨ 纯粹塞入：匿名留言板（连接到你的 message.html 网页） -->
+            <a href="message.html" class="btn btn-message">📝 第三步：留言板（来吹水或匿名吐槽）</a>
+            
+            <!-- 4. 最下面：喜欢的音乐（精准连接到你的网易云最新歌单） -->
+            <a href="https://163cn.tv/7SbEBgb" class="btn btn-music" target="_blank">🎵 第四步：Rren-_-喜欢的音乐</a>
             
         </div>
     </div>
 
 </body>
 </html>
-
