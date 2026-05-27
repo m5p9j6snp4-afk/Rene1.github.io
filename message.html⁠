@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene 的匿名留言板</title>
-    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -18,7 +17,7 @@
         .title { font-size: 24px; font-weight: 800; }
         .subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
 
-        /* 留言板容器样式 */
+        /* 留言板卡片 */
         .message-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -27,17 +26,48 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        /* 强制覆盖插件内部样式，匹配你的高级紫色调 */
-        .v .vbtn { background: #805ad5 !important; color: white !important; border: none !important; border-radius: 8px !important; }
-        .v .vbtn:hover { background: #6b46c1 !important; }
-        .v .vwrap { border-radius: 12px !important; border: 1px solid #e2e8f0 !important; }
+        /* 输入框样式 */
+        textarea {
+            width: 100%; height: 100px; padding: 12px; border-radius: 10px;
+            border: 1px solid #e2e8f0; resize: none; box-sizing: border-box;
+            font-size: 14px; margin-bottom: 12px;
+        }
+        .meta-inputs { display: flex; gap: 10px; margin-bottom: 12px; }
+        input {
+            flex: 1; padding: 10px; border-radius: 8px;
+            border: 1px solid #e2e8f0; font-size: 13px; box-sizing: border-box;
+        }
+        
+        .btn-submit {
+            background: #319795; color: white; border: none; padding: 12px 20px;
+            border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover { background: #234e52; }
+
+        /* 留言列表样式 */
+        .comment-list { margin-top: 25px; }
+        .comment-item {
+            border-bottom: 1px solid #edf2f7; padding: 15px 0;
+        }
+        .comment-item:last-child { border-bottom: none; }
+        .comment-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .comment-nick { font-weight: bold; color: #2d3748; font-size: 14px; }
+        .comment-time { color: #a0aec0; font-size: 12px; }
+        .comment-text { color: #4a5568; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
+        
+        /* 回复样式 */
+        .reply-box {
+            background: #f7fafc; padding: 10px; border-radius: 8px; margin-top: 8px;
+            border-left: 3px solid #319795; font-size: 13px; color: #4a5568;
+        }
+        .reply-owner { font-weight: bold; color: #319795; margin-bottom: 20px; display: block;}
 
         .btn-back { 
             display: block; padding: 14px; background: #4a5568; color: white; 
             text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
             text-align: center; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2); margin-top: 10px;
         }
-        .btn-back:hover { background: #2d3748; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -49,23 +79,65 @@
         </div>
 
         <div class="message-card">
-            <div id="vcomments"></div>
+            <form id="commentForm">
+                <div class="meta-inputs">
+                    <input type="text" id="nickInput" placeholder="昵称（留空则为完全匿名）">
+                </div>
+                <textarea id="contentInput" placeholder="说点什么吧... 🔒" required></textarea>
+                <button type="submit" class="btn-submit">🚀 提交留言</button>
+            </form>
+
+            <div class="comment-list" id="commentContainer">
+                
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-nick">🤫 匿名路人甲</span>
+                        <span class="comment-time">2026-05-27 23:25</span>
+                    </div>
+                    <div class="comment-text">博主，你这个新域名 rene0824.com 真的太帅了！改天教教我怎么弄的！</div>
+                    <div class="reply-box">
+                        <span class="reply-owner">👑 Rene 回复：</span>
+                        哈哈哈哈，低调低调，折腾了好久总算通车了，常来玩啊！
+                    </div>
+                </div>
+
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-nick">🐱 冲浪选手</span>
+                        <span class="comment-time">2026-05-27 21:10</span>
+                    </div>
+                    <div class="comment-text">悄悄路过，踩一踩！主页非常好看！</div>
+                </div>
+
+            </div>
         </div>
 
         <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
 
     <script>
-        new Valine({
-            el: '#vcomments',
-            // ⚠️ 这两行现在是用我的公共测试钥匙，你可以先测试！以后可以换成你自己的
-            appId: '8p8bTfS4m5hXq7k8z9p0Q-gzGzoHsz',
-            appKey: 'p9k8j7h6g5f4e3d2c1b0a',
-            placeholder: '随便说点什么吧，不填昵称就是完全匿名哦... 🔒',
-            avatar: 'monsterid', // 匿名用户的搞笑小怪物头像
-            pageSize: 10,
-            highlight: true,
-            recordIP: false // 保护隐私，不记录留言者的真实IP
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nick = document.getElementById('nickInput').value.trim() || '🤫 匿名路人';
+            const content = document.getElementById('contentInput').value.trim();
+            const now = new Date();
+            const timeStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+            const item = document.createElement('div');
+            item.className = 'comment-item';
+            item.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-nick">${nick}</span>
+                    <span class="comment-time">${timeStr}</span>
+                </div>
+                <div class="comment-text">${content}</div>
+            `;
+            
+            const container = document.getElementById('commentContainer');
+            container.insertBefore(item, container.firstChild);
+            
+            document.getElementById('contentInput').value = '';
+            alert('发布成功！（由于静态网页限制，刷新页面后会恢复预设留言。如需永久保存留言，以后可一键升级云数据库）');
         });
     </script>
 
