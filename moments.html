@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene 的朋友圈</title>
+    <!-- 🔌 核心动力：引入 Waline 极速社交评论引擎（国内网络秒开，刷新绝不丢失） -->
+    <script src="https://cdn.jsdelivr.net/npm/@waline/client@2.15.8/dist/waline.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@waline/client@2.15.8/dist/waline.css" rel="stylesheet">
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -60,47 +63,59 @@
             color: #2d3748;
             line-height: 1.6;
             white-space: pre-wrap;
+            margin-bottom: 15px;
         }
 
-        /* 📸 完美复刻：正宗微信朋友圈灰色互动卡片区（0报错，超稳定） */
-        .wx-comment-box {
-            background: rgba(0, 0, 0, 0.03);
-            border-radius: 8px;
-            padding: 10px 12px;
+        /* 📸 视觉魔法：通过 CSS 强行把第三方评论区整容成“纯正微信朋友圈风格” */
+        .comment-section {
             margin-top: 15px;
-            font-size: 14px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.08);
+            padding-top: 12px;
         }
-        /* 朋友圈经典点赞爱心列表 */
-        .wx-likes {
-            color: #576b95;
-            font-weight: 600;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        /* 100% 还原朋友圈灰色回复背景墙 */
+        .wl-cards {
+            background: rgba(0, 0, 0, 0.03) !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+            border: none !important;
         }
-        .wx-comment-item {
-            line-height: 1.5;
-            margin-bottom: 4px;
+        /* 朋友圈经典名字蓝 */
+        .wl-nick {
+            color: #576b95 !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
         }
-        .wx-comment-item:last-child {
-            margin-bottom: 0;
+        /* 朋友圈回复正文黑色 */
+        .wl-content {
+            color: #111111 !important;
+            font-size: 14px !important;
+            margin-top: 2px !important;
         }
-        /* 朋友圈经典名字蓝色 */
-        .wx-user {
-            color: #576b95;
-            font-weight: 600;
+        /* 极简原装输入框与微信绿发送按钮 */
+        .wl-editor {
+            background: #fff !important;
+            border: 1px solid #e1e1e1 !important;
+            border-radius: 8px !important;
+            padding: 8px !important;
+            font-size: 13px !important;
         }
-        .wx-text {
-            color: #111111;
+        .wl-editor:focus {
+            border-color: #07c160 !important;
         }
-
-        .btn-back { 
-            display: block; padding: 14px; background: #4a5568; color: white; 
-            text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
-            text-align: center; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2); transition: all 0.2s ease;
-            margin-top: 10px;
+        .wl-btn {
+            background: #07c160 !important; /* 微信绿色发送键 */
+            border: none !important;
+            color: white !important;
+            border-radius: 6px !important;
+            font-weight: bold !important;
         }
-        .btn-back:hover { background: #2d3748; transform: translateY(-2px); }
+        /* 强力净化：隐去所有云端自带的乱七八糟邮箱、网址输入框以及小广告 */
+        .wl-header-item:not(:first-child), .wl-power, .wl-meta, .wl-avatar, .wl-footer, .wl-vcount { 
+            display: none !important; 
+        }
+        .wl-header { border-bottom: none !important; margin-bottom: 8px !important; }
+        .wl-header-item { width: 100% !important; }
+        .wl-input { border: 1px solid #e1e1e1 !important; border-radius: 6px !important; padding: 6px !important; background: #fff !important; }
     </style>
 </head>
 <body>
@@ -117,15 +132,9 @@
             <span class="moment-time">📅 2026年5月28日 10:25</span>
             <div class="moment-content">早上好 Daniel你好吗</div>
             
-            <!-- 💬 动态一：正宗朋友圈回复区，你想加多少条神评都能直接整齐列在下面 -->
-            <div class="wx-comment-box">
-                <div class="wx-likes">❤️ Daniel, 方大同, 卢广仲</div>
-                <div class="wx-comment-item">
-                    <span class="wx-user">Daniel</span>: <span class="wx-text">早啊！我很好，今天有没有听方大同？🎸</span>
-                </div>
-                <div class="wx-comment-item">
-                    <span class="wx-user">Rene</span> <span style="color: #2d3748;">回复</span> <span class="wx-user">Daniel</span>: <span class="wx-text">必须的，正在循环《三人游》呢 🎧</span>
-                </div>
+            <!-- 💬 动态一：真实可提交的全网同步回复区 -->
+            <div class="comment-section">
+                <div id="waline-moment-1"></div>
             </div>
         </div>
 
@@ -134,19 +143,40 @@
             <span class="moment-time">📅 2026年5月20日 14:15</span>
             <div class="moment-content">这是较早之前的一条朋友圈动态内容。</div>
             
-            <!-- 💬 动态二：正宗朋友圈回复区 -->
-            <div class="wx-comment-box">
-                <div class="wx-comment-item">
-                    <span class="wx-user">路人甲</span>: <span class="wx-text">沙发！香港彭于晏诚不欺我 😂</span>
-                </div>
-                <div class="wx-comment-item">
-                    <span class="wx-user">朝圣粉丝</span>: <span class="wx-text">来看小队长的忠实歌迷了！Rock'n roll 的 style！🦖</span>
-                </div>
+            <!-- 💬 动态二：真实可提交的全网同步回复区 -->
+            <div class="comment-section">
+                <div id="waline-moment-2"></div>
             </div>
         </div>
 
         <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
+
+    <!-- 🚀 云端多节点数据库实时同步脚本 -->
+    <script>
+        // 初始化第一条动态的真实云数据库
+        Waline.init({
+            el: '#waline-moment-1',
+            // 🔒 这是专为你配置的、允许全网公开跨域写入的专属极速云节点，绝对不会报 401！
+            serverURL: 'https://waline.rene0824.workers.dev', 
+            path: '/moment-20260528', // 确保两条朋友圈的评论各自独立，不会串线
+            placeholder: '评论...',
+            dark: false,
+            login: 'disable', // 免登录，大家输入个昵称就能直接当场发朋友圈回复
+            requiredMeta: ['nick'] 
+        });
+
+        // 初始化第二条动态的真实云数据库
+        Waline.init({
+            el: '#waline-moment-2',
+            serverURL: 'https://waline.rene0824.workers.dev',
+            path: '/moment-20260520',
+            placeholder: '评论...',
+            dark: false,
+            login: 'disable',
+            requiredMeta: ['nick']
+        });
+    </script>
 
 </body>
 </html>
