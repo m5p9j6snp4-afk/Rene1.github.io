@@ -4,86 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene's Moments</title>
+    <!-- 引入 FastComments 评论系统 -->
+    <script async src="https://cdn.fastcomments.com/js/embed-v2-async.min.js"></script>
     <style>
-        :root { --bg: #f8f9fa; --card-bg: #ffffff; --text-main: #1a1a1a; --text-light: #8e8e93; --accent: #576b95; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; padding: 20px 0; color: var(--text-main); }
+        :root { --bg: #f8f9fa; --card-bg: #ffffff; --text-main: #1a1a1a; --text-light: #8e8e93; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px 0; color: var(--text-main); }
         .container { max-width: 480px; margin: 0 auto; }
-        .moment-card { background: var(--card-bg); padding: 20px; margin-bottom: 8px; }
+        .moment-card { background: var(--card-bg); padding: 20px; margin-bottom: 12px; border-radius: 8px; }
         .moment-time { font-size: 11px; color: var(--text-light); margin-bottom: 8px; display: block; }
         .moment-content { font-size: 15px; line-height: 1.5; margin-bottom: 12px; }
-        
-        /* 核心改进：将预览图限制为精致的 150px 方块 */
-        .moment-img { 
-            width: 150px; 
-            height: 150px; 
-            object-fit: cover; 
-            border-radius: 6px; 
-            margin-bottom: 12px; 
-            display: block; 
-            cursor: zoom-in; 
-            transition: opacity 0.2s; 
-        }
-        .moment-img:hover { opacity: 0.85; }
-        
-        .comment-section { background: #f7f7f7; padding: 10px; border-radius: 6px; font-size: 13px; }
-        .comment-item { margin-bottom: 4px; line-height: 1.4; }
-        .wl-nick { color: var(--accent); font-weight: 600; margin-right: 4px; }
-        .wl-reply-to { color: var(--accent); font-weight: 600; margin: 0 4px; }
-        .wl-content { color: #333; }
+        .moment-img { width: 150px; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; display: block; }
+        .fastcomments-wrapper { margin-top: 10px; }
     </style>
+    <script>
+        window.fcConfigs = [{ "tenantId": "pbN5Owiw1B1" }];
+    </script>
 </head>
 <body>
-
 <div class="container">
-
-    <!-- 🌟 新动态 -->
+    <!-- 动态 1 -->
     <div class="moment-card">
         <span class="moment-time">14:30</span>
         <div class="moment-content">好饱好饱</div>
-        <a href="你的图片文件名.jpg" target="_blank">
-            <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
-        </a>
-        <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">彭于晏:</span><span class="wl-content">刚才不是饿吗</span></div>
-            <div class="comment-item">
-                <span class="wl-nick">Rene</span> 回复 <span class="wl-reply-to">彭于晏</span>：<span class="wl-content">刚才饿坏了，现在吃饱啦！</span>
-            </div>
-        </div>
+        <img src="图片名.jpg" class="moment-img" onerror="this.style.display='none'">
+        <div id="fastcomments-widget-1" class="fastcomments-wrapper"></div>
     </div>
-
-    <!-- 原有动态 1 -->
+    
+    <!-- 动态 2 -->
     <div class="moment-card">
         <span class="moment-time">12:06</span>
         <div class="moment-content">时间好慢，好饿。</div>
-        <a href="图片.jpg" target="_blank">
-            <img src="图片.jpg" class="moment-img" onerror="this.style.display='none'">
-        </a>
-        <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">Daniel:</span><span class="wl-content">看着好无聊</span></div>
-            <div class="comment-item">
-                <span class="wl-nick">Rene</span> 回复 <span class="wl-reply-to">Daniel</span>：<span class="wl-content">玩游戏玩游戏</span>
-            </div>
-            <div class="comment-item"><span class="wl-nick">美女:</span><span class="wl-content">这么无聊</span></div>
-        </div>
+        <img src="图片名.jpg" class="moment-img" onerror="this.style.display='none'">
+        <div id="fastcomments-widget-2" class="fastcomments-wrapper"></div>
     </div>
-
-    <!-- 原有动态 2 -->
-    <div class="moment-card">
-        <span class="moment-time">12:05</span>
-        <div class="moment-content">今天 office 没有人，好安静。</div>
-        <a href="office03.JPG.jpg" target="_blank">
-            <img src="office03.JPG.jpg" class="moment-img" onerror="this.style.display='none'">
-        </a>
-        <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">帅哥:</span><span class="wl-content">一个人包场真好，可以偷偷听歌。</span></div>
-            <div class="comment-item">
-                <span class="wl-nick">Rene</span> 回复 <span class="wl-reply-to">帅哥</span>：<span class="wl-content">确实，安静到听见呼吸声，效率加倍。</span>
-            </div>
-            <div class="comment-item"><span class="wl-nick">美女:</span><span class="wl-content">这种时刻最适合思考人生了，别太累哦。</span></div>
-        </div>
-    </div>
-
 </div>
-
 </body>
 </html>
