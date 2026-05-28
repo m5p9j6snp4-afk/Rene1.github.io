@@ -14,7 +14,8 @@
         .moment-img { width: 100%; border-radius: 8px; margin-bottom: 16px; object-fit: cover; display: block; }
         .comment-section { background: #f2f2f7; padding: 12px; border-radius: 6px; font-size: 14px; }
         .comment-item { margin-bottom: 8px; line-height: 1.4; }
-        .wl-nick { color: var(--accent); font-weight: 600; margin-right: 6px; }
+        .wl-nick { color: var(--accent); font-weight: 600; margin-right: 4px; }
+        .wl-reply-to { color: var(--accent); font-weight: 600; margin: 0 4px; }
         .wl-content { color: #333; }
     </style>
 </head>
@@ -22,14 +23,16 @@
 
 <div class="container">
 
-    <!-- 🌟 新动态区域 (最新动态放在最上面) -->
+    <!-- 🌟 新动态 -->
     <div class="moment-card">
         <span class="moment-time">14:30</span>
         <div class="moment-content">好饱好饱</div>
-        <!-- 记得修改下方的 src 文件名 -->
         <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
         <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">彭于晏</span><span class="wl-content">刚才不是饿吗</span></div>
+            <div class="comment-item"><span class="wl-nick">彭于晏:</span><span class="wl-content">刚才不是饿吗</span></div>
+            <div class="comment-item">
+                <span class="wl-nick">Rene</span> 回复 <span class="wl-reply-to">彭于晏</span>：<span class="wl-content">刚才饿坏了，现在吃饱啦！</span>
+            </div>
         </div>
     </div>
 
@@ -37,11 +40,13 @@
     <div class="moment-card">
         <span class="moment-time">12:06</span>
         <div class="moment-content">时间好慢，好饿。</div>
-        <img src="图片" class="moment-img" onerror="this.style.display='none'">
+        <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
         <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">Daniel</span><span class="wl-content">看着好无聊</span></div>
-            <div class="comment-item"><span class="wl-nick">Rene</span><span class="wl-content">玩游戏玩游戏</span></div>
-            <div class="comment-item"><span class="wl-nick">Sarah</span><span class="wl-content">这么无聊</span></div>
+            <div class="comment-item"><span class="wl-nick">Daniel:</span><span class="wl-content">看着好无聊</span></div>
+            <div class="comment-item">
+                <span class="wl-nick">Rene</span> 回复 <span class="wl-reply-to">Daniel</span>：<span class="wl-content">玩游戏玩游戏</span>
+            </div>
+            <div class="comment-item"><span class="wl-nick">Sarah:</span><span class="wl-content">这么无聊</span></div>
         </div>
     </div>
 
@@ -51,9 +56,11 @@
         <div class="moment-content">今天 office 没有人，好安静。</div>
         <img src="office03.JPG.jpg" class="moment-img" onerror="this.style.display='none'">
         <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">老王</span><span class="wl-content">一个人包场真好，可以偷偷听歌。</span></div>
-            <div class="comment-item"><span class="wl-nick">Rene</span><span class="wl-content">确实，安静到听见呼吸声，效率加倍。</span></div>
-            <div class="comment-item"><span class="wl-nick">Linda</span><span class="wl-content">这种时刻最适合思考人生了，别太累哦。</span></div>
+            <div class="comment-item"><span class="wl-nick">老王:</span><span class="wl-content">一个人包场真好，可以偷偷听歌。</span></div>
+            <div class="comment-item">
+                <span class="wl-nick">Rene</span> 回复 <span class="wl-reply-to">老王</span>：<span class="wl-content">确实，安静到听见呼吸声，效率加倍。</span>
+            </div>
+            <div class="comment-item"><span class="wl-nick">Linda:</span><span class="wl-content">这种时刻最适合思考人生了，别太累哦。</span></div>
         </div>
     </div>
 
