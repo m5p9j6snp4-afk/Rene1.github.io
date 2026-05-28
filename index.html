@@ -3,40 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rene's Moments</title>
-    <!-- 引入 FastComments 评论系统 -->
-    <script async src="https://cdn.fastcomments.com/js/embed-v2-async.min.js"></script>
+    <title>Rene的空间</title>
     <style>
-        :root { --bg: #f8f9fa; --card-bg: #ffffff; --text-main: #1a1a1a; --text-light: #8e8e93; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 20px 0; color: var(--text-main); }
-        .container { max-width: 480px; margin: 0 auto; }
-        .moment-card { background: var(--card-bg); padding: 20px; margin-bottom: 12px; border-radius: 8px; }
-        .moment-time { font-size: 11px; color: var(--text-light); margin-bottom: 8px; display: block; }
-        .moment-content { font-size: 15px; line-height: 1.5; margin-bottom: 12px; }
-        .moment-img { width: 150px; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; display: block; }
-        .fastcomments-wrapper { margin-top: 10px; }
+        /* 100% 严格保留你最初最完美的经典排版与色彩 */
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; max-width: 350px; width: 100%; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; }
+        h1 { color: #333; margin-bottom: 20px; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn { display: block; padding: 12px; background: #007bff; color: white; text-decoration: none; border-radius: 25px; font-weight: bold; transition: background 0.3s; cursor: pointer; border: none; font-size: 16px; text-align: center; }
+        .btn:hover { background: #0056b3; }
+        .countdown { font-size: 14px; color: #666; margin-bottom: 15px; background: #e9ecef; padding: 8px; border-radius: 5px; }
     </style>
-    <script>
-        window.fcConfigs = [{ "tenantId": "pbN5Owiw1B1" }];
-    </script>
 </head>
 <body>
-<div class="container">
-    <!-- 动态 1 -->
-    <div class="moment-card">
-        <span class="moment-time">14:30</span>
-        <div class="moment-content">好饱好饱</div>
-        <img src="图片名.jpg" class="moment-img" onerror="this.style.display='none'">
-        <div id="fastcomments-widget-1" class="fastcomments-wrapper"></div>
+
+    <!-- 📱 完美的个人卡片：这里保留了你所有的回忆与跳转 -->
+    <div class="card">
+        <!-- 原装倒计时 -->
+        <div class="countdown" id="timer">⏰ 倒计时加载中...</div>
+        
+        <!-- 原装头像 -->
+        <img src="toto01.JPG" alt="头像" class="avatar">
+        
+        <h1>Rene 的空间</h1>
+        
+        <div class="btn-group">
+            <!-- 👤 第一步：关于我 -->
+            <a href="about.html" class="btn">👤 第一步：关于我</a>
+            
+            <!-- 📸 第二步：朋友圈 -->
+            <a href="moments.html" class="btn">📸 第二步：朋友圈</a>
+            
+            <!-- 📝 第三步：终极免权限全网留言板 -->
+            <a href="https://ngl.link/rene25528" class="btn" target="_blank" style="background: #28a745;">📝 第三步：留言（想告诉我秘密？点这里）</a>
+            
+            <!-- 🎵 第四步：喜欢的音乐 -->
+            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 第四步：喜欢的音乐</a>
+        </div>
     </div>
-    
-    <!-- 动态 2 -->
-    <div class="moment-card">
-        <span class="moment-time">12:06</span>
-        <div class="moment-content">时间好慢，好饿。</div>
-        <img src="图片名.jpg" class="moment-img" onerror="this.style.display='none'">
-        <div id="fastcomments-widget-2" class="fastcomments-wrapper"></div>
-    </div>
-</div>
+
+    <script>
+        // 原装倒计时逻辑
+        function updateTimer() {
+            const targetDate = new Date("2026/08/24 00:00:00").getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+            if (difference <= 0) { document.getElementById('timer').innerHTML = "🎉 Rene 生日快乐！！🍻"; return; }
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            document.getElementById('timer').innerHTML = `🎁 距离Rene生日轰趴还有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+    </script>
 </body>
 </html>
