@@ -4,61 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene's Moments</title>
-    <!-- 高级感 CSS 样式 -->
     <style>
+        /* 页面基础：微信朋友圈风格背景 */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #ededed; 
+            background-color: #ffffff; 
             margin: 0; 
             padding: 20px; 
             color: #333; 
         }
         .container { max-width: 500px; margin: 0 auto; }
         
-        /* 朋友圈卡片样式 */
-        .moment-card { 
-            background: #ffffff; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            border-radius: 8px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08); 
-        }
+        /* 布局：左侧头像，右侧内容 */
+        .moment-row { display: flex; gap: 12px; margin-bottom: 40px; }
         
-        /* 正文排版 */
-        .header { font-weight: 600; color: #576b95; margin-bottom: 8px; }
-        .text { margin-bottom: 15px; line-height: 1.6; }
-        .moment-img { 
-            width: 150px; 
-            height: 150px; 
-            object-fit: cover; 
-            border-radius: 6px; 
-            display: block; 
-            margin-bottom: 15px; 
-        }
+        /* 头像与名字 */
+        .avatar { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; background: #eee; flex-shrink: 0; }
+        .name { font-weight: 600; color: #576b95; font-size: 15px; margin-bottom: 6px; }
+        
+        /* 正文与图片 */
+        .content-box { flex: 1; }
+        .text { margin-bottom: 12px; line-height: 1.5; font-size: 15px; }
+        .moment-img { width: 100%; max-width: 200px; border-radius: 4px; display: block; margin-bottom: 15px; }
 
-        /* 评论区优化 */
-        #fastcomments-widget { 
-            margin-top: 20px; 
-            border-top: 1px solid #f0f0f0; 
-            padding-top: 15px; 
-        }
+        /* 评论区：保持简洁 */
+        #fastcomments-widget { margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- 朋友圈动态单元 -->
-    <div class="moment-card">
-        <div class="header">Rene</div>
-        <div class="text">分享生活中的小确幸。✨</div>
-        <img src="你的图片.jpg" class="moment-img" onerror="this.style.display='none'">
+    <!-- 动态单元：包含头像、名字、内容、图片和评论 -->
+    <div class="moment-row">
+        <!-- 请替换此处为你的真实头像链接 -->
+        <img src="toto01.JPG" class="avatar" onerror="this.style.display='none'">
         
-        <!-- 评论挂载点 -->
-        <div id="fastcomments-widget"></div>
+        <div class="content-box">
+            <div class="name">Rene</div>
+            <div class="text">晚上好</div>
+            
+            <!-- 请替换此处为你的真实动态图片 -->
+            <img src="office02.JPG" class="moment-img" onerror="this.style.display='none'">
+            
+            <!-- 评论挂载点：保留原功能 -->
+            <div id="fastcomments-widget"></div>
+        </div>
     </div>
 </div>
 
-<!-- 脚本引入保持不变 -->
+<!-- 评论系统脚本：保持不变 -->
 <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
 <script>
     window.FastCommentsUI(document.getElementById('fastcomments-widget'), {
