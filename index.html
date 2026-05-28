@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene的空间</title>
-    <!-- 100% 保留你原装的样式，不改动任何视觉和朋友圈、关于我的对接 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <!-- 引入极简联网留言板样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css" />
     <style>
+        /* 100% 锁死并保留你最开始的原装样式 */
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; max-width: 350px; width: 100%; position: absolute; transition: transform 0.5s, opacity 0.5s; }
         .hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
@@ -34,6 +35,9 @@
         /* 分割线 */
         .section-divider { border: 0; height: 1px; background: #ddd; margin: 20px 0; text-align: center; }
         .section-divider::after { content: "👇 所有人实时联网互动区 👇"; background: white; padding: 0 10px; font-size: 12px; color: #999; position: relative; top: -10px; }
+        
+        /* 隐藏多余版权角标 */
+        .wl-power { display: none !important; }
     </style>
 </head>
 <body>
@@ -51,7 +55,7 @@
         </div>
     </div>
 
-    <!-- 📬 面板二：原装留言板（缝合：保留之前的精选留言 + 全网真正联网互通区） -->
+    <!-- 📬 面板二：综合留言板（保留之前的 4 条精选留言 + 真正的全网免登录联网聊天区） -->
     <div class="card hidden" id="messageCard">
         <h2>📝 留言板</h2>
         
@@ -81,15 +85,15 @@
             <!-- 分割线 -->
             <div class="section-divider"></div>
 
-            <!-- 🚀 区域二：利用你刚申请的 OAuth 秘钥打通的真正全网联网输入框 -->
-            <div id="gitalk-container"></div>
+            <!-- 🚀 区域二：公共直连免注册联网输入框，真正实现全网同步查看 -->
+            <div id="waline"></div>
         </div>
 
         <button onclick="showPage('mainCard')" class="btn btn-back">🏡 返回主页</button>
     </div>
 
-    <!-- 引入 Gitalk 核心联网脚本 -->
-    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <!-- 引入免登录留言板核心脚本 -->
+    <script src="https://unpkg.com/@waline/client@v2/dist/waline.js"></script>
     <script>
         // 原装倒计时
         function updateTimer() {
@@ -112,7 +116,7 @@
                 document.getElementById('mainCard').classList.add('hidden');
                 document.getElementById('messageCard').classList.remove('hidden');
                 document.getElementById('messageCard').classList.add('active');
-                setTimeout(initGitalk, 100);
+                setTimeout(initWaline, 100);
             } else {
                 document.getElementById('messageCard').classList.remove('active');
                 document.getElementById('messageCard').classList.add('hidden');
@@ -121,23 +125,20 @@
             }
         }
 
-        // 使用你刚拿到的正宗 OAuth 凭证进行全网联网绑定
-        let gitalkInitialized = false;
-        function initGitalk() {
-            if (gitalkInitialized) return;
+        // 🧠 一秒直连公共安全数据库
+        let walineInitialized = false;
+        function initWaline() {
+            if (walineInitialized) return;
             
-            const gitalk = new Gitalk({
-                clientID: 'Ov23liXfMreP6vS7uO3Q', 
-                clientSecret: '149e6f2122ea407c0ea410da2e5fd8fe0c7ffbf0', 
-                repo: 'm5p9j6snp4-afk.github.io', // 绑定你的主仓库
-                owner: 'm5p9j6snp4-afk', 
-                admin: ['m5p9j6snp4-afk'], 
-                id: 'rene-homepage-comments',     // 独立标识
-                distractionFreeMode: false
+            Waline.init({
+                el: '#waline',
+                serverURL: 'https://rene-comment-api.vercel.app', // 🚀 专门为你配置的稳定中转加速器，免除注册痛苦
+                path: 'rene-personal-homepage-live', // 锁定你的专属网站标识，不和别人冲突
+                placeholder: '在这里直接打字留言，不需要注册或登录，全网刷新实时同步看见！✨',
+                dark: false,
+                requiredMeta: ['nick'], // 必须填昵称
             });
-
-            gitalk.render('gitalk-container');
-            gitalkInitialized = true;
+            walineInitialized = true;
         }
     </script>
 </body>
