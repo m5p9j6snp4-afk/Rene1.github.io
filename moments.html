@@ -5,79 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene's Moments</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f7f7f7; margin: 0; padding: 20px; color: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 500px; margin: 0 auto; }
+        .moment-row { display: flex; gap: 12px; margin-bottom: 40px; }
+        .avatar { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; background: #eee; flex-shrink: 0; }
+        .content-box { flex: 1; }
+        .name { font-weight: 600; color: #576b95; font-size: 15px; margin-bottom: 2px; }
+        .time { font-size: 12px; color: #b2b2b2; margin-bottom: 8px; }
+        .text { margin-bottom: 12px; line-height: 1.5; font-size: 15px; }
         
-        /* 发布区域样式 */
-        .post-box { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        textarea { width: 100%; border: none; outline: none; font-size: 15px; resize: none; height: 60px; }
-        .post-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        input[type="text"] { border: 1px solid #eee; padding: 5px; font-size: 12px; width: 150px; }
-        button { background: #07c160; color: #fff; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
-
-        /* 朋友圈列表样式 */
-        .moment-row { display: flex; gap: 12px; margin-bottom: 30px; background: #fff; padding: 15px; border-radius: 8px; }
-        .avatar { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
-        .name { font-weight: 600; color: #576b95; font-size: 15px; }
-        .text { margin: 8px 0; line-height: 1.5; }
-        .moment-img { width: 100%; max-width: 200px; border-radius: 4px; margin-top: 10px; cursor: pointer; }
+        /* 图片预览样式：光标手势，点击放大 */
+        .moment-img { width: 100%; max-width: 200px; border-radius: 4px; display: block; margin-bottom: 15px; cursor: zoom-in; transition: transform 0.2s; }
+        .moment-img:active { transform: scale(0.98); }
+        
+        #fastcomments-widget { margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="post-box">
-        <textarea id="moment-text" placeholder="这一刻的想法..."></textarea>
-        <div class="post-actions">
-            <input type="text" id="moment-img" placeholder="图片链接 (可选)">
-            <button onclick="addMoment()">发表</button>
+    <div class="moment-row">
+        <img src="toto01.jpg" class="avatar" onerror="this.style.display='none'">
+        <div class="content-box">
+            <div class="name">Rene</div>
+            <div class="time">2026年5月28日21:05</div>
+            <div class="text">你们好</div>
+            
+            <!-- 图片点击放大逻辑 -->
+            <img src="office03.JPG.jpg" class="moment-img" onclick="window.open(this.src)" title="点击查看大图" onerror="this.style.display='none'">
+            
+<div class="container">
+    <div class="moment-row">
+        <img src="toto01.jpg" class="avatar" onerror="this.style.display='none'">
+        <div class="content-box">
+            <div class="name">Rene</div>
+            <div class="time">2026年5月28日19:05</div>
+            <div class="text">晚上好</div>
+            
+            <!-- 图片点击放大逻辑 -->
+            <img src="office03.JPG.jpg" class="moment-img" onclick="window.open(this.src)" title="点击查看大图" onerror="this.style.display='none'">
+            
+            <div id="fastcomments-widget"></div>
         </div>
     </div>
-
-    <div id="moments-list"></div>
 </div>
 
 <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
 <script>
-    // 页面加载时读取存储的数据
-    window.onload = loadMoments;
-
-    function addMoment() {
-        const text = document.getElementById('moment-text').value;
-        const imgUrl = document.getElementById('moment-img').value;
-        if (!text) return alert("写点内容吧！");
-
-        const data = { text, imgUrl, time: new Date().toLocaleString() };
-        
-        // 存入 localStorage
-        const list = JSON.parse(localStorage.getItem('myMoments') || '[]');
-        list.unshift(data);
-        localStorage.setItem('myMoments', JSON.stringify(list));
-
-        renderMoment(data);
-        document.getElementById('moment-text').value = '';
-        document.getElementById('moment-img').value = '';
-    }
-
-    function renderMoment(data) {
-        const list = document.getElementById('moments-list');
-        const div = document.createElement('div');
-        div.className = 'moment-row';
-        div.innerHTML = `
-            <img src="toto01.jpg" class="avatar">
-            <div class="content-box">
-                <div class="name">Rene</div>
-                <div class="text">${data.text}</div>
-                ${data.imgUrl ? `<img src="${data.imgUrl}" class="moment-img" onclick="window.open(this.src)">` : ''}
-            </div>
-        `;
-        list.insertBefore(div, list.firstChild);
-    }
-
-    function loadMoments() {
-        const list = JSON.parse(localStorage.getItem('myMoments') || '[]');
-        list.forEach(renderMoment);
-    }
+    window.FastCommentsUI(document.getElementById('fastcomments-widget'), {
+        tenantId: 'pbN5Owiw1B1'
+    });
 </script>
 </body>
 </html>
+
+
