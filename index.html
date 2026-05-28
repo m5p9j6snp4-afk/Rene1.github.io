@@ -54,7 +54,7 @@
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerHTML = `🎁 距离生日还有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+            document.getElementById('timer').innerHTML = `🎁 距离Rene生日轰趴还有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
         setInterval(updateTimer, 1000); updateTimer();
     </script>
