@@ -11,7 +11,7 @@
         .moment-card { background: var(--card-bg); padding: 24px; margin-bottom: 12px; }
         .moment-time { font-size: 12px; color: var(--text-light); margin-bottom: 8px; display: block; }
         .moment-content { font-size: 16px; line-height: 1.5; margin-bottom: 16px; }
-        .moment-img { width: 100%; border-radius: 8px; margin-bottom: 16px; object-fit: cover; }
+        .moment-img { width: 100%; border-radius: 8px; margin-bottom: 16px; object-fit: cover; display: block; }
         .comment-section { background: #f2f2f7; padding: 12px; border-radius: 6px; font-size: 14px; }
         .comment-item { margin-bottom: 8px; line-height: 1.4; }
         .wl-nick { color: var(--accent); font-weight: 600; margin-right: 6px; }
@@ -21,14 +21,35 @@
 <body>
 
 <div class="container">
-    <!-- 第一条动态 -->
+
+    <!-- 🌟 新动态区域 (最新动态放在最上面) -->
+    <div class="moment-card">
+        <span class="moment-time">14:30</span>
+        <div class="moment-content">这是新动态的内容。</div>
+        <!-- 记得修改下方的 src 文件名 -->
+        <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
+        <div class="comment-section">
+            <div class="comment-item"><span class="wl-nick">昵称</span><span class="wl-content">评论内容。</span></div>
+        </div>
+    </div>
+
+    <!-- 原有动态 1 -->
+    <div class="moment-card">
+        <span class="moment-time">12:06</span>
+        <div class="moment-content">时间好慢，好饿。</div>
+        <img src="office01.JPG.jpg" class="moment-img" onerror="this.style.display='none'">
+        <div class="comment-section">
+            <div class="comment-item"><span class="wl-nick">Daniel</span><span class="wl-content">看着好无聊</span></div>
+            <div class="comment-item"><span class="wl-nick">Rene</span><span class="wl-content">玩游戏玩游戏</span></div>
+            <div class="comment-item"><span class="wl-nick">Sarah</span><span class="wl-content">这么无聊</span></div>
+        </div>
+    </div>
+
+    <!-- 原有动态 2 -->
     <div class="moment-card">
         <span class="moment-time">12:05</span>
         <div class="moment-content">今天 office 没有人，好安静。</div>
-        
-        <!-- 📸 这里加照片：把 photo1.JPG 换成你真实的文件名 -->
-        <img src="office03.JPG.jpg" class="moment-img" alt="Office">
-        
+        <img src="office03.JPG.jpg" class="moment-img" onerror="this.style.display='none'">
         <div class="comment-section">
             <div class="comment-item"><span class="wl-nick">老王</span><span class="wl-content">一个人包场真好，可以偷偷听歌。</span></div>
             <div class="comment-item"><span class="wl-nick">Rene</span><span class="wl-content">确实，安静到听见呼吸声，效率加倍。</span></div>
@@ -36,35 +57,7 @@
         </div>
     </div>
 
-    <!-- 第二条动态 -->
-    <div class="moment-card">
-        <span class="moment-time">12:06</span>
-        <div class="moment-content">时间好慢，好饿。</div>
-        
-        <!-- 📸 这里加照片：把 photo2.JPG 换成你真实的文件名 -->
-        <img src="office01.JPG.jpg" class="moment-img" alt="Hungry">
-        
-        <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">Daniel</span><span class="wl-content">看着好无聊</span></div>
-            <div class="comment-item"><span class="wl-nick">Rene</span><span class="wl-content">玩游戏玩游戏</span></div>
-            <div class="comment-item"><span class="wl-nick">Sarah</span><span class="wl-content">这么无聊</span></div>
-        </div>
-    </div>
 </div>
-    <!-- ⬇️ 在这里粘贴你的新动态 ⬇️ -->
-    
-    <div class="moment-card">
-        <span class="moment-time">14:30</span> <!-- 时间 -->
-        <div class="moment-content">这是新动态的内容。</div> <!-- 文字内容 -->
-        
-        <img src="你的图片文件名.jpg" class="moment-img" alt="描述"> <!-- 图片 -->
-        
-        <div class="comment-section">
-            <div class="comment-item"><span class="wl-nick">昵称</span><span class="wl-content">评论内容。</span></div>
-        </div>
-    </div>
-
-    <!-- ⬆️ 粘贴结束 ⬆️ -->
 
 </body>
 </html>
