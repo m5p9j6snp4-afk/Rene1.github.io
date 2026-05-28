@@ -11,18 +11,16 @@
             box-sizing: border-box;
         }
         body {
-            /* 微信朋友圈背景色 */
             background-color: #f7f7f7;
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft Yahei", sans-serif;
             padding: 15px;
             color: #333;
         }
-        /* 外层容器 限制宽度 居中 */
         .wrapper {
             max-width: 550px;
             margin: 0 auto;
         }
-        /* 单条朋友圈容器 每条动态独立模块 */
+        /* 单条朋友圈卡片 */
         .friend-circle-item {
             background: #fff;
             border-radius: 8px;
@@ -30,43 +28,39 @@
             margin-bottom: 15px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        /* 头像+内容 横向布局 */
         .circle-header {
             display: flex;
             gap: 12px;
         }
-        /* 头像样式 统一圆形 微信风格 */
+        /* 头像固定 toto01.JPG 圆形微信风格 */
         .avatar {
             width: 42px;
             height: 42px;
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
-            /* 固定头像为 toto01.JPG */
         }
         .main-content {
             flex: 1;
         }
-        /* 昵称 */
         .nickname {
             font-size: 15px;
             font-weight: 500;
             color: #2c3e50;
             margin-bottom: 4px;
         }
-        /* 发布时间 */
         .publish-time {
             font-size: 12px;
             color: #999;
             margin-bottom: 8px;
         }
-        /* 朋友圈文字内容 */
+        /* 【朋友圈文字内容填写处】 */
         .circle-text {
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 12px;
         }
-        /* 朋友圈配图 支持单图 点击放大 */
+        /* 【朋友圈图片填写处】修改src路径 */
         .circle-img {
             max-width: 220px;
             width: 100%;
@@ -79,13 +73,11 @@
         .circle-img:active {
             transform: scale(0.97);
         }
-        /* 评论区分割线 */
         .comment-line {
             height: 1px;
             background: #f1f1f1;
             margin: 10px 0;
         }
-        /* 评论组件容器 */
         .comment-widget {
             padding-top: 5px;
         }
@@ -94,40 +86,31 @@
 <body>
     <div class="wrapper">
 
-        <!-- ===================== 第一条朋友圈 开始 ===================== -->
+        <!-- ========== 第一条朋友圈 ========== -->
         <div class="friend-circle-item">
             <div class="circle-header">
-                <!-- 【固定头像位置】头像文件名：toto01.JPG 无需修改 -->
                 <img src="toto01.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
-                    <!-- 昵称 固定为 Rene -->
                     <div class="nickname">Rene</div>
-                    <!-- 【填写发布时间】修改此处文字 -->
+                    <!-- 【填写发布时间】 -->
                     <div class="publish-time">2026年5月28日 21:05</div>
-                    <!-- 【填写朋友圈文字】修改此处文案 -->
+                    <!-- 【填写朋友圈文字】 -->
                     <div class="circle-text">你们好</div>
-
-                    <!-- 【填写配图】修改 src 里的图片文件名 -->
+                    <!-- 【填写图片：修改src内图片名】 -->
                     <img src="office03.JPG" class="circle-img" 
                          onclick="window.open(this.src)" 
                          title="点击查看大图" 
                          onerror="this.style.display='none'">
 
-                    <!-- 分割线 -->
                     <div class="comment-line"></div>
-                    <!-- 本条朋友圈对应的评论区 -->
                     <div class="comment-widget" id="comment1"></div>
                 </div>
             </div>
         </div>
-        <!-- ===================== 第一条朋友圈 结束 ===================== -->
 
-
-        <!-- ===================== 第二条朋友圈 开始 ===================== -->
-        <!-- 复制整个 friend-circle-item 模块 即可新增一条朋友圈 -->
+        <!-- ========== 第二条朋友圈 ========== -->
         <div class="friend-circle-item">
             <div class="circle-header">
-                <!-- 头像固定 toto01.JPG -->
                 <img src="toto01.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
@@ -135,39 +118,43 @@
                     <div class="publish-time">2026年5月28日 19:05</div>
                     <!-- 【填写朋友圈文字】 -->
                     <div class="circle-text">晚上好</div>
-
-                    <!-- 【填写配图】修改图片文件名 -->
+                    <!-- 【填写图片：修改src内图片名】 -->
                     <img src="office03.JPG" class="circle-img" 
                          onclick="window.open(this.src)" 
                          title="点击查看大图" 
                          onerror="this.style.display='none'">
 
                     <div class="comment-line"></div>
-                    <!-- 本条朋友圈对应的评论区 -->
                     <div class="comment-widget" id="comment2"></div>
                 </div>
             </div>
         </div>
-        <!-- ===================== 第二条朋友圈 结束 ===================== -->
 
     </div>
 
-    <!-- 评论组件JS 全局引入 -->
+    <!-- 评论组件JS -->
     <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
     <script>
-        // 初始化 第一条朋友圈评论区
+        // 核心：pageId 每条朋友圈设置唯一值，实现评论彻底分离
+        // 第一条动态：pageId = moment_001
         window.FastCommentsUI(document.getElementById('comment1'), {
-            tenantId: 'pbN5Owiw1B1'
-        });
-        // 初始化 第二条朋友圈评论区
-        window.FastCommentsUI(document.getElementById('comment2'), {
-            tenantId: 'pbN5Owiw1B1'
+            tenantId: 'pbN5Owiw1B1',
+            pageId: 'moment_001'  // 唯一标识，不可和其他重复
         });
 
-        // 新增朋友圈规则：
-        // 1. 复制一整段 <div class="friend-circle-item">...</div>
-        // 2. 修改 id="comment3"、comment4... 保证唯一
-        // 3. 在下方追加对应初始化代码即可
+        // 第二条动态：pageId = moment_002
+        window.FastCommentsUI(document.getElementById('comment2'), {
+            tenantId: 'pbN5Owiw1B1',
+            pageId: 'moment_002'  // 唯一标识
+        });
+
+        /*
+        🔔 新增朋友圈规则：
+        1. 复制整段 friend-circle-item 模块
+        2. 评论容器 id 改为 comment3、comment4...
+        3. pageId 按顺序改为 moment_003、moment_004...（必须唯一）
+        4. 在下方追加对应初始化代码
+        */
     </script>
 </body>
 </html>
