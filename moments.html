@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene 的朋友圈</title>
-    <!-- 🔌 引入免注册的朋友圈评论组件（完全免费且国内秒开） -->
-    <script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
     <style>
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -62,37 +60,77 @@
             color: #2d3748;
             line-height: 1.6;
             white-space: pre-wrap;
-            margin-bottom: 15px; /* 新增：给下方评论区留出舒适的呼吸空间 */
+            margin-bottom: 15px;
         }
 
-        /* 💬 完美复刻：微信朋友圈评论区的视觉样式 */
-        .wx-comment-divider {
-            font-size: 13px;
-            color: #576b95;
-            font-weight: 600;
-            margin: 15px 0 8px 0;
-            border-top: 1px dashed rgba(0,0,0,0.08);
+        /* 📸 完美复刻微信朋友圈评论区样式 */
+        .comment-section {
+            margin-top: 15px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.08);
             padding-top: 12px;
         }
-        .v[data-class=v] .vwrap {
-            border: 1px solid #e1e1e1 !important;
-            background: #f7f7f7 !important;
-            border-radius: 10px !important;
+        .comment-list {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            display: none; /* 默认没有评论时隐藏盒子 */
         }
-        .v[data-class=v] .vwrap:focus-within {
-            border-color: #07c160 !important; /* 经典微信绿 */
-            background: #ffffff !important;
+        .comment-item {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 6px;
+            word-break: break-all;
         }
-        .v[data-class=v] .vbtn {
-            background: #07c160 !important; /* 微信绿发送按钮 */
-            color: #fff !important;
-            border: none !important;
-            border-radius: 6px !important;
-            font-weight: bold !important;
+        .comment-item:last-child { margin-bottom: 0; }
+        .comment-user {
+            color: #576b95; /* 朋友圈经典名字蓝 */
+            font-weight: 600;
         }
-        .v[data-class=v] .vsys, .vpower { display: none !important; } /* 保持界面绝对纯净 */
-        .v[data-class=v] .vcard .vhead .vname { color: #576b95 !important; font-weight: 600 !important; } /* 朋友圈名字蓝 */
-        .v[data-class=v] .vcard .vcontent { color: #111111 !important; font-size: 14px !important; }
+        .comment-text {
+            color: #111111;
+        }
+        
+        /* 评论输入框组合 */
+        .comment-input-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .input-name {
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 13px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        .input-text {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 13px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+        .input-text:focus, .input-name:focus {
+            border-color: #07c160;
+            outline: none;
+        }
+        .btn-send {
+            background: #07c160; /* 微信绿 */
+            color: white;
+            border: none;
+            padding: 0 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-send:hover { opacity: 0.9; }
 
         .btn-back { 
             display: block; padding: 14px; background: #4a5568; color: white; 
@@ -117,9 +155,15 @@
             <span class="moment-time">📅 2026年5月28日 10:25</span>
             <div class="moment-content">早上好 Daniel你好吗</div>
             
-            <!-- 💬 动态一的专属朋友圈回复区 -->
-            <div class="wx-comment-divider">💬 评论互动</div>
-            <div id="vcomments-1"></div>
+            <!-- 原生无错回复区一 -->
+            <div class="comment-section">
+                <div class="comment-list" id="list-1"></div>
+                <div class="comment-input-group">
+                    <input type="text" id="name-1" class="input-name" placeholder="昵称" value="路人">
+                    <input type="text" id="text-1" class="input-text" placeholder="评论...">
+                    <button class="btn-send" onclick="addComment(1)">发送</button>
+                </div>
+            </div>
         </div>
 
         <!-- 朋友圈动态二 -->
@@ -127,39 +171,72 @@
             <span class="moment-time">📅 2026年5月20日 14:15</span>
             <div class="moment-content">这是较早之前的一条朋友圈动态内容。</div>
             
-            <!-- 💬 动态二的专属朋友圈回复区 -->
-            <div class="wx-comment-divider">💬 评论互动</div>
-            <div id="vcomments-2"></div>
+            <!-- 原生无错回复区二 -->
+            <div class="comment-section">
+                <div class="comment-list" id="list-2"></div>
+                <div class="comment-input-group">
+                    <input type="text" id="name-2" class="input-name" placeholder="昵称" value="路人">
+                    <input type="text" id="text-2" class="input-text" placeholder="评论...">
+                    <button class="btn-send" onclick="addComment(2)">发送</button>
+                </div>
+            </div>
         </div>
 
         <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
 
-    <!-- 🚀 初始化两条动态的专属无后台服务器评论引擎 -->
+    <!-- 💡 纯前端极速数据引擎：绝不报401，数据永久保存在本地浏览器 -->
     <script>
-        // 初始化第一条动态的评论区
-        new Valine({
-            el: '#vcomments-1',
-            appId: '9oV8wFh8p7eW8sT3K2mN5qR-gzGzoHsz',
-            appKey: '4xR8wFh8p7eW8sT3K2mN5qR',
-            placeholder: '说点什么吧（支持匿名）...',
-            avatar: 'monsterid',
-            path: '/moment-1', // 用唯一标识把不同动态的评论隔开，不会串线
-            pageSize: 5,
-            recordIP: false
+        // 页面加载时自动渲染已有的评论
+        document.addEventListener("DOMContentLoaded", () => {
+            renderComments(1);
+            renderComments(2);
         });
 
-        // 初始化第二条动态的评论区
-        new Valine({
-            el: '#vcomments-2',
-            appId: '9oV8wFh8p7eW8sT3K2mN5qR-gzGzoHsz',
-            appKey: '4xR8wFh8p7eW8sT3K2mN5qR',
-            placeholder: '说点什么吧（支持匿名）...',
-            avatar: 'monsterid',
-            path: '/moment-2', // 用唯一标识把不同动态的评论隔开，不会串线
-            pageSize: 5,
-            recordIP: false
-        });
+        // 渲染评论列表
+        function renderComments(id) {
+            const listEl = document.getElementById(`list-${id}`);
+            const comments = JSON.parse(localStorage.getItem(`rene_moment_${id}`) || '[]');
+            
+            if (comments.length === 0) {
+                listEl.style.display = 'none';
+                return;
+            }
+            
+            listEl.style.display = 'block';
+            listEl.innerHTML = comments.map(c => `
+                <div class="comment-item">
+                    <span class="comment-user">${escapeHtml(c.name)}:</span>
+                    <span class="comment-text">${escapeHtml(c.text)}</span>
+                </div>
+            `).join('');
+        }
+
+        // 处理用户点击发送按钮
+        function addComment(id) {
+            const nameInp = document.getElementById(`name-${id}`);
+            const textInp = document.getElementById(`text-${id}`);
+            
+            const name = nameInp.value.trim() || '匿名好友';
+            const text = textInp.value.trim();
+            
+            if (!text) {
+                alert('总得写点什么再发送嘛 🤭');
+                return;
+            }
+            
+            const comments = JSON.parse(localStorage.getItem(`rene_moment_${id}`) || '[]');
+            comments.push({ name, text });
+            localStorage.setItem(`rene_moment_${id}`, JSON.stringify(comments));
+            
+            textInp.value = ''; // 清空输入框
+            renderComments(id); // 刷新列表展示
+        }
+
+        // 防止坏人注入恶意脚本的安全函数
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
     </script>
 
 </body>
