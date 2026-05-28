@@ -60,35 +60,38 @@
             color: #2d3748;
             line-height: 1.6;
             white-space: pre-wrap;
-            margin-bottom: 15px;
         }
 
-        /* 📸 完美复刻微信朋友圈灰色交互区：绝不报错 */
-        .comment-section {
+        /* 📸 完美复刻：正宗微信朋友圈灰色互动卡片区（0报错，超稳定） */
+        .wx-comment-box {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            padding: 10px 12px;
             margin-top: 15px;
-            border-top: 1px dashed rgba(0, 0, 0, 0.08);
-            padding-top: 15px;
-        }
-        .wx-reply-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f7f7f7;
-            border: 1px solid #e1e1e1;
-            padding: 10px 14px;
-            border-radius: 10px;
-            color: #8e8e93;
             font-size: 14px;
-            text-decoration: none;
-            transition: all 0.2s ease;
         }
-        .wx-reply-btn:hover {
-            background: #ffffff;
-            border-color: #07c160; /* 激活微信绿 */
-        }
-        .wx-reply-btn span.action-text {
-            color: #576b95; /* 朋友圈经典名字蓝 */
+        /* 朋友圈经典点赞爱心列表 */
+        .wx-likes {
+            color: #576b95;
             font-weight: 600;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        }
+        .wx-comment-item {
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+        .wx-comment-item:last-child {
+            margin-bottom: 0;
+        }
+        /* 朋友圈经典名字蓝色 */
+        .wx-user {
+            color: #576b95;
+            font-weight: 600;
+        }
+        .wx-text {
+            color: #111111;
         }
 
         .btn-back { 
@@ -114,12 +117,15 @@
             <span class="moment-time">📅 2026年5月28日 10:25</span>
             <div class="moment-content">早上好 Daniel你好吗</div>
             
-            <!-- 💬 完美的微信绿朋友圈回复通道 -->
-            <div class="comment-section">
-                <a href="https://ngl.link/rene25528" target="_blank" class="wx-reply-btn">
-                    <span>💭 评论这条动态...</span>
-                    <span class="action-text">去神评 →</span>
-                </a>
+            <!-- 💬 动态一：正宗朋友圈回复区，你想加多少条神评都能直接整齐列在下面 -->
+            <div class="wx-comment-box">
+                <div class="wx-likes">❤️ Daniel, 方大同, 卢广仲</div>
+                <div class="wx-comment-item">
+                    <span class="wx-user">Daniel</span>: <span class="wx-text">早啊！我很好，今天有没有听方大同？🎸</span>
+                </div>
+                <div class="wx-comment-item">
+                    <span class="wx-user">Rene</span> <span style="color: #2d3748;">回复</span> <span class="wx-user">Daniel</span>: <span class="wx-text">必须的，正在循环《三人游》呢 🎧</span>
+                </div>
             </div>
         </div>
 
@@ -128,12 +134,14 @@
             <span class="moment-time">📅 2026年5月20日 14:15</span>
             <div class="moment-content">这是较早之前的一条朋友圈动态内容。</div>
             
-            <!-- 💬 完美的微信绿朋友圈回复通道 -->
-            <div class="comment-section">
-                <a href="https://ngl.link/rene25528" target="_blank" class="wx-reply-btn">
-                    <span>💭 评论这条动态...</span>
-                    <span class="action-text">去神评 →</span>
-                </a>
+            <!-- 💬 动态二：正宗朋友圈回复区 -->
+            <div class="wx-comment-box">
+                <div class="wx-comment-item">
+                    <span class="wx-user">路人甲</span>: <span class="wx-text">沙发！香港彭于晏诚不欺我 😂</span>
+                </div>
+                <div class="wx-comment-item">
+                    <span class="wx-user">朝圣粉丝</span>: <span class="wx-text">来看小队长的忠实歌迷了！Rock'n roll 的 style！🦖</span>
+                </div>
             </div>
         </div>
 
