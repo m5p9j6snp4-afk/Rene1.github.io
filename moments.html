@@ -1,49 +1,48 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rene's Moments</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 500px; margin: 0 auto; }
-        .moment-row { display: flex; gap: 12px; margin-bottom: 40px; }
-        .avatar { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; background: #eee; flex-shrink: 0; }
-        .content-box { flex: 1; }
-        .name { font-weight: 600; color: #576b95; font-size: 15px; margin-bottom: 2px; }
-        .time { font-size: 12px; color: #b2b2b2; margin-bottom: 8px; }
-        .text { margin-bottom: 12px; line-height: 1.5; font-size: 15px; }
-        
-        /* 图片预览样式：光标手势，点击放大 */
-        .moment-img { width: 100%; max-width: 200px; border-radius: 4px; display: block; margin-bottom: 15px; cursor: zoom-in; transition: transform 0.2s; }
-        .moment-img:active { transform: scale(0.98); }
-        
-        #fastcomments-widget { margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="moment-row">
-        <img src="toto01.jpg" class="avatar" onerror="this.style.display='none'">
-        <div class="content-box">
-            <div class="name">Rene</div>
-            <div class="time">2026年5月28日</div>
-            <div class="text">晚上好</div>
-            
-            <!-- 图片点击放大逻辑 -->
-            <img src="office03.JPG.jpg" class="moment-img" onclick="window.open(this.src)" title="点击查看大图" onerror="this.style.display='none'">
-            
-            <div id="fastcomments-widget"></div>
-        </div>
-    </div>
+<!-- 1. 发布区域 -->
+<div style="margin-bottom: 30px;">
+    <textarea id="moment-input" placeholder="这一刻的想法..." style="width: 100%; height: 60px;"></textarea>
+    <button onclick="postMoment()">发布动态</button>
 </div>
 
+<!-- 2. 动态展示区域 -->
+<div id="moments-list"></div>
+
+<!-- 3. 加载 FastComments 核心脚本 -->
 <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
+
 <script>
-    window.FastCommentsUI(document.getElementById('fastcomments-widget'), {
-        tenantId: 'pbN5Owiw1B1'
-    });
+    // 发布动态逻辑
+    function postMoment() {
+        const text = document.getElementById('moment-input').value;
+        if (!text) return;
+
+        // 生成一个基于时间的唯一ID，作为这条动态的“评论ID”
+        const uniqueId = 'moment-' + Date.now();
+        
+        createMomentElement(text, uniqueId);
+        document.getElementById('moment-input').value = '';
+    }
+
+    // 渲染动态及绑定评论
+    function createMomentElement(text, uniqueId) {
+        const container = document.getElementById('moments-list');
+        const wrapper = document.createElement('div');
+        wrapper.className = 'moment-row';
+        wrapper.innerHTML = `
+            <img src="toto01.jpg" class="avatar">
+            <div class="content-box">
+                <div class="name">Rene</div>
+                <div class="text">${text}</div>
+                <!-- 这是每一条动态专属的评论区 -->
+                <div id="${uniqueId}" style="margin-top: 10px;"></div>
+            </div>
+        `;
+        container.insertBefore(wrapper, container.firstChild);
+
+        // 调用 FastComments，为这个唯一 ID 挂载评论区
+        window.FastCommentsUI(document.getElementById(uniqueId), {
+            tenantId: 'pbN5Owiw1B1',
+            urlId: uniqueId // 核心：这就是区分不同动态评论的关键
+        });
+    }
 </script>
-</body>
-</html>
