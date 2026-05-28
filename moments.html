@@ -11,7 +11,11 @@
         .moment-card { background: var(--card-bg); padding: 24px; margin-bottom: 12px; }
         .moment-time { font-size: 12px; color: var(--text-light); margin-bottom: 8px; display: block; }
         .moment-content { font-size: 16px; line-height: 1.5; margin-bottom: 16px; }
-        .moment-img { width: 100%; border-radius: 8px; margin-bottom: 16px; object-fit: cover; display: block; }
+        
+        /* 图片点击放大样式 */
+        .moment-img { width: 100%; border-radius: 8px; margin-bottom: 16px; object-fit: cover; display: block; cursor: zoom-in; transition: opacity 0.2s; }
+        .moment-img:hover { opacity: 0.9; }
+        
         .comment-section { background: #f2f2f7; padding: 12px; border-radius: 6px; font-size: 14px; }
         .comment-item { margin-bottom: 8px; line-height: 1.4; }
         .wl-nick { color: var(--accent); font-weight: 600; margin-right: 4px; }
@@ -27,7 +31,9 @@
     <div class="moment-card">
         <span class="moment-time">14:30</span>
         <div class="moment-content">好饱好饱</div>
-        <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
+        <a href="你的图片文件名.jpg" target="_blank">
+            <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
+        </a>
         <div class="comment-section">
             <div class="comment-item"><span class="wl-nick">彭于晏:</span><span class="wl-content">刚才不是饿吗</span></div>
             <div class="comment-item">
@@ -40,7 +46,9 @@
     <div class="moment-card">
         <span class="moment-time">12:06</span>
         <div class="moment-content">时间好慢，好饿。</div>
-        <img src="你的图片文件名.jpg" class="moment-img" onerror="this.style.display='none'">
+        <a href="图片.jpg" target="_blank">
+            <img src="图片.jpg" class="moment-img" onerror="this.style.display='none'">
+        </a>
         <div class="comment-section">
             <div class="comment-item"><span class="wl-nick">Daniel:</span><span class="wl-content">看着好无聊</span></div>
             <div class="comment-item">
@@ -54,7 +62,9 @@
     <div class="moment-card">
         <span class="moment-time">12:05</span>
         <div class="moment-content">今天 office 没有人，好安静。</div>
-        <img src="office03.JPG.jpg" class="moment-img" onerror="this.style.display='none'">
+        <a href="office03.JPG.jpg" target="_blank">
+            <img src="office03.JPG.jpg" class="moment-img" onerror="this.style.display='none'">
+        </a>
         <div class="comment-section">
             <div class="comment-item"><span class="wl-nick">老王:</span><span class="wl-content">一个人包场真好，可以偷偷听歌。</span></div>
             <div class="comment-item">
