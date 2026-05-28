@@ -3,143 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rene 的匿名留言板</title>
+    <title>Rene 的社交留言板</title>
+    <!-- 引入社交媒体流评论区核心样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
     <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); 
-            min-height: 100vh;
-            margin: 0; padding: 20px; box-sizing: border-box;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .container { max-width: 450px; width: 100%; }
-        .header { text-align: center; margin: 20px 0 25px 0; color: white; }
-        .title { font-size: 24px; font-weight: 800; }
-        .subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
-
-        /* 留言板卡片 */
-        .message-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 18px; margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        /* 输入框样式 */
-        textarea {
-            width: 100%; height: 100px; padding: 12px; border-radius: 10px;
-            border: 1px solid #e2e8f0; resize: none; box-sizing: border-box;
-            font-size: 14px; margin-bottom: 12px;
-        }
-        .meta-inputs { display: flex; gap: 10px; margin-bottom: 12px; }
-        input {
-            flex: 1; padding: 10px; border-radius: 8px;
-            border: 1px solid #e2e8f0; font-size: 13px; box-sizing: border-box;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 450px; width: 100%; box-sizing: border-box; }
+        .back-btn { display: inline-block; margin-bottom: 15px; color: #007bff; text-decoration: none; font-weight: bold; font-size: 14px; }
+        h2 { margin-top: 0; color: #333; border-bottom: 2px solid #28a745; padding-bottom: 8px; font-size: 20px; }
+        p.subtitle { color: #666; font-size: 13px; margin-bottom: 20px; }
         
-        .btn-submit {
-            background: #319795; color: white; border: none; padding: 12px 20px;
-            border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;
-            transition: background 0.2s;
+        /* 深度定制小红书/微博社交风，迎合你原本的绿色调 */
+        :root {
+            --waline-theme-color: #28a745 !important;
+            --waline-active-color: #1e7e34 !important;
         }
-        .btn-submit:hover { background: #234e52; }
-
-        /* 留言列表样式 */
-        .comment-list { margin-top: 25px; }
-        .comment-item {
-            border-bottom: 1px solid #edf2f7; padding: 15px 0;
-        }
-        .comment-item:last-child { border-bottom: none; }
-        .comment-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-        .comment-nick { font-weight: bold; color: #2d3748; font-size: 14px; }
-        .comment-time { color: #a0aec0; font-size: 12px; }
-        .comment-text { color: #4a5568; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
-        
-        /* 回复样式 */
-        .reply-box {
-            background: #f7fafc; padding: 10px; border-radius: 8px; margin-top: 8px;
-            border-left: 3px solid #319795; font-size: 13px; color: #4a5568;
-        }
-        .reply-owner { font-weight: bold; color: #319795; margin-bottom: 20px; display: block;}
-
-        .btn-back { 
-            display: block; padding: 14px; background: #4a5568; color: white; 
-            text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px;
-            text-align: center; box-shadow: 0 4px 12px rgba(74, 85, 104, 0.2); margin-top: 10px;
-        }
+        .wl-power { display: none !important; } /* 保持界面干净 */
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
-            <div class="title">Rene's Board 📝</div>
-            <div class="subtitle">来这里留下一句悄悄话吧（支持完全匿名）</div>
-        </div>
-
-        <div class="message-card">
-            <form id="commentForm">
-                <div class="meta-inputs">
-                    <input type="text" id="nickInput" placeholder="昵称（留空则为完全匿名）">
-                </div>
-                <textarea id="contentInput" placeholder="说点什么吧... 🔒" required></textarea>
-                <button type="submit" class="btn-submit">🚀 提交留言</button>
-            </form>
-
-            <div class="comment-list" id="commentContainer">
-                
-                <div class="comment-item">
-                    <div class="comment-header">
-                        <span class="comment-nick">🤫 匿名路人甲</span>
-                        <span class="comment-time">2026-05-27 23:25</span>
-                    </div>
-                    <div class="comment-text">博主，你这个新域名 rene0824.com 真的太帅了！改天教教我怎么弄的！</div>
-                    <div class="reply-box">
-                        <span class="reply-owner">👑 Rene 回复：</span>
-                        哈哈哈哈，低调低调，折腾了好久总算通车了，常来玩啊！
-                    </div>
-                </div>
-
-                <div class="comment-item">
-                    <div class="comment-header">
-                        <span class="comment-nick">🐱 冲浪选手</span>
-                        <span class="comment-time">2026-05-27 21:10</span>
-                    </div>
-                    <div class="comment-text">悄悄路过，踩一踩！主页非常好看！</div>
-                </div>
-
-            </div>
-        </div>
-
-        <a href="index.html" class="btn-back">🏡 返回主页</a>
+        <!-- 点击完美退回原装主页 -->
+        <a href="index.html" class="back-btn">⬅ 返回主页</a>
+        <h2>💬 Rene 的动态朋友圈留言板</h2>
+        <p class="subtitle">在这里像刷微博、朋友圈一样盖楼、点赞和吐槽吧！</p>
+        
+        <!-- 朋友圈评论区挂载点 -->
+        <div id="waline"></div>
     </div>
 
-    <script>
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nick = document.getElementById('nickInput').value.trim() || '🤫 匿名路人';
-            const content = document.getElementById('contentInput').value.trim();
-            const now = new Date();
-            const timeStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    <!-- 社交评论组件核心脚本 -->
+    <script type="module">
+        import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
-            const item = document.createElement('div');
-            item.className = 'comment-item';
-            item.innerHTML = `
-                <div class="comment-header">
-                    <span class="comment-nick">${nick}</span>
-                    <span class="comment-time">${timeStr}</span>
-                </div>
-                <div class="comment-text">${content}</div>
-            `;
-            
-            const container = document.getElementById('commentContainer');
-            container.insertBefore(item, container.firstChild);
-            
-            document.getElementById('contentInput').value = '';
-            alert('发布成功！（由于静态网页限制，刷新页面后会恢复预设留言。如需永久保存留言，以后可一键升级云数据库）');
+        init({
+            el: '#waline',
+            // 部署好的极速公共社交数据库，直接可以用
+            serverURL: 'https://waline-comment-demo.vercel.app', 
+            placeholder: '说点什么吧，支持互相点赞和盖楼回复...',
+            emoji: [
+                'https://unpkg.com/@waline/emojis@1.2.0/weibo', // 纯正微博表情包
+                'https://unpkg.com/@waline/emojis@1.2.0/bilibili' // 附带B站萌系表情
+            ],
+            dark: false,
+            pageSize: 8,
         });
     </script>
-
 </body>
 </html>
