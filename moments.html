@@ -4,179 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene 的朋友圈</title>
-    <!-- 🔌 核心动力：引入 Waline 极速社交评论引擎（国内网络秒开，刷新绝不丢失） -->
-    <script src="https://cdn.jsdelivr.net/npm/@waline/client@2.15.8/dist/waline.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@waline/client@2.15.8/dist/waline.css" rel="stylesheet">
     <style>
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); 
-            min-height: 100vh;
-            margin: 0; 
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container { 
-            max-width: 450px; 
-            width: 100%;
-        }
-        .header {
-            text-align: center;
-            margin: 20px 0 30px 0;
-            color: white;
-        }
-        .header-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            margin-bottom: 12px;
-        }
-        .title { font-size: 24px; font-weight: 800; }
-        .subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
-
-        .moment-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .moment-time {
-            font-size: 13px;
-            color: #8a99ad;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: block;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 5px;
-        }
-        .moment-content {
-            font-size: 15px;
-            color: #2d3748;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            margin-bottom: 15px;
-        }
-
-        /* 📸 视觉魔法：通过 CSS 强行把第三方评论区整容成“纯正微信朋友圈风格” */
-        .comment-section {
-            margin-top: 15px;
-            border-top: 1px dashed rgba(0, 0, 0, 0.08);
-            padding-top: 12px;
-        }
-        /* 100% 还原朋友圈灰色回复背景墙 */
-        .wl-cards {
-            background: rgba(0, 0, 0, 0.03) !important;
-            border-radius: 8px !important;
-            padding: 8px 12px !important;
-            border: none !important;
-        }
-        /* 朋友圈经典名字蓝 */
-        .wl-nick {
-            color: #576b95 !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-        }
-        /* 朋友圈回复正文黑色 */
-        .wl-content {
-            color: #111111 !important;
-            font-size: 14px !important;
-            margin-top: 2px !important;
-        }
-        /* 极简原装输入框与微信绿发送按钮 */
-        .wl-editor {
-            background: #fff !important;
-            border: 1px solid #e1e1e1 !important;
-            border-radius: 8px !important;
-            padding: 8px !important;
-            font-size: 13px !important;
-        }
-        .wl-editor:focus {
-            border-color: #07c160 !important;
-        }
-        .wl-btn {
-            background: #07c160 !important; /* 微信绿色发送键 */
-            border: none !important;
-            color: white !important;
-            border-radius: 6px !important;
-            font-weight: bold !important;
-        }
-        /* 强力净化：隐去所有云端自带的乱七八糟邮箱、网址输入框以及小广告 */
-        .wl-header-item:not(:first-child), .wl-power, .wl-meta, .wl-avatar, .wl-footer, .wl-vcount { 
-            display: none !important; 
-        }
-        .wl-header { border-bottom: none !important; margin-bottom: 8px !important; }
-        .wl-header-item { width: 100% !important; }
-        .wl-input { border: 1px solid #e1e1e1 !important; border-radius: 6px !important; padding: 6px !important; background: #fff !important; }
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 450px; width: 100%; }
+        .moment-card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .comment-box { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .comment-item { font-size: 14px; margin: 5px 0; border-bottom: 1px solid #f9f9f9; padding: 3px 0; }
+        input, button { padding: 8px; margin-top: 5px; }
+        button { background: #07c160; color: white; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <img src="toto01.JPG" alt="头像" class="header-avatar">
-            <div class="title">Rene's Moments 📸</div>
-            <div class="subtitle">日常碎片动态记录</div>
+<div class="container" id="moments">
+    <div class="moment-card">
+        <div>早上好 Daniel你好吗</div>
+        <div class="comment-box" id="comments-moment-1">
+            <div class="list">加载中...</div>
+            <input type="text" id="input-1" placeholder="昵称">
+            <input type="text" id="text-1" placeholder="评论内容">
+            <button onclick="postComment('moment-1')">发送</button>
         </div>
-        
-        <!-- 朋友圈动态一 -->
-        <div class="moment-card">
-            <span class="moment-time">📅 2026年5月28日 10:25</span>
-            <div class="moment-content">早上好 Daniel你好吗</div>
-            
-            <!-- 💬 动态一：真实可提交的全网同步回复区 -->
-            <div class="comment-section">
-                <div id="waline-moment-1"></div>
-            </div>
-        </div>
-
-        <!-- 朋友圈动态二 -->
-        <div class="moment-card">
-            <span class="moment-time">📅 2026年5月20日 14:15</span>
-            <div class="moment-content">这是较早之前的一条朋友圈动态内容。</div>
-            
-            <!-- 💬 动态二：真实可提交的全网同步回复区 -->
-            <div class="comment-section">
-                <div id="waline-moment-2"></div>
-            </div>
-        </div>
-
-        <a href="index.html" class="btn-back">🏡 返回主页</a>
     </div>
+</div>
 
-    <!-- 🚀 云端多节点数据库实时同步脚本 -->
-    <script>
-        // 初始化第一条动态的真实云数据库
-        Waline.init({
-            el: '#waline-moment-1',
-            // 🔒 这是专为你配置的、允许全网公开跨域写入的专属极速云节点，绝对不会报 401！
-            serverURL: 'https://waline.rene0824.workers.dev', 
-            path: '/moment-20260528', // 确保两条朋友圈的评论各自独立，不会串线
-            placeholder: '评论...',
-            dark: false,
-            login: 'disable', // 免登录，大家输入个昵称就能直接当场发朋友圈回复
-            requiredMeta: ['nick'] 
-        });
+<script>
+    // 你的专属接口地址
+    const API_URL = 'https://late-water-d55a.bmk4byvf9b.workers.dev';
 
-        // 初始化第二条动态的真实云数据库
-        Waline.init({
-            el: '#waline-moment-2',
-            serverURL: 'https://waline.rene0824.workers.dev',
-            path: '/moment-20260520',
-            placeholder: '评论...',
-            dark: false,
-            login: 'disable',
-            requiredMeta: ['nick']
+    async function loadComments(id) {
+        const res = await fetch(`${API_URL}?id=${id}`);
+        const data = await res.json();
+        const list = document.querySelector(`#comments-${id} .list`);
+        list.innerHTML = data.map(c => `<div class="comment-item"><b>${c.name}:</b> ${c.text}</div>`).join('');
+    }
+
+    async function postComment(id) {
+        const name = document.getElementById(`input-${id.split('-')[1]}`).value;
+        const text = document.getElementById(`text-${id.split('-')[1]}`).value;
+        await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ id, name, text })
         });
-    </script>
+        loadComments(id);
+    }
+
+    // 初始化加载
+    loadComments('moment-1');
+</script>
 
 </body>
 </html>
