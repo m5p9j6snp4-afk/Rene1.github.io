@@ -4,14 +4,15 @@
     <title>俄罗斯方块</title>
     <style>
         body { background: #202028; color: #fff; text-align: center; font-family: sans-serif; }
+        /* 增加画布大小以匹配放大后的比例 */
         canvas { border: 2px solid #fff; background: #000; display: block; margin: 10px auto; }
         .controls { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        button { padding: 15px 25px; font-size: 16px; background: #576b95; color: white; border: none; border-radius: 5px; }
+        button { padding: 15px 25px; font-size: 20px; background: #576b95; color: white; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
     <h3>俄罗斯方块</h3>
-    <canvas id="tetris" width="240" height="400"></canvas>
+    <canvas id="tetris" width="360" height="600"></canvas>
     <div class="controls">
         <button onclick="playerMove(-1)">⬅️</button>
         <button onclick="playerRotate(1)">🔄</button>
@@ -22,7 +23,9 @@
 <script>
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
-context.scale(20, 20);
+
+// 【修改点1】放大显示比例：从 20 改为 30
+context.scale(30, 30);
 
 function createPiece(type) {
     if (type === 'T') return [[0, 1, 0], [1, 1, 1], [0, 0, 0]];
@@ -51,16 +54,24 @@ function drawMatrix(matrix, offset) {
         row.forEach((value, x) => {
             if (value !== 0) {
                 context.fillStyle = 'red';
-                context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                // 【修改点2】方块留出小缝隙，质感更好
+                context.fillRect(x + offset.x, y + offset.y, 0.9, 0.9);
             }
         });
     });
 }
 
 function playerMove(dir) { player.pos.x += dir; draw(); }
-function playerRotate(dir) { /* 旋转逻辑简化 */ }
-function update() { player.pos.y++; draw(); setTimeout(update, 1000); }
+function playerRotate(dir) { /* 后续扩展旋转功能 */ }
 
+// 【修改点3】减慢速度：从 1000 改为 2000 (单位毫秒)
+function update() { 
+    player.pos.y++; 
+    draw(); 
+    setTimeout(update, 2000); 
+}
+
+draw();
 update();
 </script>
 </body>
