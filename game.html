@@ -1,49 +1,67 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>互动游戏室</title>
+    <title>俄罗斯方块</title>
     <style>
-        body { background: #f7f7f7; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
-        .game-card { background: #fff; width: 100%; max-width: 500px; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
-        #reaction-btn { width: 200px; height: 200px; border-radius: 50%; border: none; background: #e74c3c; color: white; font-size: 20px; cursor: pointer; margin: 20px 0; }
-        #reaction-btn.ready { background: #2ecc71; }
+        body { background: #202028; color: #fff; text-align: center; font-family: sans-serif; }
+        canvas { border: 2px solid #fff; background: #000; display: block; margin: 10px auto; }
+        .controls { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        button { padding: 15px 25px; font-size: 16px; background: #576b95; color: white; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
-<div class="game-card">
-    <h2>反应力挑战</h2>
-    <p id="msg">点击开始，变绿后立即点击！</p>
-    <button id="reaction-btn" onclick="handleReaction()">开始</button>
-    <br>
-    <a href="index.html">← 返回主页</a>
-</div>
+    <h3>俄罗斯方块</h3>
+    <canvas id="tetris" width="240" height="400"></canvas>
+    <div class="controls">
+        <button onclick="playerMove(-1)">⬅️</button>
+        <button onclick="playerRotate(1)">🔄</button>
+        <button onclick="playerMove(1)">➡️</button>
+    </div>
+    <div style="margin-top: 10px;"><a href="index.html" style="color:#aaa;">返回主页</a></div>
+
 <script>
-    let startTime, timeoutID;
-    const btn = document.getElementById('reaction-btn');
-    const msg = document.getElementById('msg');
-    function handleReaction() {
-        if (btn.innerText === "开始" || btn.innerText === "再试一次") {
-            btn.innerText = "等待...";
-            btn.style.background = "#3498db";
-            btn.className = "";
-            timeoutID = setTimeout(() => {
-                btn.className = "ready";
-                btn.innerText = "点我！";
-                startTime = Date.now();
-            }, Math.random() * 2000 + 1000);
-        } else if (btn.className === "ready") {
-            msg.innerHTML = `反应时间: <strong>${Date.now() - startTime} ms</strong>`;
-            btn.className = "";
-            btn.style.background = "#e74c3c";
-            btn.innerText = "再试一次";
-        } else {
-            clearTimeout(timeoutID);
-            msg.innerText = "太急啦！";
-            btn.style.background = "#e74c3c";
-            btn.innerText = "开始";
-        }
-    }
+const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
+context.scale(20, 20);
+
+function createPiece(type) {
+    if (type === 'T') return [[0, 1, 0], [1, 1, 1], [0, 0, 0]];
+    if (type === 'O') return [[2, 2], [2, 2]];
+    if (type === 'L') return [[0, 3, 0], [0, 3, 0], [0, 3, 3]];
+}
+
+const arena = createMatrix(12, 20);
+const player = { pos: {x: 5, y: 0}, matrix: createPiece('T') };
+
+function createMatrix(w, h) {
+    const matrix = [];
+    while (h--) matrix.push(new Array(w).fill(0));
+    return matrix;
+}
+
+function draw() {
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    drawMatrix(arena, {x: 0, y: 0});
+    drawMatrix(player.matrix, player.pos);
+}
+
+function drawMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                context.fillStyle = 'red';
+                context.fillRect(x + offset.x, y + offset.y, 1, 1);
+            }
+        });
+    });
+}
+
+function playerMove(dir) { player.pos.x += dir; draw(); }
+function playerRotate(dir) { /* 旋转逻辑简化 */ }
+function update() { player.pos.y++; draw(); setTimeout(update, 1000); }
+
+update();
 </script>
 </body>
 </html>
