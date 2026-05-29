@@ -44,11 +44,15 @@
         // 自动查找页面中所有的 .comment-widget 并进行初始化
         const widgets = document.querySelectorAll('.comment-widget');
         widgets.forEach(el => {
+            const uniqueId = el.getAttribute('data-page-id');
+            
             window.FastCommentsUI(el, {
                 tenantId: 'pbN5Owiw1B1',
-                pageId: el.getAttribute('data-page-id') // 自动读取每个容器的唯一 ID
+                urlId: uniqueId,  // 关键：修改为 urlId
+                pageId: uniqueId  // 保留 pageId 辅助识别
             });
         });
     </script>
+
 </body>
 </html>
