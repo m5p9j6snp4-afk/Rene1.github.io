@@ -3,75 +3,124 @@
 <head>
     <title>俄罗斯方块</title>
     <style>
-        body { background: #202028; color: #fff; text-align: center; font-family: sans-serif; }
-        /* 增加画布大小以匹配放大后的比例 */
-        canvas { border: 2px solid #fff; background: #000; display: block; margin: 10px auto; }
-        .controls { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        button { padding: 15px 25px; font-size: 20px; background: #576b95; color: white; border: none; border-radius: 5px; }
+        body { background: #202028; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; color: white; font-family: sans-serif; }
+        canvas { border: 4px solid #fff; background: #000; }
+        .controls { margin-top: 15px; display: flex; gap: 10px; }
+        button { padding: 15px 25px; font-size: 18px; border-radius: 8px; border: none; background: #576b95; color: white; }
     </style>
 </head>
 <body>
-    <h3>俄罗斯方块</h3>
-    <canvas id="tetris" width="360" height="600"></canvas>
+    <div id="score">分数: 0</div>
+    <canvas id="tetris" width="240" height="400"></canvas>
     <div class="controls">
         <button onclick="playerMove(-1)">⬅️</button>
-        <button onclick="playerRotate(1)">🔄</button>
+        <button onclick="playerRotate()">🔄</button>
         <button onclick="playerMove(1)">➡️</button>
     </div>
-    <div style="margin-top: 10px;"><a href="index.html" style="color:#aaa;">返回主页</a></div>
+    <a href="index.html" style="margin-top: 20px; color: #aaa; text-decoration: none;">返回主页</a>
 
 <script>
 const canvas = document.getElementById('tetris');
-const context = canvas.getContext('2d');
+const ctx = canvas.getContext('2d');
+ctx.scale(20, 20);
 
-// 【修改点1】放大显示比例：从 20 改为 30
-context.scale(50, 50);
-
-function createPiece(type) {
-    if (type === 'T') return [[0, 1, 0], [1, 1, 1], [0, 0, 0]];
-    if (type === 'O') return [[2, 2], [2, 2]];
-    if (type === 'L') return [[0, 3, 0], [0, 3, 0], [0, 3, 3]];
+function arenaSweep() {
+    let rowCount = 1;
+    outer: for (let y = arena.length - 1; y > 0; --y) {
+        for (let x = 0; x < arena[y].length; ++x) {
+            if (arena[y][x] === 0) continue outer;
+        }
+        const row = arena.splice(y, 1)[0].fill(0);
+        arena.unshift(row);
+        ++y;
+        player.score += rowCount * 10;
+        rowCount *= 2;
+    }
+    document.getElementById('score').innerText = "分数: " + player.score;
 }
 
-const arena = createMatrix(12, 20);
-const player = { pos: {x: 5, y: 0}, matrix: createPiece('T') };
-
-function createMatrix(w, h) {
-    const matrix = [];
-    while (h--) matrix.push(new Array(w).fill(0));
-    return matrix;
+function collide(arena, player) {
+    const [m, o] = [player.matrix, player.pos];
+    for (let y = 0; y < m.length; ++y) {
+        for (let x = 0; x < m[y].length; ++x) {
+            if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true;
+        }
+    }
+    return false;
 }
+
+function createMatrix(w, h) { return Array.from({length: h}, () => Array(w).fill(0)); }
 
 function draw() {
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawMatrix(arena, {x: 0, y: 0});
     drawMatrix(player.matrix, player.pos);
 }
 
 function drawMatrix(matrix, offset) {
-    matrix.forEach((row, y) => {
-        row.forEach((value, x) => {
-            if (value !== 0) {
-                context.fillStyle = 'red';
-                // 【修改点2】方块留出小缝隙，质感更好
-                context.fillRect(x + offset.x, y + offset.y, 0.9, 0.9);
-            }
-        });
-    });
+    matrix.forEach((row, y) => row.forEach((val, x) => {
+        if (val !== 0) { ctx.fillStyle = 'red'; ctx.fillRect(x + offset.x, y + offset.y, 1, 1); }
+    }));
 }
 
-function playerMove(dir) { player.pos.x += dir; draw(); }
-function playerRotate(dir) { /* 后续扩展旋转功能 */ }
-
-// 【修改点3】减慢速度：从 1000 改为 2000 (单位毫秒)
-function update() { 
-    player.pos.y++; 
-    draw(); 
-    setTimeout(update, 5000); 
+function merge(arena, player) {
+    player.matrix.forEach((row, y) => row.forEach((val, x) => {
+        if (val !== 0) arena[y + player.pos.y][x + player.pos.x] = val;
+    }));
 }
 
-draw();
+function playerDrop() {
+    player.pos.y++;
+    if (collide(arena, player)) {
+        player.pos.y--;
+        merge(arena, player);
+        playerReset();
+        arenaSweep();
+    }
+    dropCounter = 0;
+}
+
+function playerMove(dir) {
+    player.pos.x += dir;
+    if (collide(arena, player)) player.pos.x -= dir;
+}
+
+function playerReset() {
+    const pieces = 'ILJOTSZ';
+    player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+    player.pos.y = 0;
+    player.pos.x = 5;
+    if (collide(arena, player)) arena.forEach(row => row.fill(0));
+}
+
+function playerRotate() {
+    player.matrix = player.matrix[0].map((_, i) => player.matrix.map(row => row[i]).reverse());
+    if (collide(arena, player)) player.pos.x -= 1; // 简单的墙壁修正
+}
+
+function createPiece(type) {
+    if (type === 'T') return [[0,1,0],[1,1,1],[0,0,0]];
+    if (type === 'O') return [[2,2],[2,2]];
+    if (type === 'L') return [[0,3,0],[0,3,0],[0,3,3]];
+    if (type === 'I') return [[0,4,0,0],[0,4,0,0],[0,4,0,0],[0,4,0,0]];
+    return [[0,0,0],[1,1,1],[0,1,0]];
+}
+
+const arena = createMatrix(12, 20);
+const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
+
+let dropCounter = 0;
+let lastTime = 0;
+function update(time = 0) {
+    const deltaTime = time - lastTime;
+    lastTime = time;
+    dropCounter += deltaTime;
+    if (dropCounter > 1000) playerDrop();
+    draw();
+    requestAnimationFrame(update);
+}
+
+playerReset();
 update();
 </script>
 </body>
