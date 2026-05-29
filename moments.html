@@ -18,26 +18,32 @@
         .circle-img { max-width: 220px; width: 100%; border-radius: 6px; display: block; margin-bottom: 12px; cursor: zoom-in; transition: transform 0.2s ease; }
         .circle-img:active { transform: scale(0.97); }
         .comment-line { height: 1px; background: #f1f1f1; margin: 10px 0; }
+        /* 新增：返回主页链接样式 */
+        .back-home-link { display: block; margin: 10px 0; font-size: 13px; color: #576b95; text-decoration: none; }
         .comment-widget { padding-top: 5px; }
     </style>
 </head>
 <body>
-    <div class="friend-circle-item">
-    <div class="circle-header">
-        <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
-        <div class="main-content">
-            <div class="nickname">Rene</div>
-            <div class="publish-time">2026年5月29日 10:20</div>
-            <div class="circle-text">早上好</div>
-            <img src="图片" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
-            <div class="comment-line"></div>
-            <div class="comment-widget" data-page-id="moment_003"></div> 
-        </div>
-    </div>
-</div>
-
     <div class="wrapper">
 
+        <!-- 第一条动态 -->
+        <div class="friend-circle-item">
+            <div class="circle-header">
+                <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
+                <div class="main-content">
+                    <div class="nickname">Rene</div>
+                    <div class="publish-time">2026年5月29日 10:20</div>
+                    <div class="circle-text">早上好</div>
+                    <img src="图片" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
+                    
+                    <a href="index.html" class="back-home-link">返回主页</a>
+                    <div class="comment-line"></div>
+                    <div class="comment-widget" data-page-id="moment_003"></div> 
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二条动态 -->
         <div class="friend-circle-item">
             <div class="circle-header">
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
@@ -46,13 +52,16 @@
                     <div class="publish-time">2026年5月28日 21:05</div>
                     <div class="circle-text">晚上好</div>
                     <img src="图片" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
+                    
+                    <a href="index.html" class="back-home-link">返回主页</a>
                     <div class="comment-line"></div>
                     <div class="comment-widget" data-page-id="moment_001"></div>
                 </div>
             </div>
         </div>
 
-       
+    </div> <!-- wrapper 结束 -->
+
     <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
     <script>
         // 自动查找页面中所有的 .comment-widget 并进行初始化
@@ -62,11 +71,10 @@
             
             window.FastCommentsUI(el, {
                 tenantId: 'pbN5Owiw1B1',
-                urlId: uniqueId,  // 关键：修改为 urlId
-                pageId: uniqueId  // 保留 pageId 辅助识别
+                urlId: uniqueId,
+                pageId: uniqueId
             });
         });
     </script>
-
 </body>
 </html>
