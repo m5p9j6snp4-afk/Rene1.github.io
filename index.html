@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rene的空间</title>
+    <title>Rene的空間</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; max-width: 350px; width: 100%; }
@@ -21,18 +21,18 @@
 <body>
 
     <div class="card">
-        <div class="countdown" id="timer">⏰ 倒计时加载中...</div>
+        <div class="countdown" id="timer">⏰ 倒計時加載中...</div>
         <img src="tx.JPG.JPG" alt="头像" class="avatar">
-        <h1>Rene 的空间</h1>
+        <h1>Rene 的空間</h1>
         
         <div class="btn-group">
-            <a href="about.html" class="btn">👤 第一步：关于我</a>
+            <a href="about.html" class="btn">👤 第一步：關於我</a>
             <a href="moments.html" class="btn">📸 第二步：朋友圈</a>
-            <a href="https://ngl.link/rene25528" class="btn" target="_blank" style="background: #28a745;">📝 第三步：留言（想告诉我秘密？点这里）</a>
-            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 第四步：喜欢的音乐</a>
+            <a href="https://ngl.link/rene25528" class="btn" target="_blank" style="background: #28a745;">📝 第三步：留言（想告訴我秘密？點這裡）</a>
+            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 第四步：喜歡的音樂</a>
             
             <!-- 【新增】第五步：游戏室入口 -->
-            <a href="game.html" class="btn btn-game">🎮 第五步：互动游戏室</a>
+            <a href="game.html" class="btn btn-game">🎮 第五步：互動遊戲室</a>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerHTML = `🎁 距离Rene生日轰趴还有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+            document.getElementById('timer').innerHTML = `🎁 距離Rene生日轟趴還有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
         setInterval(updateTimer, 1000); updateTimer();
     </script>
