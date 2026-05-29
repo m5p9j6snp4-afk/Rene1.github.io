@@ -25,7 +25,7 @@ const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
 // 【修改点1】放大显示比例：从 20 改为 30
-context.scale(30, 30);
+context.scale(50, 50);
 
 function createPiece(type) {
     if (type === 'T') return [[0, 1, 0], [1, 1, 1], [0, 0, 0]];
@@ -68,7 +68,7 @@ function playerRotate(dir) { /* 后续扩展旋转功能 */ }
 function update() { 
     player.pos.y++; 
     draw(); 
-    setTimeout(update, 2000); 
+    setTimeout(update, 5000); 
 }
 
 draw();
