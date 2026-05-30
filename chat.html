@@ -1,31 +1,25 @@
 <!DOCTYPE html>
-<!-- 选择模式的按钮 -->
-<div class="mode-selector" style="margin-bottom: 10px;">
-    <button onclick="setMode('toxic')" id="toxic-btn" style="background: #000; color: #fff;">智囊模式</button>
-    <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
-</div>
-
-<script>
-    let currentMode = 'toxic'; // 默认状态
-
-    function setMode(mode) {
-        currentMode = mode;
-        // 简单的视觉反馈
-        document.getElementById('toxic-btn').style.background = (mode === 'toxic' ? '#000' : '#ccc');
-        document.getElementById('comfort-btn').style.background = (mode === 'comfort' ? '#000' : '#ccc');
-        console.log("当前模式已切换为:", currentMode);
-    }
-</script>
-
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 关键：添加这一行，手机端显示就不会太小 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rene的AI 毒舌助手</title>
+    <title>Rene的AI 助手</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        body { 
+            font-family: sans-serif; 
+            background: #1a1a1a; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+            margin: 0; 
+        }
         
+        .mode-selector {
+            margin-bottom: 10px;
+        }
+
         #chat { 
             width: 90%; 
             max-width: 500px; 
@@ -48,7 +42,7 @@
             border: none; 
             margin-bottom: 15px; 
             font-size: 16px;
-            box-sizing: border-box; /* 确保 padding 不会撑破宽度 */
+            box-sizing: border-box;
         }
         
         button { 
@@ -60,40 +54,90 @@
             color: white; 
             cursor: pointer; 
             font-weight: bold;
+            margin: 0 5px;
         }
-        
-        a { margin-top: 20px; color: #666; text-decoration: none; }
+
+        a { 
+            margin-top: 20px; 
+            color: #666; 
+            text-decoration: none; 
+        }
     </style>
 </head>
 <body>
-    <h3>Rene的AI 毒舌助手</h3>
-    <div id="chat">AI: 又來送罵？快說吧，我準備好了。</div>
+    <h3>Rene的AI 助手</h3>
+
+    <!-- 模式选择按钮 -->
+    <div class="mode-selector">
+        <button onclick="setMode('toxic')" id="toxic-btn" style="background: #000; color: #fff;">智囊模式</button>
+        <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
+    </div>
+
+    <!-- 初始默认文案：智囊AI -->
+    <div id="chat">AI: 我是Rene的智囊AI，有什么问题尽管说。</div>
     <input type="text" id="userInput" placeholder="輸入你想說的...">
     <button onclick="getReply()">發送</button>
-    <br><a href="index.html">⬅️ 返回首頁</a>
+    <br>
+    <a href="index.html">⬅️ 返回首頁</a>
 
     <script>
+        let currentMode = 'toxic'; // 默认智囊模式
+
+        // 切换模式 + 按钮样式 + 刷新顶部提示
+        function setMode(mode) {
+            currentMode = mode;
+            const chatBox = document.getElementById('chat');
+
+            document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
+            document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
+            document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
+            document.getElementById('comfort-btn').style.color = mode === 'comfort' ? '#fff' : '#000';
+
+            // 切换模式时更新聊天区开场白
+            if(mode === 'toxic'){
+                chatBox.innerHTML = "AI: 我是Rene的智囊AI，有什么问题尽管说。";
+            }else{
+                chatBox.innerHTML = "AI: 我是Rene的安慰AI，我会一直陪着你。";
+            }
+            console.log("当前模式：", currentMode);
+        }
+
+        // 发送消息请求接口
         async function getReply() {
             const inputField = document.getElementById('userInput');
-            const input = inputField.value;
+            const input = inputField.value.trim();
             const chat = document.getElementById('chat');
-            const workerUrl = "https://lively-darkness-2561.bmk4byvf9b.workers.dev/"; 
+            // Worker 地址 + 拼接 mode 参数
+            const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=${currentMode}`;
 
-            if(!input) return;
-            chat.innerHTML += "<div>我: " + input + "</div>";
-            inputField.value = "...";
+            if (!input) return;
+
+            // 追加用户消息
+            chat.innerHTML += `<div>我: ${input}</div>`;
+            inputField.value = "请求中...";
 
             try {
                 const response = await fetch(workerUrl, {
                     method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' // 补充必备请求头
+                    },
                     body: JSON.stringify({ message: input })
                 });
+
                 const data = await response.json();
-                chat.innerHTML += "<div style='color:#fff; margin-bottom:10px;'>AI: " + data.reply + "</div>";
+                // 区分正常回复/错误提示
+                if (data.reply) {
+                    chat.innerHTML += `<div style="color:#fff; margin-bottom:10px;">AI: ${data.reply}</div>`;
+                } else if (data.error) {
+                    chat.innerHTML += `<div style="color:red;">错误：${data.error}</div>`;
+                }
             } catch (e) {
-                chat.innerHTML += "<div style='color:red;'>连接失败，请检查 Worker 设置。</div>";
+                chat.innerHTML += `<div style="color:red;">连接失败，请检查接口状态</div>`;
             }
+
             inputField.value = "";
+            // 滚动到底部
             chat.scrollTop = chat.scrollHeight;
         }
     </script>
