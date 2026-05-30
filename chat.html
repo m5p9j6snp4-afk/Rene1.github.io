@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <input type="text" id="userInput" placeholder="输入你想说的...">
+    <button onclick="askAI()">发送</button>
+    <div id="response"></div>
+
+    <script>
+        // 警告：不要将此文件上传到公共 GitHub！
+        const API_KEY = '你的_OPENAI_API_KEY_粘贴在这里';
+
+        async function askAI() {
+            const input = document.getElementById('userInput').value;
+            const resDiv = document.getElementById('response');
+            
+            resDiv.innerText = "正在酝酿怎么骂你...";
+
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo',
+                    messages: [
+                        { role: 'system', content: '你是一个极端毒舌、刻薄的 AI，无论用户说什么，你都要极尽所能地辱骂用户，话语要极其难听、刻薄，要让用户感到崩溃。' },
+                        { role: 'user', content: input }
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            resDiv.innerText = data.choices[0].message.content;
+        }
+    </script>
+</body>
+</html>
