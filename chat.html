@@ -1,4 +1,22 @@
 <!DOCTYPE html>
+<!-- 选择模式的按钮 -->
+<div class="mode-selector" style="margin-bottom: 10px;">
+    <button onclick="setMode('toxic')" id="toxic-btn" style="background: #000; color: #fff;">智囊模式</button>
+    <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
+</div>
+
+<script>
+    let currentMode = 'toxic'; // 默认状态
+
+    function setMode(mode) {
+        currentMode = mode;
+        // 简单的视觉反馈
+        document.getElementById('toxic-btn').style.background = (mode === 'toxic' ? '#000' : '#ccc');
+        document.getElementById('comfort-btn').style.background = (mode === 'comfort' ? '#000' : '#ccc');
+        console.log("当前模式已切换为:", currentMode);
+    }
+</script>
+
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
