@@ -2,30 +2,68 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>AI 毒舌助手</title>
+    <!-- 关键：添加这一行，手机端显示就不会太小 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rene的AI 毒舌助手</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        #chat { width: 100%; max-width: 400px; height: 300px; background: #000; border: 1px solid #444; border-radius: 10px; padding: 15px; overflow-y: auto; margin-bottom: 15px; color: #ff5555; }
-        input { width: 100%; max-width: 400px; padding: 12px; border-radius: 20px; border: none; margin-bottom: 10px; }
-        button { padding: 10px 20px; border-radius: 20px; border: none; background: #343a40; color: white; cursor: pointer; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        
+        #chat { 
+            width: 90%; 
+            max-width: 500px; 
+            height: 400px; 
+            background: #000; 
+            border: 1px solid #444; 
+            border-radius: 15px; 
+            padding: 20px; 
+            overflow-y: auto; 
+            margin-bottom: 20px; 
+            color: #ff5555;
+            font-size: 16px;
+        }
+        
+        input { 
+            width: 90%; 
+            max-width: 500px; 
+            padding: 16px; 
+            border-radius: 25px; 
+            border: none; 
+            margin-bottom: 15px; 
+            font-size: 16px;
+            box-sizing: border-box; /* 确保 padding 不会撑破宽度 */
+        }
+        
+        button { 
+            padding: 15px 40px; 
+            font-size: 18px; 
+            border-radius: 25px; 
+            border: none; 
+            background: #343a40; 
+            color: white; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+        
+        a { margin-top: 20px; color: #666; text-decoration: none; }
     </style>
 </head>
 <body>
-    <h3>AI 毒舌助手</h3>
+    <h3>Rene的AI 毒舌助手</h3>
     <div id="chat">AI: 又来送骂？快说吧，我准备好了。</div>
     <input type="text" id="userInput" placeholder="输入你想说的...">
     <button onclick="getReply()">发送</button>
-    <br><a href="index.html" style="color: #666;">返回首页</a>
+    <br><a href="index.html">⬅️ 返回首页</a>
 
     <script>
         async function getReply() {
-            const input = document.getElementById('userInput').value;
+            const inputField = document.getElementById('userInput');
+            const input = inputField.value;
             const chat = document.getElementById('chat');
             const workerUrl = "https://lively-darkness-2561.bmk4byvf9b.workers.dev/"; 
 
             if(!input) return;
             chat.innerHTML += "<div>我: " + input + "</div>";
-            document.getElementById('userInput').value = "...";
+            inputField.value = "...";
 
             try {
                 const response = await fetch(workerUrl, {
@@ -33,11 +71,11 @@
                     body: JSON.stringify({ message: input })
                 });
                 const data = await response.json();
-                chat.innerHTML += "<div style='color:#fff;'>AI: " + data.reply + "</div>";
+                chat.innerHTML += "<div style='color:#fff; margin-bottom:10px;'>AI: " + data.reply + "</div>";
             } catch (e) {
                 chat.innerHTML += "<div style='color:red;'>连接失败，请检查 Worker 设置。</div>";
             }
-            document.getElementById('userInput').value = "";
+            inputField.value = "";
             chat.scrollTop = chat.scrollHeight;
         }
     </script>
