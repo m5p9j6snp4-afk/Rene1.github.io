@@ -5,62 +5,144 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene的AI 助手</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body { 
-            font-family: sans-serif; 
-            background: #1a1a1a; 
-            color: white; 
+            font-family: "Microsoft Yahei", sans-serif; 
+            background: #121212; 
+            color: #f0f0f0; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding: 20px; 
-            margin: 0; 
+            padding: 20px 15px; 
+            min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
         }
         
         .mode-selector {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
         }
 
+        /* 聊天容器 */
         #chat { 
-            width: 90%; 
-            max-width: 500px; 
-            height: 400px; 
-            background: #000; 
-            border: 1px solid #444; 
-            border-radius: 15px; 
-            padding: 20px; 
+            width: 100%; 
+            max-width: 520px; 
+            height: 420px; 
+            background: #1e1e1e; 
+            border: 1px solid #333; 
+            border-radius: 18px; 
+            padding: 18px; 
             overflow-y: auto; 
             margin-bottom: 20px; 
-            color: #ff5555;
-            font-size: 16px;
+            font-size: 15px;
+            line-height: 1.6;
         }
-        
-        input { 
-            width: 90%; 
-            max-width: 500px; 
-            padding: 16px; 
-            border-radius: 25px; 
-            border: none; 
+        /* 自定义滚动条 */
+        #chat::-webkit-scrollbar {
+            width: 6px;
+        }
+        #chat::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 3px;
+        }
+        #chat::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        /* 消息气泡样式 */
+        .msg-ai {
+            background: #2d2d2d;
+            color: #ff6b6b;
+            padding: 10px 14px;
+            border-radius: 12px 12px 12px 4px;
+            max-width: 85%;
+            margin: 8px 0;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        .msg-user {
+            background: #254b80;
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 12px 12px 4px 12px;
+            max-width: 85%;
+            margin: 8px 0 8px auto;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        .loading {
+            color: #888;
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+        .error-msg {
+            color: #ff4444;
+            margin: 8px 0;
+        }
+
+        /* 输入框 */
+        #userInput { 
+            width: 100%; 
+            max-width: 520px; 
+            padding: 14px 20px; 
+            border-radius: 30px; 
+            border: 1px solid #444;
+            background: #1e1e1e;
+            color: #fff;
             margin-bottom: 15px; 
-            font-size: 16px;
-            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        #userInput:focus {
+            border-color: #666;
         }
         
+        /* 按钮通用样式 */
         button { 
-            padding: 15px 40px; 
-            font-size: 18px; 
-            border-radius: 25px; 
+            padding: 12px 28px; 
+            font-size: 16px; 
+            border-radius: 30px; 
             border: none; 
-            background: #343a40; 
+            background: #2c2c2c; 
             color: white; 
             cursor: pointer; 
-            font-weight: bold;
+            font-weight: 500;
             margin: 0 5px;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background: #444;
+        }
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .operate-bar {
+            margin-bottom: 15px;
         }
 
         a { 
-            margin-top: 20px; 
-            color: #666; 
+            margin-top: 25px; 
+            color: #888; 
             text-decoration: none; 
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #ccc;
         }
     </style>
     <!-- 登录校验：未登录自动跳回首页 -->
@@ -73,70 +155,110 @@
 <body>
     <h3>Rene的AI 助手</h3>
 
-    <!-- 模式选择按钮 -->
+    <!-- 模式选择 -->
     <div class="mode-selector">
         <button onclick="setMode('toxic')" id="toxic-btn" style="background: #000; color: #fff;">智囊模式</button>
         <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
     </div>
 
-    <!-- 初始默认文案：智囊AI -->
-    <div id="chat">AI: 我是Rene的智囊AI，有什么问题尽管说。</div>
-    <input type="text" id="userInput" placeholder="輸入你想說的...">
-    <button onclick="getReply()">發送</button>
-    <br>
+    <!-- 聊天区域 -->
+    <div id="chat">
+        <div class="msg-ai">我是Rene的智囊AI，有什么问题尽管说。</div>
+    </div>
+
+    <input type="text" id="userInput" placeholder="輸入消息，按回車或點擊發送..." onkeydown="enterSend(event)">
+    
+    <!-- 功能按钮区 -->
+    <div class="operate-bar">
+        <button onclick="getReply()">發送</button>
+        <button onclick="clearChat()">清空對話</button>
+    </div>
+
     <a href="index.html">⬅️ 返回首頁</a>
 
     <script>
         let currentMode = 'toxic';
-        // 对话历史 & 最大保留轮数
         let chatHistory = [];
         const MAX_HISTORY_ROUND = 10;
+        const chatBox = document.getElementById('chat');
+        const inputField = document.getElementById('userInput');
 
         // 页面加载读取本地历史
         window.addEventListener('load', () => {
             const localHis = localStorage.getItem("chatHistory");
             if (localHis) {
                 chatHistory = JSON.parse(localHis);
+                renderHistory();
             }
         });
+
+        // 渲染历史消息
+        function renderHistory() {
+            chatBox.innerHTML = "";
+            chatHistory.forEach(item => {
+                if(item.role === "user"){
+                    chatBox.innerHTML += `<div class="msg-user">${item.content}</div>`;
+                }else{
+                    chatBox.innerHTML += `<div class="msg-ai">${item.content}</div>`;
+                }
+            })
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
         // 切换模式
         function setMode(mode) {
             currentMode = mode;
-            const chatBox = document.getElementById('chat');
+            chatHistory = [];
+            localStorage.removeItem("chatHistory");
 
             document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
             document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
             document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
             document.getElementById('comfort-btn').style.color = mode === 'comfort' ? '#fff' : '#000';
 
-            // 切换模式清空历史 + 重置开场白
+            if(mode === 'toxic'){
+                chatBox.innerHTML = `<div class="msg-ai">我是Rene的智囊AI，有什么问题尽管说。</div>`;
+            }else{
+                chatBox.innerHTML = `<div class="msg-ai">我是Rene的安慰AI，我会一直陪着你。</div>`;
+            }
+        }
+
+        // 回车发送消息
+        function enterSend(e) {
+            if(e.keyCode === 13) {
+                getReply();
+            }
+        }
+
+        // 清空对话
+        function clearChat() {
+            if(!confirm("確定要清空所有對話記錄嗎？")) return;
             chatHistory = [];
             localStorage.removeItem("chatHistory");
-            if(mode === 'toxic'){
-                chatBox.innerHTML = "AI: 我是Rene的智囊AI，有什么问题尽管说。";
-            }else{
-                chatBox.innerHTML = "AI: 我是Rene的安慰AI，我会一直陪着你。";
-            }
+            setMode(currentMode);
         }
 
         // 发送消息
         async function getReply() {
-            const inputField = document.getElementById('userInput');
             const input = inputField.value.trim();
-            const chat = document.getElementById('chat');
             const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=${currentMode}`;
 
             if (!input) return;
 
-            // 限制历史长度，避免token过多
+            // 限制历史长度
             if (chatHistory.length > MAX_HISTORY_ROUND * 2) {
                 chatHistory = chatHistory.slice(-MAX_HISTORY_ROUND * 2);
             }
 
-            // 追加用户消息到聊天框
-            chat.innerHTML += `<div>我: ${input}</div>`;
-            inputField.value = "请求中...";
+            // 展示用户消息
+            chatBox.innerHTML += `<div class="msg-user">${input}</div>`;
+            // 加载动画
+            const loadingDom = document.createElement("div");
+            loadingDom.className = "loading";
+            loadingDom.innerText = "AI 思考中...";
+            chatBox.appendChild(loadingDom);
+            inputField.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
                 const response = await fetch(workerUrl, {
@@ -144,7 +266,6 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    // 同时传递 message + history
                     body: JSON.stringify({
                         message: input,
                         history: chatHistory
@@ -152,20 +273,22 @@
                 });
 
                 const data = await response.json();
+                // 移除加载提示
+                chatBox.removeChild(loadingDom);
+
                 if (data.reply) {
-                    chat.innerHTML += `<div style="color:#fff; margin-bottom:10px;">AI: ${data.reply}</div>`;
-                    // 更新历史并保存到本地
+                    chatBox.innerHTML += `<div class="msg-ai">${data.reply}</div>`;
                     chatHistory = data.history;
                     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
                 } else if (data.error) {
-                    chat.innerHTML += `<div style="color:red;">错误：${data.error}</div>`;
+                    chatBox.innerHTML += `<div class="error-msg">錯誤：${data.error}</div>`;
                 }
             } catch (e) {
-                chat.innerHTML += `<div style="color:red;">连接失败，请检查接口状态</div>`;
+                chatBox.removeChild(loadingDom);
+                chatBox.innerHTML += `<div class="error-msg">連接失敗，請稍後再試</div>`;
             }
 
-            inputField.value = "";
-            chat.scrollTop = chat.scrollHeight;
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
 </body>
