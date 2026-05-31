@@ -56,8 +56,43 @@
 
         h3 {
             font-size: 22px;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             letter-spacing: 1px;
+        }
+
+        /* 仅闲聊模式可用的人设面板 */
+        .role-set {
+            width: 100%;
+            max-width: 520px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: none;
+        }
+        .role-set.show {
+            display: block;
+        }
+        .role-set p {
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+        .role-set input, .role-set textarea {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-main);
+            padding: 8px;
+            margin-bottom: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+        .role-set textarea {
+            height: 60px;
+            resize: none;
         }
         
         .mode-selector, .func-bar, .quick-word {
@@ -71,13 +106,13 @@
         #chat { 
             width: 100%; 
             max-width: 520px; 
-            height: 420px; 
+            height: 400px; 
             background: var(--bg-card); 
             border: 1px solid var(--border); 
             border-radius: 18px; 
             padding: 18px; 
             overflow-y: auto; 
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
             font-size: 15px;
             line-height: 1.6;
             box-shadow: var(--shadow);
@@ -198,7 +233,7 @@
         }
 
         a { 
-            margin-top: 25px; 
+            margin-top: 20px; 
             color: #888; 
             text-decoration: none; 
             font-size: 15px;
@@ -232,10 +267,18 @@
 <body>
     <h3>Rene的AI</h3>
 
+    <!-- 人设面板：仅闲聊模式显示 -->
+    <div class="role-set" id="rolePanel">
+        <p>自定义角色名称（男友/女友/明星/朋友等）</p>
+        <input type="text" id="roleName" placeholder="输入角色名字">
+        <p>人物设定、性格、说话风格</p>
+        <textarea id="roleDesc" placeholder="描述身份、性格、语气、相处模式..."></textarea>
+    </div>
+
     <div class="mode-selector">
-        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式(有点高冷)</button>
+        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式(高冷)</button>
         <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
-        <button onclick="setMode('chat')" id="chat-btn">闲聊模式</button>
+        <button onclick="setMode('chat')" id="chat-btn">闲聊模式(自定义角色)</button>
     </div>
 
     <div class="func-bar">
@@ -254,7 +297,6 @@
 
     <div class="count-text" id="countText">0 / 200</div>
 
-    <!-- 回车直接发送 -->
     <input type="text" id="userInput" placeholder="輸入消息，回車發送" 
            onkeydown="if(event.keyCode===13) getReply()" oninput="calcLength()">
     
@@ -268,14 +310,19 @@
 
     <script>
         let currentMode = 'toxic';
+        let chatHistory = [];
         let voiceOpen = true;
         const MAX_INPUT_LENGTH = 200;
+        const MAX_HISTORY = 12;
         const TYPE_SPEED = 40;
         const chatBox = document.getElementById('chat');
         const inputField = document.getElementById('userInput');
         const copyTip = document.getElementById('copyTip');
         const sendBtn = document.getElementById('sendBtn');
         const countText = document.getElementById('countText');
+        const roleName = document.getElementById('roleName');
+        const roleDesc = document.getElementById('roleDesc');
+        const rolePanel = document.getElementById('rolePanel');
         const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=`;
 
         function getTimeStr() {
@@ -289,6 +336,15 @@
 
             const lastMode = localStorage.getItem("lastMode") || "toxic";
             setMode(lastMode);
+
+            if(localStorage.getItem("roleName")) roleName.value = localStorage.getItem("roleName");
+            if(localStorage.getItem("roleDesc")) roleDesc.value = localStorage.getItem("roleDesc");
+
+            const localHis = localStorage.getItem("chatHistory");
+            if (localHis) {
+                chatHistory = JSON.parse(localHis);
+                renderHistory();
+            }
 
             window.addEventListener("online", checkNetwork);
             window.addEventListener("offline", checkNetwork);
@@ -322,10 +378,34 @@
             countText.innerText = `${len} / ${MAX_INPUT_LENGTH}`;
         }
 
+        function renderHistory() {
+            chatBox.innerHTML = "";
+            chatHistory.forEach(item => {
+                const time = item.time || "";
+                if(item.role === "user"){
+                    chatBox.innerHTML += `
+                        <div class="msg-user">
+                            ${item.content}
+                            <span class="msg-time">${time}</span>
+                        </div>`;
+                }else{
+                    chatBox.innerHTML += `
+                        <div class="msg-ai" onclick="copyMsg(this)">
+                            ${item.content}
+                            <span class="msg-time">${time}</span>
+                        </div>`;
+                }
+            })
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
         function setMode(mode) {
             currentMode = mode;
             localStorage.setItem("lastMode", mode);
+            chatHistory = [];
+            localStorage.removeItem("chatHistory");
 
+            // 按钮高亮
             document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
             document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
             document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
@@ -333,23 +413,33 @@
             document.getElementById('chat-btn').style.background = mode === 'chat' ? '#000' : '#ccc';
             document.getElementById('chat-btn').style.color = mode === 'chat' ? '#fff' : '#000';
 
-            let text = "";
+            // 切换模式：只有闲聊模式显示自定义人设面板
+            if(mode === 'chat'){
+                rolePanel.classList.add("show");
+            }else{
+                rolePanel.classList.remove("show");
+            }
+
+            // 各模式默认开场白（统一使用薯条）
+            let welcome = "";
             switch(mode){
                 case "toxic":
-                    text = "我是汉堡，有什么问题尽管说。";
+                    welcome = "我是薯条，有问题可以直接问我。";
                     break;
                 case "comfort":
-                    text = "我是甜筒，我会一直陪着你。";
+                    welcome = "我是薯条，愿意倾听和陪伴你。";
                     break;
                 case "chat":
-                    text = "哈喽，我是薯条，随时可以开始聊天哦。";
+                    welcome = "我是薯条，设置好角色后开始聊天吧~";
                     break;
             }
-            chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${text}<span class="msg-time">${getTimeStr()}</span></div>`;
+            chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${welcome}<span class="msg-time">${getTimeStr()}</span></div>`;
         }
 
         function clearChat() {
             if(!confirm("確定清空所有對話？")) return;
+            chatHistory = [];
+            localStorage.removeItem("chatHistory");
             setMode(currentMode);
         }
 
@@ -390,8 +480,18 @@
             }
             if (!input) return;
 
+            // 仅闲聊模式保存&传递人设
+            if(currentMode === "chat"){
+                localStorage.setItem("roleName", roleName.value.trim());
+                localStorage.setItem("roleDesc", roleDesc.value.trim());
+            }
+
             sendBtn.disabled = true;
             inputField.disabled = true;
+
+            if (chatHistory.length > MAX_HISTORY) {
+                chatHistory = chatHistory.slice(-MAX_HISTORY);
+            }
 
             const nowTime = getTimeStr();
             chatBox.innerHTML += `
@@ -408,11 +508,17 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // 只传当前消息，不再传历史对话，彻底解决第二句报错
+                let postData = { message: input, history: chatHistory };
+                // 闲聊模式额外传人设
+                if(currentMode === "chat"){
+                    postData.roleName = roleName.value.trim();
+                    postData.roleDesc = roleDesc.value.trim();
+                }
+
                 const res = await fetch(workerUrl + currentMode, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: input})
+                    body: JSON.stringify(postData)
                 });
                 const data = await res.json();
                 chatBox.removeChild(loadingDom);
@@ -424,6 +530,10 @@
                     chatBox.appendChild(aiBox);
                     await typeWriter(aiBox, data.reply);
                     aiBox.innerHTML += `<span class="msg-time">${nowTime}</span>`;
+
+                    chatHistory.push({role:"user", content:input, time:nowTime});
+                    chatHistory.push({role:"ai", content:data.reply, time:nowTime});
+                    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 
                     document.title = "✨ 收到新回覆";
                     setTimeout(()=> document.title = "Rene的AI", 2000);
