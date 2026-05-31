@@ -111,6 +111,12 @@
         }
         .btn-back:hover { background: #2d3748; transform: translateY(-2px); }
     </style>
+    <!-- 登录权限拦截 -->
+    <script>
+        if(localStorage.getItem("siteLogin") !== "ok"){
+            location.href = "index.html";
+        }
+    </script>
 </head>
 <body>
 
