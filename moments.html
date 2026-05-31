@@ -18,11 +18,10 @@
         .circle-img { max-width: 220px; width: 100%; border-radius: 6px; display: block; margin-bottom: 12px; cursor: zoom-in; transition: transform 0.2s ease; }
         .circle-img:active { transform: scale(0.97); }
         .comment-line { height: 1px; background: #f1f1f1; margin: 10px 0; }
-        /* 新增：返回主页链接样式 */
         .back-home-link { display: block; margin: 10px 0; font-size: 13px; color: #576b95; text-decoration: none; }
         .comment-widget { padding-top: 5px; }
     </style>
-    <!-- 登录拦截代码 加在这里 -->
+    <!-- 登录拦截 -->
     <script>
         if(localStorage.getItem("siteLogin") !== "ok"){
             location.href = "index.html";
@@ -97,19 +96,22 @@
             </div>
         </div>
 
-    </div> <!-- wrapper 结束 -->
+    </div>
 
     <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
     <script>
-        // 自动查找页面中所有的 .comment-widget 并进行初始化
+        // 获取当前登录用户名
+        const loginName = localStorage.getItem("regUser") || "訪客";
         const widgets = document.querySelectorAll('.comment-widget');
         widgets.forEach(el => {
             const uniqueId = el.getAttribute('data-page-id');
-            
             window.FastCommentsUI(el, {
                 tenantId: 'pbN5Owiw1B1',
                 urlId: uniqueId,
-                pageId: uniqueId
+                pageId: uniqueId,
+                // 自动填充昵称 + 禁用昵称修改
+                defaultDisplayName: loginName,
+                allowDisplayNameChange: false
             });
         });
     </script>
