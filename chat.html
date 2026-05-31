@@ -81,9 +81,20 @@
     <a href="index.html">⬅️ 返回首頁</a>
 
     <script>
-        let currentMode = 'toxic'; // 默认智囊模式
+        let currentMode = 'toxic';
+        // 对话历史 & 最大保留轮数
+        let chatHistory = [];
+        const MAX_HISTORY_ROUND = 10;
 
-        // 切换模式 + 按钮样式 + 刷新顶部提示
+        // 页面加载读取本地历史
+        window.addEventListener('load', () => {
+            const localHis = localStorage.getItem("chatHistory");
+            if (localHis) {
+                chatHistory = JSON.parse(localHis);
+            }
+        });
+
+        // 切换模式
         function setMode(mode) {
             currentMode = mode;
             const chatBox = document.getElementById('chat');
@@ -93,26 +104,31 @@
             document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
             document.getElementById('comfort-btn').style.color = mode === 'comfort' ? '#fff' : '#000';
 
-            // 切换模式时更新聊天区开场白
+            // 切换模式清空历史 + 重置开场白
+            chatHistory = [];
+            localStorage.removeItem("chatHistory");
             if(mode === 'toxic'){
                 chatBox.innerHTML = "AI: 我是Rene的智囊AI，有什么问题尽管说。";
             }else{
                 chatBox.innerHTML = "AI: 我是Rene的安慰AI，我会一直陪着你。";
             }
-            console.log("当前模式：", currentMode);
         }
 
-        // 发送消息请求接口
+        // 发送消息
         async function getReply() {
             const inputField = document.getElementById('userInput');
             const input = inputField.value.trim();
             const chat = document.getElementById('chat');
-            // Worker 地址 + 拼接 mode 参数
             const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=${currentMode}`;
 
             if (!input) return;
 
-            // 追加用户消息
+            // 限制历史长度，避免token过多
+            if (chatHistory.length > MAX_HISTORY_ROUND * 2) {
+                chatHistory = chatHistory.slice(-MAX_HISTORY_ROUND * 2);
+            }
+
+            // 追加用户消息到聊天框
             chat.innerHTML += `<div>我: ${input}</div>`;
             inputField.value = "请求中...";
 
@@ -120,15 +136,21 @@
                 const response = await fetch(workerUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json' // 补充必备请求头
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ message: input })
+                    // 同时传递 message + history
+                    body: JSON.stringify({
+                        message: input,
+                        history: chatHistory
+                    })
                 });
 
                 const data = await response.json();
-                // 区分正常回复/错误提示
                 if (data.reply) {
                     chat.innerHTML += `<div style="color:#fff; margin-bottom:10px;">AI: ${data.reply}</div>`;
+                    // 更新历史并保存到本地
+                    chatHistory = data.history;
+                    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
                 } else if (data.error) {
                     chat.innerHTML += `<div style="color:red;">错误：${data.error}</div>`;
                 }
@@ -137,7 +159,6 @@
             }
 
             inputField.value = "";
-            // 滚动到底部
             chat.scrollTop = chat.scrollHeight;
         }
     </script>
