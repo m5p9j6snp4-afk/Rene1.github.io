@@ -90,6 +90,10 @@
             height: 60px;
             resize: none;
         }
+        /* 提交按钮间距 */
+        .role-submit {
+            text-align: right;
+        }
 
         .mode-box {
             width: 100%;
@@ -280,11 +284,15 @@
 <body>
     <h3>Rene的AI</h3>
 
+    <!-- 新增：提交人设按钮 -->
     <div class="role-set" id="rolePanel">
         <p>自定义角色名称（男友/女友/明星/朋友等）</p>
         <input type="text" id="roleName" placeholder="输入角色名字">
         <p>人物设定、性格、说话风格</p>
         <textarea id="roleDesc" placeholder="描述身份、性格、语气、相处模式..."></textarea>
+        <div class="role-submit">
+            <button onclick="saveRole()">提交人设</button>
+        </div>
     </div>
 
     <div class="mode-box">
@@ -328,6 +336,10 @@
         let currentMode = 'hamburger';
         let chatHistory = [];
         let voiceOpen = true;
+        // 缓存已提交的人设
+        let savedRoleName = "";
+        let savedRoleDesc = "";
+
         const MAX_INPUT_LENGTH = 200;
         const MAX_HISTORY = 12;
         const TYPE_SPEED = 40;
@@ -342,6 +354,15 @@
         const fixedMode = document.getElementById('fixedMode');
         const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=`;
 
+        // 保存人设函数
+        function saveRole(){
+            savedRoleName = roleName.value.trim();
+            savedRoleDesc = roleDesc.value.trim();
+            localStorage.setItem("roleName", savedRoleName);
+            localStorage.setItem("roleDesc", savedRoleDesc);
+            alert("人设提交成功！");
+        }
+
         function getTimeStr() {
             const d = new Date();
             return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
@@ -352,10 +373,15 @@
             if (theme === "light") document.body.classList.add("light-mode");
 
             const lastMode = localStorage.getItem("lastMode") || "hamburger";
-            setMode(lastMode);
-
-            if (localStorage.getItem("roleName")) roleName.value = localStorage.getItem("roleName");
-            if (localStorage.getItem("roleDesc")) roleDesc.value = localStorage.getItem("roleDesc");
+            // 读取本地缓存人设
+            if (localStorage.getItem("roleName")) {
+                roleName.value = localStorage.getItem("roleName");
+                savedRoleName = roleName.value;
+            }
+            if (localStorage.getItem("roleDesc")) {
+                roleDesc.value = localStorage.getItem("roleDesc");
+                savedRoleDesc = roleDesc.value;
+            }
 
             const localHis = localStorage.getItem("chatHistory");
             if (localHis) {
@@ -363,6 +389,7 @@
                 renderHistory();
             }
 
+            setMode(lastMode);
             window.addEventListener("online", checkNetwork);
             window.addEventListener("offline", checkNetwork);
             checkNetwork();
@@ -429,13 +456,11 @@
             document.getElementById('custom-btn').style.background = mode === 'custom' ? '#000' : '#ccc';
             document.getElementById('custom-btn').style.color = mode === 'custom' ? '#fff' : '#000';
 
-            // 逻辑：仅点击自定义时隐藏汉堡/薯条按钮，切换回汉堡/薯条时恢复显示
             if (mode === "custom") {
                 fixedMode.style.display = "none";
             } else {
                 fixedMode.style.display = "flex";
             }
-            // 人设输入框 全程保持显示
             rolePanel.style.display = "block";
 
             let welcome = "";
@@ -447,7 +472,7 @@
                     welcome = "我是薯条，随时陪你聊天。";
                     break;
                 case "custom":
-                    welcome = "请先设置角色，我们开始聊天吧~";
+                    welcome = "请先设置角色并点击【提交人设】，再开始聊天吧~";
                     break;
             }
             chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${welcome}<span class="msg-time">${getTimeStr()}</span></div>`;
@@ -497,11 +522,6 @@
             }
             if (!input) return;
 
-            if (currentMode === "custom") {
-                localStorage.setItem("roleName", roleName.value.trim());
-                localStorage.setItem("roleDesc", roleDesc.value.trim());
-            }
-
             sendBtn.disabled = true;
             inputField.disabled = true;
 
@@ -525,9 +545,10 @@
 
             try {
                 let postData = { message: input, history: chatHistory };
+                // 改用已提交缓存的人设
                 if (currentMode === "custom") {
-                    postData.roleName = roleName.value.trim();
-                    postData.roleDesc = roleDesc.value.trim();
+                    postData.roleName = savedRoleName;
+                    postData.roleDesc = savedRoleDesc;
                 }
 
                 const res = await fetch(workerUrl + currentMode, {
