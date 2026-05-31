@@ -31,14 +31,14 @@
             --border: #ddd;
             --shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        body { 
-            font-family: "Microsoft Yahei", sans-serif; 
-            background: var(--bg-main); 
-            color: var(--text-main); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px 15px; 
+        body {
+            font-family: "Microsoft Yahei", sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
             min-height: 100vh;
             user-select: none;
             -webkit-user-select: none;
@@ -60,7 +60,6 @@
             letter-spacing: 1px;
         }
 
-        /* 仅闲聊模式可用的人设面板 */
         .role-set {
             width: 100%;
             max-width: 520px;
@@ -69,9 +68,6 @@
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 12px;
-            display: none;
-        }
-        .role-set.show {
             display: block;
         }
         .role-set p {
@@ -94,8 +90,25 @@
             height: 60px;
             resize: none;
         }
-        
-        .mode-selector, .func-bar, .quick-word {
+
+        .mode-box {
+            width: 100%;
+            max-width: 520px;
+            margin-bottom: 12px;
+        }
+        .fixed-mode {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .custom-mode {
+            display: flex;
+            justify-content: center;
+        }
+
+        .func-bar, .quick-word {
             margin-bottom: 12px;
             display: flex;
             gap: 8px;
@@ -103,16 +116,16 @@
             justify-content: center;
         }
 
-        #chat { 
-            width: 100%; 
-            max-width: 520px; 
-            height: 400px; 
-            background: var(--bg-card); 
-            border: 1px solid var(--border); 
-            border-radius: 18px; 
-            padding: 18px; 
-            overflow-y: auto; 
-            margin-bottom: 12px; 
+        #chat {
+            width: 100%;
+            max-width: 520px;
+            height: 400px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            overflow-y: auto;
+            margin-bottom: 12px;
             font-size: 15px;
             line-height: 1.6;
             box-shadow: var(--shadow);
@@ -182,15 +195,15 @@
             margin-bottom: 8px;
         }
 
-        #userInput { 
-            width: 100%; 
-            max-width: 520px; 
-            padding: 14px 20px; 
-            border-radius: 30px; 
+        #userInput {
+            width: 100%;
+            max-width: 520px;
+            padding: 14px 20px;
+            border-radius: 30px;
             border: 1px solid var(--border);
             background: var(--bg-card);
             color: var(--text-main);
-            margin-bottom: 8px; 
+            margin-bottom: 8px;
             font-size: 15px;
             outline: none;
             transition: border 0.2s;
@@ -202,15 +215,15 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
-        
-        button { 
-            padding: 10px 16px; 
-            font-size: 14px; 
-            border-radius: 30px; 
-            border: none; 
-            background: #2c2c2c; 
-            color: white; 
-            cursor: pointer; 
+
+        button {
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 30px;
+            border: none;
+            background: #2c2c2c;
+            color: white;
+            cursor: pointer;
             font-weight: 500;
             transition: all 0.2s ease;
         }
@@ -232,10 +245,10 @@
             cursor: not-allowed;
         }
 
-        a { 
-            margin-top: 20px; 
-            color: #888; 
-            text-decoration: none; 
+        a {
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
             font-size: 15px;
             transition: color 0.2s;
         }
@@ -267,7 +280,6 @@
 <body>
     <h3>Rene的AI</h3>
 
-    <!-- 人设面板：仅闲聊模式显示 -->
     <div class="role-set" id="rolePanel">
         <p>自定义角色名称（男友/女友/明星/朋友等）</p>
         <input type="text" id="roleName" placeholder="输入角色名字">
@@ -275,10 +287,14 @@
         <textarea id="roleDesc" placeholder="描述身份、性格、语气、相处模式..."></textarea>
     </div>
 
-    <div class="mode-selector">
-        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式(高冷)</button>
-        <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
-        <button onclick="setMode('chat')" id="chat-btn">闲聊模式(自定义角色)</button>
+    <div class="mode-box">
+        <div class="fixed-mode" id="fixedMode">
+            <button onclick="setMode('hamburger')" id="hamburger-btn">汉堡模式</button>
+            <button onclick="setMode('fries')" id="fries-btn">薯条模式</button>
+        </div>
+        <div class="custom-mode">
+            <button onclick="setMode('custom')" id="custom-btn">自定义角色</button>
+        </div>
     </div>
 
     <div class="func-bar">
@@ -297,9 +313,9 @@
 
     <div class="count-text" id="countText">0 / 200</div>
 
-    <input type="text" id="userInput" placeholder="輸入消息，回車發送" 
+    <input type="text" id="userInput" placeholder="輸入消息，回車發送"
            onkeydown="if(event.keyCode===13) getReply()" oninput="calcLength()">
-    
+
     <div class="func-bar">
         <button onclick="getReply()" id="sendBtn">發送</button>
     </div>
@@ -309,7 +325,7 @@
     <div class="copy-tip" id="copyTip">複製成功</div>
 
     <script>
-        let currentMode = 'toxic';
+        let currentMode = 'hamburger';
         let chatHistory = [];
         let voiceOpen = true;
         const MAX_INPUT_LENGTH = 200;
@@ -323,22 +339,23 @@
         const roleName = document.getElementById('roleName');
         const roleDesc = document.getElementById('roleDesc');
         const rolePanel = document.getElementById('rolePanel');
+        const fixedMode = document.getElementById('fixedMode');
         const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=`;
 
         function getTimeStr() {
             const d = new Date();
-            return `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+            return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
         }
 
         window.addEventListener('load', () => {
             const theme = localStorage.getItem("siteTheme");
-            if(theme === "light") document.body.classList.add("light-mode");
+            if (theme === "light") document.body.classList.add("light-mode");
 
-            const lastMode = localStorage.getItem("lastMode") || "toxic";
+            const lastMode = localStorage.getItem("lastMode") || "hamburger";
             setMode(lastMode);
 
-            if(localStorage.getItem("roleName")) roleName.value = localStorage.getItem("roleName");
-            if(localStorage.getItem("roleDesc")) roleDesc.value = localStorage.getItem("roleDesc");
+            if (localStorage.getItem("roleName")) roleName.value = localStorage.getItem("roleName");
+            if (localStorage.getItem("roleDesc")) roleDesc.value = localStorage.getItem("roleDesc");
 
             const localHis = localStorage.getItem("chatHistory");
             if (localHis) {
@@ -352,7 +369,7 @@
         });
 
         function checkNetwork() {
-            if(!navigator.onLine){
+            if (!navigator.onLine) {
                 chatBox.innerHTML += `<div class="error-msg">⚠️ 網絡離線，暫無法使用</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
@@ -382,13 +399,13 @@
             chatBox.innerHTML = "";
             chatHistory.forEach(item => {
                 const time = item.time || "";
-                if(item.role === "user"){
+                if (item.role === "user") {
                     chatBox.innerHTML += `
                         <div class="msg-user">
                             ${item.content}
                             <span class="msg-time">${time}</span>
                         </div>`;
-                }else{
+                } else {
                     chatBox.innerHTML += `
                         <div class="msg-ai" onclick="copyMsg(this)">
                             ${item.content}
@@ -405,52 +422,52 @@
             chatHistory = [];
             localStorage.removeItem("chatHistory");
 
-            // 按钮高亮
-            document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
-            document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
-            document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
-            document.getElementById('comfort-btn').style.color = mode === 'comfort' ? '#fff' : '#000';
-            document.getElementById('chat-btn').style.background = mode === 'chat' ? '#000' : '#ccc';
-            document.getElementById('chat-btn').style.color = mode === 'chat' ? '#fff' : '#000';
+            document.getElementById('hamburger-btn').style.background = mode === 'hamburger' ? '#000' : '#ccc';
+            document.getElementById('hamburger-btn').style.color = mode === 'hamburger' ? '#fff' : '#000';
+            document.getElementById('fries-btn').style.background = mode === 'fries' ? '#000' : '#ccc';
+            document.getElementById('fries-btn').style.color = mode === 'fries' ? '#fff' : '#000';
+            document.getElementById('custom-btn').style.background = mode === 'custom' ? '#000' : '#ccc';
+            document.getElementById('custom-btn').style.color = mode === 'custom' ? '#fff' : '#000';
 
-            // 切换模式：只有闲聊模式显示自定义人设面板
-            if(mode === 'chat'){
-                rolePanel.classList.add("show");
-            }else{
-                rolePanel.classList.remove("show");
+            // 逻辑：仅点击自定义时隐藏汉堡/薯条按钮，切换回汉堡/薯条时恢复显示
+            if (mode === "custom") {
+                fixedMode.style.display = "none";
+            } else {
+                fixedMode.style.display = "flex";
             }
+            // 人设输入框 全程保持显示
+            rolePanel.style.display = "block";
 
-            // 各模式默认开场白（统一使用薯条）
             let welcome = "";
-            switch(mode){
-                case "toxic":
-                    welcome = "我是薯条，有问题可以直接问我。";
+            switch (mode) {
+                case "hamburger":
+                    welcome = "我是汉堡，很高兴为你服务。";
                     break;
-                case "comfort":
-                    welcome = "我是薯条，愿意倾听和陪伴你。";
+                case "fries":
+                    welcome = "我是薯条，随时陪你聊天。";
                     break;
-                case "chat":
-                    welcome = "我是薯条，设置好角色后开始聊天吧~";
+                case "custom":
+                    welcome = "请先设置角色，我们开始聊天吧~";
                     break;
             }
             chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${welcome}<span class="msg-time">${getTimeStr()}</span></div>`;
         }
 
         function clearChat() {
-            if(!confirm("確定清空所有對話？")) return;
+            if (!confirm("確定清空所有對話？")) return;
             chatHistory = [];
             localStorage.removeItem("chatHistory");
             setMode(currentMode);
         }
 
         function copyMsg(el) {
-            const text = el.innerText.replace(/\d{2}:\d{2}$/,'').trim();
-            navigator.clipboard.writeText(text).then(()=>{
+            const text = el.innerText.replace(/\d{2}:\d{2}$/, '').trim();
+            navigator.clipboard.writeText(text).then(() => {
                 copyTip.style.display = "block";
-                setTimeout(()=> copyTip.style.display = "none", 1200);
-            }).catch(()=> alert("複製失敗"));
+                setTimeout(() => copyTip.style.display = "none", 1200);
+            }).catch(() => alert("複製失敗"));
 
-            if(voiceOpen && window.speechSynthesis){
+            if (voiceOpen && window.speechSynthesis) {
                 speechSynthesis.cancel();
                 const utter = new SpeechSynthesisUtterance(text);
                 utter.lang = "zh-CN";
@@ -461,7 +478,7 @@
 
         async function typeWriter(box, text) {
             box.innerHTML = "";
-            for(let i = 0; i < text.length; i++){
+            for (let i = 0; i < text.length; i++) {
                 box.innerHTML += text[i];
                 chatBox.scrollTop = chatBox.scrollHeight;
                 await new Promise(res => setTimeout(res, TYPE_SPEED));
@@ -469,19 +486,18 @@
         }
 
         async function getReply() {
-            if(!navigator.onLine){
+            if (!navigator.onLine) {
                 alert("網絡離線，無法發送");
                 return;
             }
             let input = inputField.value.trim();
-            if(input.length > MAX_INPUT_LENGTH){
+            if (input.length > MAX_INPUT_LENGTH) {
                 alert(`消息最大 ${MAX_INPUT_LENGTH} 字`);
                 return;
             }
             if (!input) return;
 
-            // 仅闲聊模式保存&传递人设
-            if(currentMode === "chat"){
+            if (currentMode === "custom") {
                 localStorage.setItem("roleName", roleName.value.trim());
                 localStorage.setItem("roleDesc", roleDesc.value.trim());
             }
@@ -509,15 +525,14 @@
 
             try {
                 let postData = { message: input, history: chatHistory };
-                // 闲聊模式额外传人设
-                if(currentMode === "chat"){
+                if (currentMode === "custom") {
                     postData.roleName = roleName.value.trim();
                     postData.roleDesc = roleDesc.value.trim();
                 }
 
                 const res = await fetch(workerUrl + currentMode, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(postData)
                 });
                 const data = await res.json();
@@ -526,17 +541,17 @@
                 if (data.reply) {
                     const aiBox = document.createElement("div");
                     aiBox.className = "msg-ai";
-                    aiBox.onclick = function(){ copyMsg(this); };
+                    aiBox.onclick = function () { copyMsg(this); };
                     chatBox.appendChild(aiBox);
                     await typeWriter(aiBox, data.reply);
                     aiBox.innerHTML += `<span class="msg-time">${nowTime}</span>`;
 
-                    chatHistory.push({role:"user", content:input, time:nowTime});
-                    chatHistory.push({role:"ai", content:data.reply, time:nowTime});
+                    chatHistory.push({ role: "user", content: input, time: nowTime });
+                    chatHistory.push({ role: "ai", content: data.reply, time: nowTime });
                     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 
                     document.title = "✨ 收到新回覆";
-                    setTimeout(()=> document.title = "Rene的AI", 2000);
+                    setTimeout(() => document.title = "Rene的AI", 2000);
                 } else if (data.error) {
                     chatBox.innerHTML += `<div class="error-msg">錯誤：${data.error}</div>`;
                 }
