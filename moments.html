@@ -22,6 +22,12 @@
         .back-home-link { display: block; margin: 10px 0; font-size: 13px; color: #576b95; text-decoration: none; }
         .comment-widget { padding-top: 5px; }
     </style>
+    <!-- 登录拦截代码 加在这里 -->
+    <script>
+        if(localStorage.getItem("siteLogin") !== "ok"){
+            location.href = "index.html";
+        }
+    </script>
 </head>
 <body>
     <div class="wrapper">
