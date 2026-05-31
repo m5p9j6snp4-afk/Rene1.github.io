@@ -233,7 +233,7 @@
     <h3>Rene的AI</h3>
 
     <div class="mode-selector">
-        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式(有点高冷</button>
+        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式(有点高冷)</button>
         <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
         <button onclick="setMode('chat')" id="chat-btn">闲聊模式</button>
     </div>
@@ -268,9 +268,7 @@
 
     <script>
         let currentMode = 'toxic';
-        let chatHistory = [];
         let voiceOpen = true;
-        const MAX_HISTORY_ROUND = 10;
         const MAX_INPUT_LENGTH = 200;
         const TYPE_SPEED = 40;
         const chatBox = document.getElementById('chat');
@@ -291,12 +289,6 @@
 
             const lastMode = localStorage.getItem("lastMode") || "toxic";
             setMode(lastMode);
-
-            const localHis = localStorage.getItem("chatHistory");
-            if (localHis) {
-                chatHistory = JSON.parse(localHis);
-                renderHistory();
-            }
 
             window.addEventListener("online", checkNetwork);
             window.addEventListener("offline", checkNetwork);
@@ -330,32 +322,9 @@
             countText.innerText = `${len} / ${MAX_INPUT_LENGTH}`;
         }
 
-        function renderHistory() {
-            chatBox.innerHTML = "";
-            chatHistory.forEach(item => {
-                const time = item.time || "";
-                if(item.role === "user"){
-                    chatBox.innerHTML += `
-                        <div class="msg-user">
-                            ${item.content}
-                            <span class="msg-time">${time}</span>
-                        </div>`;
-                }else{
-                    chatBox.innerHTML += `
-                        <div class="msg-ai" onclick="copyMsg(this)">
-                            ${item.content}
-                            <span class="msg-time">${time}</span>
-                        </div>`;
-                }
-            })
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
         function setMode(mode) {
             currentMode = mode;
             localStorage.setItem("lastMode", mode);
-            chatHistory = [];
-            localStorage.removeItem("chatHistory");
 
             document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
             document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
@@ -381,8 +350,6 @@
 
         function clearChat() {
             if(!confirm("確定清空所有對話？")) return;
-            chatHistory = [];
-            localStorage.removeItem("chatHistory");
             setMode(currentMode);
         }
 
@@ -426,10 +393,6 @@
             sendBtn.disabled = true;
             inputField.disabled = true;
 
-            if (chatHistory.length > MAX_HISTORY_ROUND * 2) {
-                chatHistory = chatHistory.slice(-MAX_HISTORY_ROUND * 2);
-            }
-
             const nowTime = getTimeStr();
             chatBox.innerHTML += `
                 <div class="msg-user">
@@ -445,10 +408,11 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
+                // 只传当前消息，不再传历史对话，彻底解决第二句报错
                 const res = await fetch(workerUrl + currentMode, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: input, history: chatHistory})
+                    body: JSON.stringify({message: input})
                 });
                 const data = await res.json();
                 chatBox.removeChild(loadingDom);
@@ -460,11 +424,6 @@
                     chatBox.appendChild(aiBox);
                     await typeWriter(aiBox, data.reply);
                     aiBox.innerHTML += `<span class="msg-time">${nowTime}</span>`;
-
-                    chatHistory = data.history;
-                    chatHistory.push({role:"user", content:input, time:nowTime});
-                    chatHistory.push({role:"ai", content:data.reply, time:nowTime});
-                    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 
                     document.title = "✨ 收到新回覆";
                     setTimeout(()=> document.title = "Rene的AI", 2000);
