@@ -10,10 +10,28 @@
             padding: 0;
             box-sizing: border-box;
         }
+        :root {
+            --bg-main: #121212;
+            --bg-card: #1e1e1e;
+            --bg-ai: #2d2d2d;
+            --bg-user: #254b80;
+            --text-main: #f0f0f0;
+            --text-ai: #ff6b6b;
+            --border: #333;
+        }
+        .light-mode {
+            --bg-main: #f5f5f5;
+            --bg-card: #ffffff;
+            --bg-ai: #e9e9e9;
+            --bg-user: #407bbd;
+            --text-main: #222222;
+            --text-ai: #e53935;
+            --border: #ddd;
+        }
         body { 
             font-family: "Microsoft Yahei", sans-serif; 
-            background: #121212; 
-            color: #f0f0f0; 
+            background: var(--bg-main); 
+            color: var(--text-main); 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -21,6 +39,7 @@
             min-height: 100vh;
             user-select: none;
             -webkit-user-select: none;
+            transition: background 0.3s, color 0.3s;
         }
 
         h3 {
@@ -29,10 +48,12 @@
             letter-spacing: 1px;
         }
         
-        .mode-selector {
+        .mode-selector, .func-bar {
             margin-bottom: 15px;
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         /* 聊天容器 */
@@ -40,8 +61,8 @@
             width: 100%; 
             max-width: 520px; 
             height: 420px; 
-            background: #1e1e1e; 
-            border: 1px solid #333; 
+            background: var(--bg-card); 
+            border: 1px solid var(--border); 
             border-radius: 18px; 
             padding: 18px; 
             overflow-y: auto; 
@@ -60,20 +81,25 @@
         #chat::-webkit-scrollbar-track {
             background: #222;
         }
+        .light-mode #chat::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
 
-        /* 消息气泡样式 */
+        /* 消息气泡 */
         .msg-ai {
-            background: #2d2d2d;
-            color: #ff6b6b;
+            background: var(--bg-ai);
+            color: var(--text-ai);
             padding: 10px 14px;
             border-radius: 12px 12px 12px 4px;
             max-width: 85%;
             margin: 8px 0;
             text-align: left;
             word-wrap: break-word;
+            cursor: pointer;
+            position: relative;
         }
         .msg-user {
-            background: #254b80;
+            background: var(--bg-user);
             color: #ffffff;
             padding: 10px 14px;
             border-radius: 12px 12px 4px 12px;
@@ -91,6 +117,19 @@
             color: #ff4444;
             margin: 8px 0;
         }
+        .copy-tip {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+            z-index: 999;
+        }
 
         /* 输入框 */
         #userInput { 
@@ -98,9 +137,9 @@
             max-width: 520px; 
             padding: 14px 20px; 
             border-radius: 30px; 
-            border: 1px solid #444;
-            background: #1e1e1e;
-            color: #fff;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
             margin-bottom: 15px; 
             font-size: 15px;
             outline: none;
@@ -110,28 +149,30 @@
             border-color: #666;
         }
         
-        /* 按钮通用样式 */
+        /* 按钮样式 */
         button { 
-            padding: 12px 28px; 
-            font-size: 16px; 
+            padding: 12px 20px; 
+            font-size: 15px; 
             border-radius: 30px; 
             border: none; 
             background: #2c2c2c; 
             color: white; 
             cursor: pointer; 
             font-weight: 500;
-            margin: 0 5px;
             transition: all 0.2s ease;
+        }
+        .light-mode button {
+            background: #e0e0e0;
+            color: #222;
         }
         button:hover {
             background: #444;
         }
+        .light-mode button:hover {
+            background: #d0d0d0;
+        }
         button:active {
             transform: scale(0.97);
-        }
-
-        .operate-bar {
-            margin-bottom: 15px;
         }
 
         a { 
@@ -155,42 +196,81 @@
 <body>
     <h3>Rene的AI 助手</h3>
 
-    <!-- 模式选择 -->
+    <!-- 模式选择：智囊 / 治愈 / 闲聊 三模式 -->
     <div class="mode-selector">
         <button onclick="setMode('toxic')" id="toxic-btn" style="background: #000; color: #fff;">智囊模式</button>
         <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
+        <button onclick="setMode('chat')" id="chat-btn">闲聊模式</button>
+    </div>
+
+    <!-- 功能按钮：清空对话 / 主题切换 -->
+    <div class="func-bar">
+        <button onclick="clearChat()">清空對話</button>
+        <button onclick="toggleTheme()">切換主題</button>
     </div>
 
     <!-- 聊天区域 -->
     <div id="chat">
-        <div class="msg-ai">我是Rene的智囊AI，有什么问题尽管说。</div>
+        <div class="msg-ai" onclick="copyMsg(this)">我是Rene的智囊AI，有什么问题尽管说。</div>
     </div>
 
-    <input type="text" id="userInput" placeholder="輸入消息，按回車或點擊發送..." onkeydown="enterSend(event)">
+    <input type="text" id="userInput" placeholder="輸入消息，按回車或點擊發送（單條最多200字）" onkeydown="enterSend(event)">
     
-    <!-- 功能按钮区 -->
-    <div class="operate-bar">
+    <div class="func-bar">
         <button onclick="getReply()">發送</button>
-        <button onclick="clearChat()">清空對話</button>
     </div>
 
     <a href="index.html">⬅️ 返回首頁</a>
+
+    <!-- 复制提示浮窗 -->
+    <div class="copy-tip" id="copyTip">複製成功</div>
 
     <script>
         let currentMode = 'toxic';
         let chatHistory = [];
         const MAX_HISTORY_ROUND = 10;
+        const MAX_INPUT_LENGTH = 200; // 单条消息最大字数
         const chatBox = document.getElementById('chat');
         const inputField = document.getElementById('userInput');
+        const copyTip = document.getElementById('copyTip');
+        const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=`;
 
-        // 页面加载读取本地历史
+        // 页面加载初始化
         window.addEventListener('load', () => {
+            // 读取主题
+            const theme = localStorage.getItem("siteTheme");
+            if(theme === "light"){
+                document.body.classList.add("light-mode");
+            }
+            // 读取聊天记录
             const localHis = localStorage.getItem("chatHistory");
             if (localHis) {
                 chatHistory = JSON.parse(localHis);
                 renderHistory();
             }
+            // 初始网络检测
+            checkNetwork();
         });
+
+        // 网络状态检测
+        function checkNetwork() {
+            if(!navigator.onLine){
+                chatBox.innerHTML += `<div class="error-msg">⚠️ 當前網絡離線，無法請求AI</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+        window.addEventListener("online", checkNetwork);
+        window.addEventListener("offline", checkNetwork);
+
+        // 主题切换 深色/浅色
+        function toggleTheme() {
+            document.body.classList.toggle("light-mode");
+            if(document.body.classList.contains("light-mode")){
+                localStorage.setItem("siteTheme","light");
+            }else{
+                localStorage.setItem("siteTheme","dark");
+            }
+        }
 
         // 渲染历史消息
         function renderHistory() {
@@ -199,31 +279,43 @@
                 if(item.role === "user"){
                     chatBox.innerHTML += `<div class="msg-user">${item.content}</div>`;
                 }else{
-                    chatBox.innerHTML += `<div class="msg-ai">${item.content}</div>`;
+                    chatBox.innerHTML += `<div class="msg-ai" onclick="copyMsg(this)">${item.content}</div>`;
                 }
             })
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // 切换模式
+        // 切换对话模式
         function setMode(mode) {
             currentMode = mode;
             chatHistory = [];
             localStorage.removeItem("chatHistory");
 
+            // 重置按钮样式
             document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
             document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
             document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
             document.getElementById('comfort-btn').style.color = mode === 'comfort' ? '#fff' : '#000';
+            document.getElementById('chat-btn').style.background = mode === 'chat' ? '#000' : '#ccc';
+            document.getElementById('chat-btn').style.color = mode === 'chat' ? '#fff' : '#000';
 
-            if(mode === 'toxic'){
-                chatBox.innerHTML = `<div class="msg-ai">我是Rene的智囊AI，有什么问题尽管说。</div>`;
-            }else{
-                chatBox.innerHTML = `<div class="msg-ai">我是Rene的安慰AI，我会一直陪着你。</div>`;
+            // 对应开场白
+            let text = "";
+            switch(mode){
+                case "toxic":
+                    text = "我是Rene的智囊AI，有什么问题尽管说。";
+                    break;
+                case "comfort":
+                    text = "我是Rene的安慰AI，我会一直陪着你。";
+                    break;
+                case "chat":
+                    text = "放輕鬆～隨便聊聊吧😊";
+                    break;
             }
+            chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${text}</div>`;
         }
 
-        // 回车发送消息
+        // 回车发送
         function enterSend(e) {
             if(e.keyCode === 13) {
                 getReply();
@@ -238,21 +330,54 @@
             setMode(currentMode);
         }
 
-        // 发送消息
-        async function getReply() {
-            const input = inputField.value.trim();
-            const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=${currentMode}`;
+        // 复制AI消息
+        function copyMsg(el) {
+            const text = el.innerText;
+            navigator.clipboard.writeText(text).then(()=>{
+                copyTip.style.display = "block";
+                setTimeout(()=>{
+                    copyTip.style.display = "none";
+                }, 1200);
+            }).catch(()=>{
+                alert("複製失敗，請手動選取");
+            });
+            // 朗读文本
+            readVoice(text);
+        }
 
+        // 语音朗读
+        function readVoice(text) {
+            if(!window.speechSynthesis) return;
+            speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = "zh-CN";
+            utter.rate = 1;
+            speechSynthesis.speak(utter);
+        }
+
+        // 发送消息主逻辑
+        async function getReply() {
+            // 离线拦截
+            if(!navigator.onLine){
+                alert("網絡離線，無法發送請求");
+                return;
+            }
+            let input = inputField.value.trim();
+            // 字数限制
+            if(input.length > MAX_INPUT_LENGTH){
+                alert(`消息不能超過 ${MAX_INPUT_LENGTH} 字`);
+                return;
+            }
             if (!input) return;
 
-            // 限制历史长度
+            // 限制历史轮数
             if (chatHistory.length > MAX_HISTORY_ROUND * 2) {
                 chatHistory = chatHistory.slice(-MAX_HISTORY_ROUND * 2);
             }
 
             // 展示用户消息
             chatBox.innerHTML += `<div class="msg-user">${input}</div>`;
-            // 加载动画
+            // 加载提示
             const loadingDom = document.createElement("div");
             loadingDom.className = "loading";
             loadingDom.innerText = "AI 思考中...";
@@ -261,7 +386,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                const response = await fetch(workerUrl, {
+                const res = await fetch(workerUrl + currentMode, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -271,13 +396,11 @@
                         history: chatHistory
                     })
                 });
-
-                const data = await response.json();
-                // 移除加载提示
+                const data = await res.json();
                 chatBox.removeChild(loadingDom);
 
                 if (data.reply) {
-                    chatBox.innerHTML += `<div class="msg-ai">${data.reply}</div>`;
+                    chatBox.innerHTML += `<div class="msg-ai" onclick="copyMsg(this)">${data.reply}</div>`;
                     chatHistory = data.history;
                     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
                 } else if (data.error) {
@@ -285,9 +408,8 @@
                 }
             } catch (e) {
                 chatBox.removeChild(loadingDom);
-                chatBox.innerHTML += `<div class="error-msg">連接失敗，請稍後再試</div>`;
+                chatBox.innerHTML += `<div class="error-msg">連接失敗，請檢查接口</div>`;
             }
-
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
