@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 关键：允许缩放、适配手机 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RENÉ | PRIVATE EXCLUSIVE MEMBER</title>
-    <!-- 高端商业字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -36,14 +36,14 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start; /* 改：顶部对齐，内容多了自动往下 */
+            padding: 20px 15px; /* 改：左右小一点，防止手机太挤 */
+            padding-bottom: 40px; /* 改：底部留空，防止被切 */
             color: var(--platinum);
-            overflow: hidden;
+            overflow-x: hidden; /* 只禁横向滚动，纵向可以滚 */
             position: relative;
         }
 
-        /* 全局鎏金动态光晕背景 */
         body::before {
             content: "";
             position: absolute;
@@ -60,14 +60,13 @@
             100% { opacity: 1; transform: scale(1.05); }
         }
 
-        /* 主殿堂级卡片 - 黑金鎏金浮雕结构 */
         .card {
             background: linear-gradient(145deg, rgba(10,10,18,0.95), rgba(2,2,5,0.98));
             backdrop-filter: blur(30px) saturate(200%);
             -webkit-backdrop-filter: blur(30px) saturate(200%);
             border: 1px solid var(--border-gold);
             border-radius: 32px;
-            padding: 50px 40px;
+            padding: 30px 25px; /* 改：内边距缩小，整体变矮 */
             box-shadow: 
                 0 30px 100px rgba(0, 0, 0, 0.8),
                 0 12px 40px rgba(0, 0, 0, 0.6),
@@ -82,7 +81,6 @@
             animation: royalEnter 1.2s ease-out forwards;
         }
 
-        /* 鎏金纵向流光带 */
         .card::after {
             content: "";
             position: absolute;
@@ -113,13 +111,12 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* 贵族专属头像 - 铂金双层镶边+环形金芒 */
         .avatar {
-            width: 130px;
-            height: 130px;
+            width: 110px; /* 改：头像小一点 */
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 26px;
+            margin: 0 auto 20px;
             border: 2px solid var(--border-gold);
             box-shadow: 
                 0 0 0 6px rgba(212, 175, 55, 0.1),
@@ -137,56 +134,52 @@
                 0 0 100px rgba(158, 126, 34, 0.15);
         }
 
-        /* 主标题 尊荣排版 英文+中文双格调 */
         h1 {
-            font-size: 32px;
+            font-size: 26px; /* 改：标题小一点 */
             font-weight: 500;
             letter-spacing: 6px;
             color: var(--gold-primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.25), 0 2px 10px #000;
         }
         .sub-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 300;
             letter-spacing: 3px;
             color: var(--platinum);
             opacity: 0.7;
-            margin-bottom: 32px;
+            margin-bottom: 25px;
         }
 
-        /* 会员倒计时模块 内嵌暗纹质感 */
         .countdown {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 300;
             color: var(--platinum);
             opacity: 0.8;
             background: rgba(0, 0, 0, 0.35);
-            padding: 16px 20px;
+            padding: 12px 16px; /* 改：内边距缩小 */
             border-radius: 16px;
-            margin-bottom: 32px;
+            margin-bottom: 25px;
             border: 1px solid rgba(212, 175, 55, 0.12);
             letter-spacing: 1px;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
         }
 
-        /* 按钮组间距 */
         .btn-group {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-bottom: 26px;
+            gap: 12px; /* 改：按钮间距变小 */
+            margin-bottom: 20px;
         }
 
-        /* 顶级会员按钮 鎏金浮雕立体样式 */
         .btn {
             display: block;
-            padding: 18px 24px;
+            padding: 14px 20px; /* 改：按钮高度变小 */
             color: #fff;
             text-decoration: none;
             border-radius: 20px;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 15px;
             letter-spacing: 1.5px;
             text-align: center;
             border: none;
@@ -232,7 +225,6 @@
             transform: translateY(2px);
         }
 
-        /* 基础功能按钮 深金商务 */
         .btn-normal {
             background: linear-gradient(135deg, #221f18, #3a3428);
             border: 1px solid var(--border-gold);
@@ -242,7 +234,6 @@
             border-color: rgba(212, 175, 55, 0.35);
         }
 
-        /* 私密留言 翡翠鎏金 */
         .btn-msg {
             background: linear-gradient(135deg, #182722, #243b32);
             border: 1px solid rgba(16, 185, 129, 0.25);
@@ -252,7 +243,6 @@
             border-color: rgba(16, 185, 129, 0.35);
         }
 
-        /* 尊享娱乐 紫晶鎏金 */
         .btn-game {
             background: linear-gradient(135deg, #231c2e, #372d4a);
             border: 1px solid rgba(139, 92, 246, 0.25);
@@ -262,7 +252,6 @@
             border-color: rgba(139, 92, 246, 0.35);
         }
 
-        /* 专属AI管家 深空铂金 */
         .btn-ai {
             background: linear-gradient(135deg, #12151c, #202633);
             border: 1px solid rgba(229, 231, 235, 0.2);
@@ -272,18 +261,16 @@
             border-color: rgba(229, 231, 235, 0.3);
         }
 
-        /* 退出会员 暗红尊戒 */
         .btn-logout {
             background: linear-gradient(135deg, #2b1717, #422222);
             border: 1px solid rgba(239, 68, 68, 0.25);
-            margin-top: 16px;
+            margin-top: 12px;
         }
         .btn-logout:hover {
             box-shadow: 0 12px 36px rgba(0,0,0,0.5), 0 0 20px rgba(239, 68, 68, 0.15);
             border-color: rgba(239, 68, 68, 0.35);
         }
 
-        /* 登录弹窗 顶级会员门禁样式 */
         .login-mask {
             position: fixed;
             top: 0;
@@ -296,6 +283,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 15px;
             z-index: 9999;
         }
 
@@ -305,9 +293,10 @@
             -webkit-backdrop-filter: blur(32px) saturate(200%);
             border: 1px solid var(--border-gold);
             border-radius: 28px;
-            padding: 48px 38px;
+            padding: 35px 25px; /* 改：内边距缩小 */
             text-align: center;
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             box-shadow: 0 32px 100px rgba(0,0,0,0.85), 0 0 60px rgba(212, 175, 55, 0.1);
             animation: noblePop 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             position: relative;
@@ -333,16 +322,16 @@
         .login-box h2 {
             color: var(--gold-primary);
             font-weight: 500;
-            margin-bottom: 32px;
+            margin-bottom: 25px;
             letter-spacing: 4px;
-            font-size: 24px;
+            font-size: 22px;
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
 
         .login-box input {
             width: 100%;
-            padding: 18px 20px;
-            margin: 14px 0;
+            padding: 15px 18px;
+            margin: 12px 0;
             background: rgba(0,0,0,0.3);
             border: 1px solid rgba(212, 175, 55, 0.15);
             border-radius: 20px;
@@ -364,7 +353,7 @@
         }
 
         .login-box button {
-            padding: 15px 36px;
+            padding: 13px 30px;
             margin: 12px 8px 0;
             border: none;
             border-radius: 20px;
@@ -411,7 +400,6 @@
     </style>
 </head>
 <body>
-    <!-- 会员专属登录门禁 -->
     <div id="loginMask" class="login-mask">
         <div class="login-box">
             <div id="loginTitle"><h2>專屬會員驗證</h2></div>
@@ -423,7 +411,6 @@
         </div>
     </div>
 
-    <!-- 頂級會員主頁面 -->
     <div class="main-content" id="mainBox">
         <div class="card">
             <div class="countdown" id="timer">⏰ 專屬倒計時加載中...</div>
@@ -444,7 +431,6 @@
     </div>
 
     <script>
-        // 會員開關配置
         const needLogin = true;
         let isRegisterMode = false;
 
@@ -476,7 +462,6 @@
             }
         };
 
-        // 切換登錄/註冊
         function switchMode(){
             msgTip.innerText = "";
             isRegisterMode = !isRegisterMode;
@@ -489,7 +474,6 @@
             }
         }
 
-        // 登錄/註冊邏輯
         function doLogin(){
             const un = document.getElementById('username').value.trim();
             const pw = document.getElementById('pwd').value.trim();
@@ -524,13 +508,11 @@
             }
         }
 
-        // 退出會員專區
         function logout(){
             localStorage.removeItem("siteLogin");
             location.reload();
         }
 
-        // 生日倒計時
         function updateTimer() {
             const targetDate = new Date("2026/08/24 00:00:00").getTime();
             const now = new Date().getTime();
@@ -543,7 +525,7 @@
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerHTML = `🎁 尊屬倒計時：距離Rene專屬慶典 ${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
+            document.getElementById('timer').innerHTML = `🎁 尊屬倒計時：距離專屬慶典 ${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
         }
     </script>
 </body>
