@@ -16,14 +16,14 @@
         .btn-game:hover { background: #5a32a3; }
         .countdown { font-size: 14px; color: #666; margin-bottom: 15px; background: #e9ecef; padding: 8px; border-radius: 5px; }
 
-        /* 登录弹窗样式 */
+        /* 登录注册弹窗样式 */
         .login-mask {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,6 +47,7 @@
         }
         .login-box button {
             padding: 10px 30px;
+            margin: 5px;
             background: #007bff;
             color: #fff;
             border: none;
@@ -54,9 +55,17 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .login-tip {
+        .login-box .switch-btn {
+            background: #6c757d;
+        }
+        .tip {
             color: red;
             margin-top: 10px;
+            height: 20px;
+        }
+        /* 隐藏页面主体内容 */
+        .main-content {
+            display: none;
         }
         .hide {
             display: none !important;
@@ -64,75 +73,125 @@
     </style>
 </head>
 <body>
-    <!-- 全局登录弹窗 -->
+    <!-- 登录/注册弹窗 -->
     <div id="loginMask" class="login-mask">
         <div class="login-box">
-            <h2>網站登錄</h2>
+            <div id="loginTitle"><h2>賬號登錄</h2></div>
             <input type="text" id="username" placeholder="請輸入賬號">
             <input type="password" id="pwd" placeholder="請輸入密碼">
-            <br>
-            <button onclick="login()">登錄</button>
-            <p class="login-tip" id="loginTip"></p>
+            <p class="tip" id="msgTip"></p>
+            <button onclick="doLogin()">登錄</button>
+            <button class="switch-btn" onclick="switchMode()">切換註冊</button>
         </div>
     </div>
 
-    <div class="card">
-        <div class="countdown" id="timer">⏰ 倒計時加載中...</div>
-        <img src="tx.JPG.JPG" alt="头像" class="avatar">
-        <h1>Rene 的空間</h1>
-        
-        <div class="btn-group">
-            <a href="about.html" class="btn">👤 第一步：關於我</a>
-            <a href="moments.html" class="btn">📸 第二步：朋友圈</a>
-            <a href="https://ngl.link/rene25528" class="btn" target="_blank" style="background: #28a745;">📝 第三步：留言（想告訴我秘密？點這裡）</a>
-            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 第四步：Rene喜歡的音樂</a>
-            <a href="game.html" class="btn btn-game">🎮 第五步：互動遊戲室</a>
-            <a href="chat.html" class="btn" style="background: #343a40;">🤖 第六步：Rene的AI 助手</a>
+    <!-- 網站主內容（未登錄時隱藏） -->
+    <div class="main-content" id="mainBox">
+        <div class="card">
+            <div class="countdown" id="timer">⏰ 倒計時加載中...</div>
+            <img src="tx.JPG.JPG" alt="头像" class="avatar">
+            <h1>Rene 的空間</h1>
+            
+            <div class="btn-group">
+                <a href="about.html" class="btn">👤 第一步：關於我</a>
+                <a href="moments.html" class="btn">📸 第二步：朋友圈</a>
+                <a href="https://ngl.link/rene25528" class="btn" target="_blank" style="background: #28a745;">📝 第三步：留言（想告訴我秘密？點這裡）</a>
+                <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 第四步：Rene喜歡的音樂</a>
+                <a href="game.html" class="btn btn-game">🎮 第五步：互動遊戲室</a>
+                <a href="chat.html" class="btn" style="background: #343a40;">🤖 第六步：Rene的AI 助手</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // ===================== 全局登錄開關（YES / NO） =====================
-        const needLogin = true;  // true=必須登錄(YES)  false=免登錄(NO)
-        const USER_ACCOUNT = "admin";  // 自定義賬號
-        const USER_PASS = "123456";    // 自定義密碼
-        // =================================================================
+        // ========== 全局開關 ==========
+        const needLogin = true;  // true=需要登錄(YES)  false=無需登錄(NO)
+        let isRegisterMode = false; // 當前模式：登錄/註冊
+        // =============================
 
         const loginMask = document.getElementById('loginMask');
-        const loginTip = document.getElementById('loginTip');
+        const mainBox = document.getElementById('mainBox');
+        const loginTitle = document.getElementById('loginTitle');
+        const msgTip = document.getElementById('msgTip');
 
-        // 頁面載入判斷登錄狀態
+        // 頁面初始化
         window.onload = function(){
-            // 倒計時
+            // 啟動倒計時
             updateTimer();
             setInterval(updateTimer, 1000);
 
-            // 登錄校驗
-            const isLogin = localStorage.getItem("siteLogin") === "ok";
+            // 讀取本地登錄狀態 & 註冊賬號
+            const loginStatus = localStorage.getItem("siteLogin");
+            const userAccount = localStorage.getItem("regUser");
+            const userPwd = localStorage.getItem("regPwd");
+
             if(!needLogin){
-                // 關閉登錄：直接隱藏彈窗
+                // 關閉登錄：直接顯示內容
                 loginMask.classList.add("hide");
+                mainBox.style.display = "block";
+                return;
+            }
+
+            // 開啟登錄：判斷是否已登錄
+            if(loginStatus === "ok" && userAccount && userPwd){
+                loginMask.classList.add("hide");
+                mainBox.style.display = "block";
             }else{
-                // 開啟登錄：已登錄則隱藏彈窗，未登錄則顯示
-                if(isLogin){
-                    loginMask.classList.add("hide");
-                }else{
-                    loginMask.classList.remove("hide");
-                }
+                loginMask.classList.remove("hide");
+                mainBox.style.display = "none";
             }
         };
 
-        // 登錄函數
-        function login(){
-            let un = document.getElementById('username').value.trim();
-            let pw = document.getElementById('pwd').value.trim();
-            loginTip.innerText = "";
-
-            if(un === USER_ACCOUNT && pw === USER_PASS){
-                localStorage.setItem("siteLogin", "ok");
-                loginMask.classList.add("hide");
+        // 切換 登錄/註冊 模式
+        function switchMode(){
+            msgTip.innerText = "";
+            isRegisterMode = !isRegisterMode;
+            if(isRegisterMode){
+                loginTitle.innerHTML = "<h2>新用戶註冊</h2>";
+                document.querySelector(".switch-btn").innerText = "切換登錄";
             }else{
-                loginTip.innerText = "賬號或密碼錯誤";
+                loginTitle.innerHTML = "<h2>賬號登錄</h2>";
+                document.querySelector(".switch-btn").innerText = "切換註冊";
+            }
+        }
+
+        // 執行 登錄 / 註冊
+        function doLogin(){
+            const un = document.getElementById('username').value.trim();
+            const pw = document.getElementById('pwd').value.trim();
+            msgTip.innerText = "";
+
+            // 校驗輸入
+            if(!un || !pw){
+                msgTip.innerText = "賬號和密碼不能為空！";
+                return;
+            }
+
+            const regUser = localStorage.getItem("regUser");
+            const regPwd = localStorage.getItem("regPwd");
+
+            if(isRegisterMode){
+                // 註冊邏輯
+                if(regUser){
+                    msgTip.innerText = "該賬號已存在，請更換！";
+                    return;
+                }
+                // 保存賬號密碼
+                localStorage.setItem("regUser", un);
+                localStorage.setItem("regPwd", pw);
+                localStorage.setItem("siteLogin", "ok");
+                // 註冊成功自動登錄
+                loginMask.classList.add("hide");
+                mainBox.style.display = "block";
+            }else{
+                // 登錄邏輯
+                if(un === regUser && pw === regPwd){
+                    localStorage.setItem("siteLogin", "ok");
+                    loginMask.classList.add("hide");
+                    mainBox.style.display = "block";
+                }else{
+                    msgTip.innerText = "賬號或密碼錯誤！";
+                }
             }
         }
 
@@ -147,7 +206,7 @@
             }
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const minutes = Math.floor((difference % (difference % (1000 * 60 * 60)) / (1000 * 60)));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
             document.getElementById('timer').innerHTML = `🎁 距離Rene生日轟趴還有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
