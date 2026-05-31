@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rene的AI 助手</title>
+    <title>Rene的AI</title>
     <style>
         * {
             margin: 0;
@@ -230,10 +230,10 @@
     </script>
 </head>
 <body>
-    <h3>Rene的AI 助手</h3>
+    <h3>Rene的AI</h3>
 
     <div class="mode-selector">
-        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式</button>
+        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式(有点高冷</button>
         <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
         <button onclick="setMode('chat')" id="chat-btn">闲聊模式</button>
     </div>
@@ -254,6 +254,7 @@
 
     <div class="count-text" id="countText">0 / 200</div>
 
+    <!-- 回车直接发送 -->
     <input type="text" id="userInput" placeholder="輸入消息，回車發送" 
            onkeydown="if(event.keyCode===13) getReply()" oninput="calcLength()">
     
@@ -366,13 +367,13 @@
             let text = "";
             switch(mode){
                 case "toxic":
-                    text = "我是Rene的智囊AI，有什么问题尽管说。";
+                    text = "我是汉堡，有什么问题尽管说。";
                     break;
                 case "comfort":
-                    text = "我是Rene的安慰AI，我会一直陪着你。";
+                    text = "我是甜筒，我会一直陪着你。";
                     break;
                 case "chat":
-                    text = "哈喽，随时可以开始聊天哦。";
+                    text = "哈喽，我是薯条，随时可以开始聊天哦。";
                     break;
             }
             chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${text}<span class="msg-time">${getTimeStr()}</span></div>`;
@@ -466,7 +467,7 @@
                     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 
                     document.title = "✨ 收到新回覆";
-                    setTimeout(()=> document.title = "Rene的AI 助手", 2000);
+                    setTimeout(()=> document.title = "Rene的AI", 2000);
                 } else if (data.error) {
                     chatBox.innerHTML += `<div class="error-msg">錯誤：${data.error}</div>`;
                 }
