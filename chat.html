@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Rene的AI 助手</title>
     <style>
         * {
@@ -18,6 +18,8 @@
             --text-main: #f0f0f0;
             --text-ai: #ff6b6b;
             --border: #333;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --animate-speed: 0.3s;
         }
         .light-mode {
             --bg-main: #f5f5f5;
@@ -27,6 +29,7 @@
             --text-main: #222222;
             --text-ai: #e53935;
             --border: #ddd;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         body { 
             font-family: "Microsoft Yahei", sans-serif; 
@@ -39,7 +42,16 @@
             min-height: 100vh;
             user-select: none;
             -webkit-user-select: none;
-            transition: background 0.3s, color 0.3s;
+            transition: background var(--animate-speed), color var(--animate-speed);
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes msgPop {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h3 {
@@ -48,15 +60,14 @@
             letter-spacing: 1px;
         }
         
-        .mode-selector, .func-bar {
-            margin-bottom: 15px;
+        .mode-selector, .func-bar, .quick-word {
+            margin-bottom: 12px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
-        /* 聊天容器 */
         #chat { 
             width: 100%; 
             max-width: 520px; 
@@ -66,11 +77,11 @@
             border-radius: 18px; 
             padding: 18px; 
             overflow-y: auto; 
-            margin-bottom: 20px; 
+            margin-bottom: 15px; 
             font-size: 15px;
             line-height: 1.6;
+            box-shadow: var(--shadow);
         }
-        /* 自定义滚动条 */
         #chat::-webkit-scrollbar {
             width: 6px;
         }
@@ -85,7 +96,6 @@
             background: #f1f1f1;
         }
 
-        /* 消息气泡 */
         .msg-ai {
             background: var(--bg-ai);
             color: var(--text-ai);
@@ -97,6 +107,7 @@
             word-wrap: break-word;
             cursor: pointer;
             position: relative;
+            animation: msgPop 0.3s ease;
         }
         .msg-user {
             background: var(--bg-user);
@@ -107,31 +118,35 @@
             margin: 8px 0 8px auto;
             text-align: left;
             word-wrap: break-word;
+            animation: msgPop 0.3s ease;
+        }
+        .msg-time {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 4px;
+            display: block;
         }
         .loading {
             color: #888;
             margin: 8px 0;
             padding-left: 10px;
+            animation: msgPop 0.3s ease;
         }
         .error-msg {
             color: #ff4444;
             margin: 8px 0;
-        }
-        .copy-tip {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: none;
-            z-index: 999;
+            animation: msgPop 0.3s ease;
         }
 
-        /* 输入框 */
+        .count-text {
+            width: 100%;
+            max-width: 520px;
+            text-align: right;
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
         #userInput { 
             width: 100%; 
             max-width: 520px; 
@@ -140,7 +155,7 @@
             border: 1px solid var(--border);
             background: var(--bg-card);
             color: var(--text-main);
-            margin-bottom: 15px; 
+            margin-bottom: 8px; 
             font-size: 15px;
             outline: none;
             transition: border 0.2s;
@@ -148,11 +163,14 @@
         #userInput:focus {
             border-color: #666;
         }
+        #userInput:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         
-        /* 按钮样式 */
         button { 
-            padding: 12px 20px; 
-            font-size: 15px; 
+            padding: 10px 16px; 
+            font-size: 14px; 
             border-radius: 30px; 
             border: none; 
             background: #2c2c2c; 
@@ -165,14 +183,18 @@
             background: #e0e0e0;
             color: #222;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background: #444;
         }
-        .light-mode button:hover {
+        .light-mode button:hover:not(:disabled) {
             background: #d0d0d0;
         }
-        button:active {
+        button:active:not(:disabled) {
             transform: scale(0.97);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         a { 
@@ -185,8 +207,22 @@
         a:hover {
             color: #ccc;
         }
+
+        .copy-tip {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+            z-index: 999;
+            animation: fadeIn 0.2s;
+        }
     </style>
-    <!-- 登录校验：未登录自动跳回首页 -->
     <script>
         if(localStorage.getItem("siteLogin") !== "ok"){
             location.href = "index.html";
@@ -196,102 +232,131 @@
 <body>
     <h3>Rene的AI 助手</h3>
 
-    <!-- 模式选择：智囊 / 治愈 / 闲聊 三模式 -->
     <div class="mode-selector">
-        <button onclick="setMode('toxic')" id="toxic-btn" style="background: #000; color: #fff;">智囊模式</button>
+        <button onclick="setMode('toxic')" id="toxic-btn">智囊模式</button>
         <button onclick="setMode('comfort')" id="comfort-btn">治愈模式</button>
         <button onclick="setMode('chat')" id="chat-btn">闲聊模式</button>
     </div>
 
-    <!-- 功能按钮：清空对话 / 主题切换 -->
     <div class="func-bar">
         <button onclick="clearChat()">清空對話</button>
         <button onclick="toggleTheme()">切換主題</button>
+        <button onclick="toggleVoice()">語音朗讀：開</button>
     </div>
 
-    <!-- 聊天区域 -->
-    <div id="chat">
-        <div class="msg-ai" onclick="copyMsg(this)">我是Rene的智囊AI，有什么问题尽管说。</div>
+    <div class="quick-word">
+        <button onclick="fillWord('你好')">你好</button>
+        <button onclick="fillWord('謝謝')">謝謝</button>
+        <button onclick="fillWord('再見')">再見</button>
     </div>
 
-    <input type="text" id="userInput" placeholder="輸入消息，按回車或點擊發送（單條最多200字）" onkeydown="enterSend(event)">
+    <div id="chat"></div>
+
+    <div class="count-text" id="countText">0 / 200</div>
+
+    <!-- 回车直接发送 -->
+    <input type="text" id="userInput" placeholder="輸入消息，回車發送" 
+           onkeydown="if(event.keyCode===13) getReply()" oninput="calcLength()">
     
     <div class="func-bar">
-        <button onclick="getReply()">發送</button>
+        <button onclick="getReply()" id="sendBtn">發送</button>
     </div>
 
     <a href="index.html">⬅️ 返回首頁</a>
 
-    <!-- 复制提示浮窗 -->
     <div class="copy-tip" id="copyTip">複製成功</div>
 
     <script>
         let currentMode = 'toxic';
         let chatHistory = [];
+        let voiceOpen = true;
         const MAX_HISTORY_ROUND = 10;
-        const MAX_INPUT_LENGTH = 200; // 单条消息最大字数
+        const MAX_INPUT_LENGTH = 200;
+        const TYPE_SPEED = 40;
         const chatBox = document.getElementById('chat');
         const inputField = document.getElementById('userInput');
         const copyTip = document.getElementById('copyTip');
+        const sendBtn = document.getElementById('sendBtn');
+        const countText = document.getElementById('countText');
         const workerUrl = `https://lively-darkness-2561.bmk4byvf9b.workers.dev/?mode=`;
 
-        // 页面加载初始化
+        function getTimeStr() {
+            const d = new Date();
+            return `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+        }
+
         window.addEventListener('load', () => {
-            // 读取主题
             const theme = localStorage.getItem("siteTheme");
-            if(theme === "light"){
-                document.body.classList.add("light-mode");
-            }
-            // 读取聊天记录
+            if(theme === "light") document.body.classList.add("light-mode");
+
+            const lastMode = localStorage.getItem("lastMode") || "toxic";
+            setMode(lastMode);
+
             const localHis = localStorage.getItem("chatHistory");
             if (localHis) {
                 chatHistory = JSON.parse(localHis);
                 renderHistory();
             }
-            // 初始网络检测
+
+            window.addEventListener("online", checkNetwork);
+            window.addEventListener("offline", checkNetwork);
             checkNetwork();
         });
 
-        // 网络状态检测
         function checkNetwork() {
             if(!navigator.onLine){
-                chatBox.innerHTML += `<div class="error-msg">⚠️ 當前網絡離線，無法請求AI</div>`;
+                chatBox.innerHTML += `<div class="error-msg">⚠️ 網絡離線，暫無法使用</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
-        window.addEventListener("online", checkNetwork);
-        window.addEventListener("offline", checkNetwork);
 
-        // 主题切换 深色/浅色
         function toggleTheme() {
             document.body.classList.toggle("light-mode");
-            if(document.body.classList.contains("light-mode")){
-                localStorage.setItem("siteTheme","light");
-            }else{
-                localStorage.setItem("siteTheme","dark");
-            }
+            localStorage.setItem("siteTheme", document.body.classList.contains("light-mode") ? "light" : "dark");
         }
 
-        // 渲染历史消息
+        function toggleVoice() {
+            voiceOpen = !voiceOpen;
+            event.target.innerText = voiceOpen ? "語音朗讀：開" : "語音朗讀：關";
+        }
+
+        function fillWord(txt) {
+            inputField.value = txt;
+            calcLength();
+        }
+
+        function calcLength() {
+            const len = inputField.value.length;
+            countText.innerText = `${len} / ${MAX_INPUT_LENGTH}`;
+        }
+
         function renderHistory() {
             chatBox.innerHTML = "";
             chatHistory.forEach(item => {
+                const time = item.time || "";
                 if(item.role === "user"){
-                    chatBox.innerHTML += `<div class="msg-user">${item.content}</div>`;
+                    chatBox.innerHTML += `
+                        <div class="msg-user">
+                            ${item.content}
+                            <span class="msg-time">${time}</span>
+                        </div>`;
                 }else{
-                    chatBox.innerHTML += `<div class="msg-ai" onclick="copyMsg(this)">${item.content}</div>`;
+                    chatBox.innerHTML += `
+                        <div class="msg-ai" onclick="copyMsg(this)">
+                            ${item.content}
+                            <span class="msg-time">${time}</span>
+                        </div>`;
                 }
             })
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // 切换对话模式
         function setMode(mode) {
             currentMode = mode;
+            localStorage.setItem("lastMode", mode);
             chatHistory = [];
             localStorage.removeItem("chatHistory");
 
-            // 重置按钮样式
             document.getElementById('toxic-btn').style.background = mode === 'toxic' ? '#000' : '#ccc';
             document.getElementById('toxic-btn').style.color = mode === 'toxic' ? '#fff' : '#000';
             document.getElementById('comfort-btn').style.background = mode === 'comfort' ? '#000' : '#ccc';
@@ -299,7 +364,6 @@
             document.getElementById('chat-btn').style.background = mode === 'chat' ? '#000' : '#ccc';
             document.getElementById('chat-btn').style.color = mode === 'chat' ? '#fff' : '#000';
 
-            // 对应开场白
             let text = "";
             switch(mode){
                 case "toxic":
@@ -309,107 +373,112 @@
                     text = "我是Rene的安慰AI，我会一直陪着你。";
                     break;
                 case "chat":
-                    text = "放輕鬆～隨便聊聊吧😊";
+                    text = "哈喽，随时可以开始聊天哦。";
                     break;
             }
-            chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${text}</div>`;
+            chatBox.innerHTML = `<div class="msg-ai" onclick="copyMsg(this)">${text}<span class="msg-time">${getTimeStr()}</span></div>`;
         }
 
-        // 回车发送
-        function enterSend(e) {
-            if(e.keyCode === 13) {
-                getReply();
-            }
-        }
-
-        // 清空对话
         function clearChat() {
-            if(!confirm("確定要清空所有對話記錄嗎？")) return;
+            if(!confirm("確定清空所有對話？")) return;
             chatHistory = [];
             localStorage.removeItem("chatHistory");
             setMode(currentMode);
         }
 
-        // 复制AI消息
         function copyMsg(el) {
-            const text = el.innerText;
+            const text = el.innerText.replace(/\d{2}:\d{2}$/,'').trim();
             navigator.clipboard.writeText(text).then(()=>{
                 copyTip.style.display = "block";
-                setTimeout(()=>{
-                    copyTip.style.display = "none";
-                }, 1200);
-            }).catch(()=>{
-                alert("複製失敗，請手動選取");
-            });
-            // 朗读文本
-            readVoice(text);
+                setTimeout(()=> copyTip.style.display = "none", 1200);
+            }).catch(()=> alert("複製失敗"));
+
+            if(voiceOpen && window.speechSynthesis){
+                speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = "zh-CN";
+                utter.rate = 1;
+                speechSynthesis.speak(utter);
+            }
         }
 
-        // 语音朗读
-        function readVoice(text) {
-            if(!window.speechSynthesis) return;
-            speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = "zh-CN";
-            utter.rate = 1;
-            speechSynthesis.speak(utter);
+        async function typeWriter(box, text) {
+            box.innerHTML = "";
+            for(let i = 0; i < text.length; i++){
+                box.innerHTML += text[i];
+                chatBox.scrollTop = chatBox.scrollHeight;
+                await new Promise(res => setTimeout(res, TYPE_SPEED));
+            }
         }
 
-        // 发送消息主逻辑
         async function getReply() {
-            // 离线拦截
             if(!navigator.onLine){
-                alert("網絡離線，無法發送請求");
+                alert("網絡離線，無法發送");
                 return;
             }
             let input = inputField.value.trim();
-            // 字数限制
             if(input.length > MAX_INPUT_LENGTH){
-                alert(`消息不能超過 ${MAX_INPUT_LENGTH} 字`);
+                alert(`消息最大 ${MAX_INPUT_LENGTH} 字`);
                 return;
             }
             if (!input) return;
 
-            // 限制历史轮数
+            sendBtn.disabled = true;
+            inputField.disabled = true;
+
             if (chatHistory.length > MAX_HISTORY_ROUND * 2) {
                 chatHistory = chatHistory.slice(-MAX_HISTORY_ROUND * 2);
             }
 
-            // 展示用户消息
-            chatBox.innerHTML += `<div class="msg-user">${input}</div>`;
-            // 加载提示
+            const nowTime = getTimeStr();
+            chatBox.innerHTML += `
+                <div class="msg-user">
+                    ${input}
+                    <span class="msg-time">${nowTime}</span>
+                </div>`;
             const loadingDom = document.createElement("div");
             loadingDom.className = "loading";
             loadingDom.innerText = "AI 思考中...";
             chatBox.appendChild(loadingDom);
             inputField.value = "";
+            calcLength();
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
                 const res = await fetch(workerUrl + currentMode, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: input,
-                        history: chatHistory
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: input, history: chatHistory})
                 });
                 const data = await res.json();
                 chatBox.removeChild(loadingDom);
 
                 if (data.reply) {
-                    chatBox.innerHTML += `<div class="msg-ai" onclick="copyMsg(this)">${data.reply}</div>`;
+                    const aiBox = document.createElement("div");
+                    aiBox.className = "msg-ai";
+                    aiBox.onclick = function(){ copyMsg(this); };
+                    chatBox.appendChild(aiBox);
+                    await typeWriter(aiBox, data.reply);
+                    aiBox.innerHTML += `<span class="msg-time">${nowTime}</span>`;
+
                     chatHistory = data.history;
+                    chatHistory.push({role:"user", content:input, time:nowTime});
+                    chatHistory.push({role:"ai", content:data.reply, time:nowTime});
                     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+
+                    document.title = "✨ 收到新回覆";
+                    setTimeout(()=> document.title = "Rene的AI 助手", 2000);
                 } else if (data.error) {
                     chatBox.innerHTML += `<div class="error-msg">錯誤：${data.error}</div>`;
                 }
             } catch (e) {
                 chatBox.removeChild(loadingDom);
-                chatBox.innerHTML += `<div class="error-msg">連接失敗，請檢查接口</div>`;
+                chatBox.innerHTML += `<div class="error-msg">連接接口失敗</div>`;
             }
+
+            sendBtn.disabled = false;
+            inputField.disabled = false;
+            inputField.focus();
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
