@@ -15,7 +15,13 @@
         .btn-game { background: #6f42c1; }
         .btn-game:hover { background: #5a32a3; }
         .countdown { font-size: 14px; color: #666; margin-bottom: 15px; background: #e9ecef; padding: 8px; border-radius: 5px; }
-
+        .btn-logout {
+            background: #dc3545;
+            margin-top: 15px;
+        }
+        .btn-logout:hover {
+            background: #b02a37;
+        }
         /* 登录注册弹窗样式 */
         .login-mask {
             position: fixed;
@@ -63,7 +69,6 @@
             margin-top: 10px;
             height: 20px;
         }
-        /* 隐藏页面主体内容 */
         .main-content {
             display: none;
         }
@@ -85,7 +90,7 @@
         </div>
     </div>
 
-    <!-- 網站主內容（未登錄時隱藏） -->
+    <!-- 網站主內容 -->
     <div class="main-content" id="mainBox">
         <div class="card">
             <div class="countdown" id="timer">⏰ 倒計時加載中...</div>
@@ -100,13 +105,15 @@
                 <a href="game.html" class="btn btn-game">🎮 第五步：互動遊戲室</a>
                 <a href="chat.html" class="btn" style="background: #343a40;">🤖 第六步：Rene的AI 助手</a>
             </div>
+            <!-- 退出登录按钮 -->
+            <button class="btn btn-logout" onclick="logout()">🚪 退出登錄</button>
         </div>
     </div>
 
     <script>
         // ========== 全局開關 ==========
         const needLogin = true;  // true=需要登錄(YES)  false=無需登錄(NO)
-        let isRegisterMode = false; // 當前模式：登錄/註冊
+        let isRegisterMode = false;
         // =============================
 
         const loginMask = document.getElementById('loginMask');
@@ -116,23 +123,19 @@
 
         // 頁面初始化
         window.onload = function(){
-            // 啟動倒計時
             updateTimer();
             setInterval(updateTimer, 1000);
 
-            // 讀取本地登錄狀態 & 註冊賬號
             const loginStatus = localStorage.getItem("siteLogin");
             const userAccount = localStorage.getItem("regUser");
             const userPwd = localStorage.getItem("regPwd");
 
             if(!needLogin){
-                // 關閉登錄：直接顯示內容
                 loginMask.classList.add("hide");
                 mainBox.style.display = "block";
                 return;
             }
 
-            // 開啟登錄：判斷是否已登錄
             if(loginStatus === "ok" && userAccount && userPwd){
                 loginMask.classList.add("hide");
                 mainBox.style.display = "block";
@@ -161,7 +164,6 @@
             const pw = document.getElementById('pwd').value.trim();
             msgTip.innerText = "";
 
-            // 校驗輸入
             if(!un || !pw){
                 msgTip.innerText = "賬號和密碼不能為空！";
                 return;
@@ -171,20 +173,16 @@
             const regPwd = localStorage.getItem("regPwd");
 
             if(isRegisterMode){
-                // 註冊邏輯
                 if(regUser){
                     msgTip.innerText = "該賬號已存在，請更換！";
                     return;
                 }
-                // 保存賬號密碼
                 localStorage.setItem("regUser", un);
                 localStorage.setItem("regPwd", pw);
                 localStorage.setItem("siteLogin", "ok");
-                // 註冊成功自動登錄
                 loginMask.classList.add("hide");
                 mainBox.style.display = "block";
             }else{
-                // 登錄邏輯
                 if(un === regUser && pw === regPwd){
                     localStorage.setItem("siteLogin", "ok");
                     loginMask.classList.add("hide");
@@ -193,6 +191,12 @@
                     msgTip.innerText = "賬號或密碼錯誤！";
                 }
             }
+        }
+
+        // 退出登录
+        function logout(){
+            localStorage.removeItem("siteLogin");
+            location.reload();
         }
 
         // 生日倒計時
@@ -206,7 +210,7 @@
             }
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (difference % (1000 * 60 * 60)) / (1000 * 60)));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
             document.getElementById('timer').innerHTML = `🎁 距離Rene生日轟趴還有：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
