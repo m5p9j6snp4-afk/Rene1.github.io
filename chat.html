@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rene的AI 助手</title>
     <style>
+        <script>
+// 未登录自动跳回首页
+if(localStorage.getItem("siteLogin") !== "ok"){
+    location.href = "index.html";
+}
+</script>
         body { 
             font-family: sans-serif; 
             background: #1a1a1a; 
