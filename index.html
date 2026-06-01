@@ -21,31 +21,33 @@
             --text-main: #e2e2e8;
             --text-light: #a8a8b3;
             --border: rgba(201, 168, 87, 0.2);
+            --danger: #e57373;
         }
 
         body {
             font-family: "Noto Sans SC", "Montserrat", sans-serif;
             background-color: var(--dark-bg);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
             color: var(--text-main);
+            padding: 40px 20px;
         }
 
-        /* 主卡片 */
-        .card {
+        /* 全屏主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 顶部个人信息区 */
+        .header-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 35px 28px;
-            width: 100%;
-            max-width: 420px;
+            padding: 35px;
             text-align: center;
+            margin-bottom: 30px;
         }
 
-        /* 头像 */
         .avatar {
             width: 100px;
             height: 100px;
@@ -70,27 +72,26 @@
             margin-bottom: 28px;
         }
 
-        /* 倒计时栏 */
         .countdown {
             font-size: 14px;
             color: var(--text-light);
             padding: 10px 14px;
             background: rgba(0,0,0,0.25);
             border-radius: 12px;
-            margin-bottom: 28px;
+            display: inline-block;
         }
 
-        /* 按钮组 */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
+        /* 按钮区域 - 网格全屏排版 */
+        .btn-wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
         }
 
         .btn {
             display: block;
-            padding: 13px;
+            padding: 18px 14px;
             color: var(--text-main);
             text-decoration: none;
             border-radius: 14px;
@@ -100,6 +101,7 @@
             background: transparent;
             transition: 0.3s ease;
             cursor: pointer;
+            text-align: center;
         }
 
         .btn:hover {
@@ -112,14 +114,15 @@
         }
 
         .btn-logout {
-            color: #e57373;
+            color: var(--danger);
             border-color: rgba(229, 115, 115, 0.2);
-            margin-top: 8px;
+            max-width: 220px;
+            margin: 0 auto;
         }
 
         .btn-logout:hover {
             background: rgba(229, 115, 115, 0.08);
-            border-color: #e57373;
+            border-color: var(--danger);
         }
 
         /* 登录弹窗 */
@@ -138,9 +141,9 @@
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 32px 26px;
+            padding: 40px 35px;
             width: 100%;
-            max-width: 380px;
+            max-width: 500px;
             text-align: center;
         }
 
@@ -173,8 +176,8 @@
         }
 
         .login-box button {
-            padding: 12px 24px;
-            margin: 10px 6px 0;
+            padding: 12px 28px;
+            margin: 10px 8px 0;
             border-radius: 14px;
             border: 1px solid var(--border);
             background: transparent;
@@ -190,7 +193,7 @@
         }
 
         .tip {
-            color: #e57373;
+            color: var(--danger);
             font-size: 13px;
             margin-top: 14px;
             height: 22px;
@@ -218,13 +221,17 @@
     </div>
 
     <div class="main-content" id="mainBox">
-        <div class="card">
-            <div class="countdown" id="timer">活动倒计时加载中...</div>
-            <img src="tx.JPG.JPG" alt="Avatar" class="avatar">
-            <h1>个人中心</h1>
-            <div class="sub-title">MEMBER AREA</div>
-            
-            <div class="btn-group">
+        <div class="container">
+            <!-- 顶部信息区 -->
+            <div class="header-card">
+                <div class="countdown" id="timer">活动倒计时加载中...</div>
+                <img src="tx.JPG.JPG" alt="Avatar" class="avatar">
+                <h1>个人中心</h1>
+                <div class="sub-title">MEMBER AREA</div>
+            </div>
+
+            <!-- 功能按钮区 全屏网格布局 -->
+            <div class="btn-wrap">
                 <a href="about.html" class="btn">👤 个人资料</a>
                 <a href="moments.html" class="btn">📸 动态分享</a>
                 <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
@@ -233,6 +240,8 @@
                 <a href="chat.html" class="btn">🤖 智能助手</a>
                 <a href="pay.html" class="btn btn-pay">💳 会员续费 / 升级</a>
             </div>
+
+            <!-- 退出按钮 -->
             <button class="btn btn-logout" onclick="logout()">🚪 退出登录</button>
         </div>
     </div>
