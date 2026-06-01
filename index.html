@@ -326,14 +326,14 @@
             const now = new Date().getTime();
             const difference = targetDate - now;
             if (difference <= 0) {
-                document.getElementById('timer').innerHTML = "🎉 纪念日快乐 🎉";
+                document.getElementById('timer').innerHTML = "🎉 生日快乐 🎉";
                 return;
             }
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerHTML = `🎁 距离纪念日：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+            document.getElementById('timer').innerHTML = `🎁 距离生日：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
     </script>
 </body>
