@@ -13,7 +13,7 @@
         .avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
         .main-content { flex: 1; }
         .nickname { font-size: 15px; font-weight: 500; color: #2c3e50; margin-bottom: 4px; }
-        .publish-time { font-size: 12px; color: #999; margin-bottom: 8px; }
+        .publishing-time { font-size: 12px; color: #999; margin-bottom: 8px; }
         .circle-text { font-size: 15px; line-height: 1.6; margin-bottom: 12px; }
         .circle-img { max-width: 220px; width: 100%; border-radius: 6px; display: block; margin-bottom: 12px; cursor: zoom-in; transition: transform 0.2s ease; }
         .circle-img:active { transform: scale(0.97); }
@@ -21,22 +21,16 @@
         .back-home-link { display: block; margin: 10px 0; font-size: 13px; color: #576b95; text-decoration: none; }
         .comment-widget { padding-top: 5px; }
     </style>
-    <!-- 登录拦截 -->
-    <script>
-        if(localStorage.getItem("siteLogin") !== "ok"){
-            location.href = "index.html";
-        }
-    </script>
 </head>
 <body>
     <div class="wrapper">
-<!-- 第四条动态 -->
+        <!-- 第四条动态 -->
         <div class="friend-circle-item">
             <div class="circle-header">
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
-                    <div class="publish-time">2026年5月31日 02:10</div>
+                    <div class="publishing-time">2026年5月31日 02:10</div>
                     <div class="circle-text">折腾许久，两套AI助手终于搞定🎉 智囊&治愈双模式，一个犀利高冷，一个温柔陪伴。</div>
                     <img src="ai.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -52,7 +46,7 @@
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
-                    <div class="publish-time">2026年5月29日 12:10</div>
+                    <div class="publishing-time">2026年5月29日 12:10</div>
                     <div class="circle-text">有点无聊 给自己做个摸鱼小游戏</div>
                     <img src="office04.JPG.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -68,7 +62,7 @@
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
-                    <div class="publish-time">2026年5月29日 10:20</div>
+                    <div class="publishing-time">2026年5月29日 10:20</div>
                     <div class="circle-text">早上好</div>
                     <img src="office03.JPG.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -85,7 +79,7 @@
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
-                    <div class="publish-time">2026年5月28日 21:05</div>
+                    <div class="publishing-time">2026年5月28日 21:05</div>
                     <div class="circle-text">晚上好</div>
                     <img src="图片" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -100,18 +94,13 @@
 
     <script src="https://cdn.fastcomments.com/js/embed-v2.min.js"></script>
     <script>
-        // 获取当前登录用户名
-        const loginName = localStorage.getItem("regUser") || "訪客";
         const widgets = document.querySelectorAll('.comment-widget');
         widgets.forEach(el => {
             const uniqueId = el.getAttribute('data-page-id');
             window.FastCommentsUI(el, {
                 tenantId: 'pbN5Owiw1B1',
                 urlId: uniqueId,
-                pageId: uniqueId,
-                // 自动填充昵称 + 禁用昵称修改
-                defaultDisplayName: loginName,
-                allowDisplayNameChange: false
+                pageId: uniqueId
             });
         });
     </script>
