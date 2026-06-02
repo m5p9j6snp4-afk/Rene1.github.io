@@ -94,117 +94,44 @@
             background:rgba(80,150,255,.07);border-color:var(--main-blue);
         }
         .btn-vip {color:var(--main-blue);}
-        .btn-logout {
-            max-width:200px;margin:0 auto;color:var(--warn);border-color:rgba(255,119,119,.2);
-        }
-        .btn-logout:hover {background:rgba(255,119,119,.07);border-color:var(--warn);}
-
-        .mask {
-            position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:20px;z-index:999;
-        }
-        .pop-box {
-            width:100%;max-width:420px;background:var(--card-bg);border-radius:16px;padding:32px 26px;border:1px solid var(--border);
-        }
-        .pop-box h2 {text-align:center;color:var(--main-blue);margin-bottom:22px;font-size:20px;}
-        .pop-box input {
-            width:100%;padding:13px 15px;margin:9px 0;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:11px;color:var(--text);outline:none;
-        }
-        .pop-box input:focus {border-color:var(--main-blue);}
-        .pop-box input::placeholder {color:var(--text-gray);}
-        .tip-text {color:var(--warn);font-size:13px;height:20px;margin:6px 0;text-align:center;}
-        .btns-row {margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-        .pop-btn {padding:11px 22px;border-radius:11px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;transition:.2s;}
-        .pop-btn:hover {border-color:var(--main-blue);background:rgba(80,150,255,.07);}
-        .check-item {display:flex;align-items:center;gap:6px;margin:8px 0 4px;}
-        .check-item input {width:auto;margin:0;}
-        .forget-text {text-align:right;margin:8px 0;cursor:pointer;font-size:13px;color:var(--main-blue);}
-
-        .hide {display:none !important;}
-        .main-content {display:none;}
     </style>
 </head>
 <body>
-    <!-- 登录弹窗 -->
-    <div id="loginMask" class="mask">
-        <div class="pop-box">
-            <div id="loginTitle"><h2>账号登录</h2></div>
-            <input type="text" id="username" placeholder="输入账号">
-            <input type="password" id="pwd" placeholder="输入密码">
-            <div class="check-item">
-                <input type="checkbox" id="savePwd">
-                <label for="savePwd">记住账号密码</label>
+    <!-- 会员主页直接展示 -->
+    <div class="container">
+        <div class="header-card">
+            <div class="header-left">
+                <h1>个人中心</h1>
+                <div class="sub-title">MEMBER AREA</div>
             </div>
-            <div class="forget-text" onclick="openReset()">忘记密码？</div>
-            <p class="tip-text" id="msgTip"></p>
-            <div class="btns-row">
-                <button class="pop-btn" onclick="doLogin()">登录</button>
-                <button class="pop-btn" onclick="switchMode()">注册账号</button>
+            <div class="countdown" id="timer">活动倒计时加载中...</div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-card">
+                <div class="info-title">🌐 网站存活时长</div>
+                <div class="info-text" id="siteLive"></div>
+            </div>
+            <div class="info-card">
+                <div class="info-title">✨ 今日状态运势</div>
+                <div class="info-text" id="dayLuck"></div>
             </div>
         </div>
-    </div>
 
-    <!-- 重置密码弹窗 -->
-    <div id="resetMask" class="mask hide">
-        <div class="pop-box">
-            <h2>重置密码</h2>
-            <input type="text" id="resetUser" placeholder="输入原注册账号">
-            <input type="password" id="newPwd" placeholder="设置新密码">
-            <p class="tip-text" id="resetTip"></p>
-            <div class="btns-row">
-                <button class="pop-btn" onclick="resetPwd()">确认重置</button>
-                <button class="pop-btn" onclick="closeReset()">取消</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 会员主页 -->
-    <div class="main-content" id="mainBox">
-        <div class="container">
-            <div class="header-card">
-                <div class="header-left">
-                    <h1>个人中心</h1>
-                    <div class="sub-title">MEMBER AREA</div>
-                </div>
-                <div class="countdown" id="timer">活动倒计时加载中...</div>
-            </div>
-
-            <div class="info-row">
-                <div class="info-card">
-                    <div class="info-title">🌐 网站存活时长</div>
-                    <div class="info-text" id="siteLive"></div>
-                </div>
-                <div class="info-card">
-                    <div class="info-title">✨ 今日状态运势</div>
-                    <div class="info-text" id="dayLuck"></div>
-                </div>
-            </div>
-
-            <div class="btn-wrap">
-                <a href="about.html" class="btn">👤 个人资料</a>
-                <a href="moments.html" class="btn">📸 动态分享</a>
-                <a href="treehole.html" class="btn">🌙 私人树洞</a>
-                <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
-                <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
-                <a href="game.html" class="btn">🎮 休闲专区</a>
-                <a href="chat.html" class="btn">🤖 智能助手</a>
-                <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
-                <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
-            </div>
-
-            <button class="btn btn-logout" onclick="logout()">🚪 退出登录</button>
+        <div class="btn-wrap">
+            <a href="about.html" class="btn">👤 个人资料</a>
+            <a href="moments.html" class="btn">📸 动态分享</a>
+            <a href="treehole.html" class="btn">🌙 私人树洞</a>
+            <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
+            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
+            <a href="game.html" class="btn">🎮 休闲专区</a>
+            <a href="chat.html" class="btn">🤖 智能助手</a>
+            <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
+            <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
         </div>
     </div>
 
     <script>
-        let isRegisterMode = false;
-        const loginMask = document.getElementById('loginMask');
-        const resetMask = document.getElementById('resetMask');
-        const mainBox = document.getElementById('mainBox');
-        const loginTitle = document.getElementById('loginTitle');
-        const msgTip = document.getElementById('msgTip');
-        const resetTip = document.getElementById('resetTip');
-        const saveCheck = document.getElementById('savePwd');
-
         //建站起始日
         const siteStart = new Date("2026/05/27 00:00:00").getTime();
         //生日固定 8.24
@@ -227,26 +154,6 @@
             setInterval(updateTimer,1000);
             updateSiteTime();
             getTodayLuck();
-
-            let loginState = localStorage.getItem("siteLogin");
-            let regUser = localStorage.getItem("regUser");
-            let regPwd = localStorage.getItem("regPwd");
-            let saveUser = localStorage.getItem("saveUser");
-            let savePass = localStorage.getItem("savePass");
-
-            if(saveUser && savePass){
-                document.getElementById('username').value = saveUser;
-                document.getElementById('pwd').value = savePass;
-                saveCheck.checked = true;
-            }
-
-            if(loginState === "ok" && regUser && regPwd){
-                loginMask.classList.add("hide");
-                mainBox.style.display = "block";
-            }else{
-                loginMask.classList.remove("hide");
-                mainBox.style.display = "none";
-            }
         }
 
         //网站存活天数
@@ -285,78 +192,6 @@
                 localStorage.setItem("luckText",res);
                 document.getElementById("dayLuck").innerText = res;
             }
-        }
-
-        function switchMode(){
-            msgTip.innerText = "";
-            isRegisterMode = !isRegisterMode;
-            if(isRegisterMode){
-                loginTitle.innerHTML = "<h2>新用户注册</h2>";
-                document.querySelectorAll(".pop-btn")[1].innerText = "返回登录";
-            }else{
-                loginTitle.innerHTML = "<h2>账号登录</h2>";
-                document.querySelectorAll(".pop-btn")[1].innerText = "注册账号";
-            }
-        }
-
-        function doLogin(){
-            const un = document.getElementById('username').value.trim();
-            const pw = document.getElementById('pwd').value.trim();
-            msgTip.innerText = "";
-            if(!un||!pw){msgTip.innerText="账号密码不能为空";return;}
-
-            const regUser = localStorage.getItem("regUser");
-            const regPwd = localStorage.getItem("regPwd");
-
-            if(saveCheck.checked){
-                localStorage.setItem("saveUser",un);
-                localStorage.setItem("savePass",pw);
-            }else{
-                localStorage.removeItem("saveUser");
-                localStorage.removeItem("savePass");
-            }
-
-            if(isRegisterMode){
-                if(regUser){msgTip.innerText="账号已被注册";return;}
-                localStorage.setItem("regUser",un);
-                localStorage.setItem("regPwd",pw);
-                localStorage.setItem("siteLogin","ok");
-                loginMask.classList.add("hide");
-                mainBox.style.display = "block";
-            }else{
-                if(un===regUser && pw===regPwd){
-                    localStorage.setItem("siteLogin","ok");
-                    loginMask.classList.add("hide");
-                    mainBox.style.display = "block";
-                }else{
-                    msgTip.innerText="账号或密码错误，请核对或找回密码";
-                }
-            }
-        }
-
-        function openReset(){
-            resetMask.classList.remove("hide");
-            resetTip.innerText = "";
-        }
-        function closeReset(){
-            resetMask.classList.add("hide");
-            resetTip.innerText = "";
-        }
-
-        function resetPwd(){
-            let user = document.getElementById('resetUser').value.trim();
-            let newP = document.getElementById('newPwd').value.trim();
-            let regU = localStorage.getItem("regUser");
-            if(!user||!newP){resetTip.innerText="账号和新密码不能为空";return;}
-            if(user !== regU){resetTip.innerText="原账号不存在";return;}
-            localStorage.setItem("regPwd",newP);
-            resetTip.innerText="密码重置成功！返回登录";
-            setTimeout(()=>{closeReset()},1200);
-        }
-
-        function logout(){
-            localStorage.removeItem("siteLogin");
-            location.reload();
         }
 
         //生日倒计时
