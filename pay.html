@@ -22,6 +22,7 @@
             --platinum: #e5e7eb;
             --danger: #f87171;
             --success: #10b981;
+            --wechat-green:#07C160;
         }
 
         body {
@@ -137,11 +138,19 @@
             cursor: pointer;
             transition: all 0.4s ease;
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
+            margin-bottom:12px;
+        }
+        .wx-pay-btn{
+            border:1px solid var(--wechat-green);
+            background:linear-gradient(135deg,#059e4e,#07C160);
+            color:#fff;
         }
         .main-btn:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 36px rgba(0,0,0,0.5), 0 0 20px rgba(212,175,55,0.2);
+        }
+        .wx-pay-btn:hover{
+            box-shadow:0 12px 36px rgba(0,0,0,0.5),0 0 20px rgba(7,193,96,0.25);
         }
         .back-link {
             color: var(--platinum);
@@ -282,7 +291,10 @@
         <div class="total-money" id="totalMoney">¥ 0.00</div>
     </div>
 
-    <button class="main-btn" onclick="openPayPop()">立即結賬付款</button>
+    <button class="main-btn" onclick="openPayPop()">立即信用卡結賬付款</button>
+    <!-- 新增0.1元跳轉微信按鈕 -->
+    <button class="main-btn wx-pay-btn" onclick="jumpWxPay()">微信測試付款 僅需 ¥0.10</button>
+
     <a href="index.html" class="back-link">⬅️ 返回會員主頁</a>
 
     <div class="mask" id="payMask">
@@ -307,10 +319,6 @@
     </div>
 
     <script>
-        if(localStorage.getItem("siteLogin") !== "ok"){
-            location.href = "index.html";
-        }
-
         let selectPrice = 0;
         const totalMoney = document.getElementById('totalMoney');
         const payMask = document.getElementById('payMask');
@@ -343,35 +351,27 @@
             const cvv = document.getElementById('cvv').value.trim();
             const payPwd = document.getElementById('payPwd').value.trim();
 
-            // 1. 信用卡號：16位純數字
             const regCard = /^\d{16}$/;
             if(!regCard.test(cardNum)){
                 alert("信用卡號碼格式錯誤！請輸入16位純數字");
                 return;
             }
-
-            // 2. 有效期：MM/YY 月份01-12
             const regExp = /^(0[1-9]|1[0-2])\/\d{2}$/;
             if(!regExp.test(expDate)){
                 alert("有效期格式錯誤！請使用 月/年 格式，例如：12/27");
                 return;
             }
-
-            // 3. CVV安全碼：3位純數字
             const regCvv = /^\d{3}$/;
             if(!regCvv.test(cvv)){
                 alert("安全碼CVV格式錯誤！請輸入3位純數字");
                 return;
             }
-
-            // 4. 支付密碼：6位純數字
             const regPwd = /^\d{6}$/;
             if(!regPwd.test(payPwd)){
                 alert("支付密碼格式錯誤！請輸入6位純數字");
                 return;
             }
 
-            // 全部驗證通過 → 進入支付流程
             payBox.innerHTML = `
                 <h3 class="pop-title">交易處理中</h3>
                 <div class="loading-icon"></div>
@@ -388,6 +388,13 @@
                     </div>
                 `;
             }, 2000);
+        }
+
+        // 0.1元喚起微信支付
+        function jumpWxPay(){
+            // 安卓/iPhone通用微信自帶付款鏈接，金額0.1
+            const wxUrl = "weixin://wap/pay?amount=0.1&productname=會員測試體驗";
+            window.location.href = wxUrl;
         }
     </script>
 </body>
