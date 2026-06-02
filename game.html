@@ -11,12 +11,6 @@
         #score { font-size: 24px; margin-bottom: 10px; }
     </style>
 </head>
-<script>
-// 未登录自动跳回首页
-if(localStorage.getItem("siteLogin") !== "ok"){
-    location.href = "index.html";
-}
-</script>
 <body>
     <div id="score">分數: 0</div>
     <canvas id="tetris" width="120" height="200"></canvas>
