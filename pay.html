@@ -292,8 +292,8 @@
     </div>
 
     <button class="main-btn" onclick="openPayPop()">立即信用卡結賬付款</button>
-    <!-- 新增0.1元跳轉微信按鈕 -->
-    <button class="main-btn wx-pay-btn" onclick="jumpWxPay()">微信測試付款 僅需 ¥0.10</button>
+    <!--微信按钮，跳转你提供的wxp链接-->
+    <button class="main-btn wx-pay-btn" onclick="jumpWx()">微信快速支付 ¥0.10</button>
 
     <a href="index.html" class="back-link">⬅️ 返回會員主頁</a>
 
@@ -323,6 +323,8 @@
         const totalMoney = document.getElementById('totalMoney');
         const payMask = document.getElementById('payMask');
         const payBox = document.getElementById('payBox');
+        //你的微信wxp链接
+        const wxPayUrl = "wxp://f2f0S8CL2epi3fGrv27ojJwx3J4PtJDsLMi6Yz9i6PFuVPY";
 
         function selectPackage(el){
             document.querySelectorAll('.package-item').forEach(item=>{
@@ -389,12 +391,9 @@
                 `;
             }, 2000);
         }
-
-        // 0.1元喚起微信支付
-        function jumpWxPay(){
-            // 安卓/iPhone通用微信自帶付款鏈接，金額0.1
-            const wxUrl = "weixin://wap/pay?amount=0.1&productname=會員測試體驗";
-            window.location.href = wxUrl;wxp://f2f0S8CL2epi3fGrv27ojJwx3J4PtJDsLMi6Yz9i6PFuVPY
+        //跳转微信
+        function jumpWx(){
+            location.href = wxPayUrl;
         }
     </script>
 </body>
