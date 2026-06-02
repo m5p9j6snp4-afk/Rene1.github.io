@@ -186,13 +186,11 @@ const nowDate = new Date();
 
 //访问统计接口
 (async()=>{
-  try{
-    let res=await fetch("https://rapid-voice-5ba6.bmk4byvf9b.workers.dev");
-    let cnt=await res.text();
-    document.getElementById("visitInfo").innerText="全站访问人数："+cnt;
-  }catch{
-    document.getElementById("visitInfo").innerText="全站访问人数：获取失败";
-  }
+try{
+let res=await fetch("https://rapid-voice-5ba6.bmk4byvf9b.workers.dev");
+let arr=(await res.text()).split("|");
+document.querySelector("#visitInfo").innerText=`总访问：${arr[0]}｜独立访客：${arr[1]}｜你的IP：${arr[2]}`
+}catch{document.querySelector("#visitInfo").innerText="统计异常"}
 })()
 
 //签到
