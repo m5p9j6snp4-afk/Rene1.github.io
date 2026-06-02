@@ -1,1 +1,152 @@
-1
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私人树洞 | Tree Hole</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-blue: #5096ff;
+            --bg-dark: #1c1f26;
+            --card-bg: #272b35;
+            --text: #f1f3f9;
+            --text-gray: #a0a8b8;
+            --border: rgba(80,150,255,0.2);
+            --warn: #ff7777;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body {
+            font-family: "Noto Sans SC", "Montserrat", sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            padding:30px 16px;
+        }
+        .container{max-width:720px;margin:0 auto;}
+        .top-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:24px;
+            margin-bottom:20px;
+        }
+        .top-card h2{
+            color:var(--main-blue);
+            font-weight:500;
+            margin-bottom:8px;
+        }
+        .desc{color:var(--text-gray);font-size:14px;margin-bottom:18px;}
+        textarea{
+            width:100%;
+            min-height:110px;
+            background:rgba(0,0,0,.22);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:14px;
+            color:var(--text);
+            font-size:14px;
+            outline:none;
+            resize:none;
+        }
+        textarea:focus{border-color:var(--main-blue);}
+        .btns{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;}
+        .btn{
+            padding:11px 22px;
+            border-radius:12px;
+            border:1px solid var(--border);
+            background:transparent;
+            color:var(--text);
+            cursor:pointer;
+            transition:.24s;
+            font-size:14px;
+        }
+        .btn:hover{background:rgba(80,150,255,.07);border-color:var(--main-blue);}
+        .btn-del{border-color:rgba(255,119,119,.2);color:var(--warn);}
+        .btn-del:hover{background:rgba(255,119,119,.07);border-color:var(--warn);}
+        .back-btn{
+            display:block;
+            text-align:center;
+            text-decoration:none;
+            margin:24px auto 0;
+            max-width:220px;
+        }
+        .item-wrap{margin-top:26px;}
+        .hole-item{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:14px;
+            padding:18px;
+            margin-bottom:14px;
+        }
+        .item-time{
+            font-size:12px;
+            color:var(--text-gray);
+            margin-bottom:8px;
+        }
+        .item-text{color:var(--text);line-height:1.6;font-size:14px;}
+    </style>
+    <!-- 未登录跳转主页 -->
+    <script>
+        if(localStorage.getItem("siteLogin") !== "ok") location.href="index.html";
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="top-card">
+            <h2>🌙 私人树洞</h2>
+            <div class="desc">心事、碎碎念、秘密仅保存在本机浏览器，别人无法查看</div>
+            <textarea id="inputTxt" placeholder="在此写下你的心事..."></textarea>
+            <div class="btns">
+                <button class="btn" onclick="saveMsg()">保存留言</button>
+                <button class="btn btn-del" onclick="clearAll()">清空全部树洞</button>
+            </div>
+        </div>
+
+        <div class="item-wrap" id="listBox"></div>
+
+        <a href="index.html" class="btn back-btn">🏠 返回会员主页</a>
+    </div>
+
+    <script>
+        //读取树洞数据
+        function getList(){
+            let raw = localStorage.getItem("treeData");
+            return raw ? JSON.parse(raw) : [];
+        }
+        //渲染列表
+        function render(){
+            let arr = getList();
+            let box = document.getElementById("listBox");
+            box.innerHTML = "";
+            arr.reverse().forEach(item=>{
+                let html = `
+                <div class="hole-item">
+                    <div class="item-time">${item.time}</div>
+                    <div class="item-text">${item.content}</div>
+                </div>`;
+                box.innerHTML += html;
+            })
+        }
+        //新增留言
+        function saveMsg(){
+            let val = document.getElementById("inputTxt").value.trim();
+            if(!val) return alert("内容不能为空");
+            let arr = getList();
+            let now = new Date().toLocaleString();
+            arr.push({time:now,content:val});
+            localStorage.setItem("treeData",JSON.stringify(arr));
+            document.getElementById("inputTxt").value = "";
+            render();
+        }
+        //全部清空
+        function clearAll(){
+            if(!confirm("确定清空所有树洞内容？无法恢复！"))return;
+            localStorage.removeItem("treeData");
+            render();
+        }
+        window.onload = render;
+    </script>
+</body>
+</html>
