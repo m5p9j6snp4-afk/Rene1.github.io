@@ -72,7 +72,6 @@
         .shop-btn{margin-top:8px;padding:5px 10px;border-radius:6px;border:1px solid var(--main-blue);color:var(--main-blue);background:transparent;cursor:pointer}
         .visit-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
         .visit-title{font-size:16px;margin-bottom:12px}
-        .visit-text{font-size:16px;color:var(--main-blue)}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@latest/dist/ua-parser.min.js"></script>
 </head>
@@ -129,9 +128,12 @@
         <div style="font-size:12px;color:#a0a8b8;margin-top:10px;">兑换前先在上方输入姓名查询积分，消耗对应积分自动扣减</div>
     </div>
 
+    <!--留言板块替换原来统计-->
     <div class="visit-card">
-        <div class="visit-title">📊 本站访客统计</div>
-        <div class="visit-text" id="visitInfo"></div>
+        <div class="visit-title">📝访客留言板</div>
+        <div id="msgBox" style="max-height:240px;overflow:auto;margin:12px 0;"></div>
+        <input id="inputMsg" placeholder="写下留言" style="width:72%;padding:7px;">
+        <button onclick="sendMsg()" style="padding:7px 14px;">发送</button>
     </div>
 
     <div class="time-box">
@@ -184,13 +186,6 @@ let exchangeLog = JSON.parse(localStorage.getItem("exchangeLog")) || [];
 const $ = s => document.querySelector(s);
 const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
-
-<div class="visit-card">
-    <div class="visit-title">📝访客留言板</div>
-    <div id="msgBox" style="max-height:240px;overflow:auto;margin:12px 0;"></div>
-    <input id="inputMsg" placeholder="写下留言" style="width:72%;padding:7px;">
-    <button onclick="sendMsg()" style="padding:7px 14px;">发送</button>
-</div>
 
 //签到
 $("#signBtn").addEventListener("click",()=>{
@@ -256,6 +251,7 @@ window.onload = function(){
     updateClock();setInterval(updateClock,1000);
     let ranQ = Math.floor(Math.random()*quoteArr.length);
     document.getElementById("enQuote").innerText = quoteArr[ranQ];
+    loadMsg();
 }
 
 function updateSiteTime(){
@@ -294,6 +290,32 @@ function updateClock(){
     document.getElementById('localTime').innerText=local;
     const getT=o=>{let t=new Date(now.getTime()+o*3600000);return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`};
     $("#hk").innerText=getT(0);$("#tokyo").innerText=getT(1);$("#london").innerText=getT(-8);$("#newyork").innerText=getT(-13);$("#sydney").innerText=getT(2);
+}
+
+//留言代码
+function loadMsg(){
+  let xhr=new XMLHttpRequest();
+  xhr.open("GET","https://rapid-voice-5ba6.bmk4byvf9b.workers.dev");
+  xhr.onload=()=>{
+    let arr=JSON.parse(xhr.responseText);
+    let html="";
+    arr.forEach(item=>{
+      html+=`<div style="border-bottom:1px #333 dashed;padding:6px 0;">${item.time} | IP:${item.ip}</div>`
+    })
+    document.getElementById("msgBox").innerHTML=html;
+  }
+  xhr.send();
+}
+function sendMsg(){
+  let val=document.getElementById("inputMsg").value.trim();
+  if(!val)return;
+  let xhr=new XMLHttpRequest();
+  xhr.open("POST","https://rapid-voice-5ba6.bmk4byvf9b.workers.dev/msg");
+  xhr.onload=()=>{
+    document.getElementById("inputMsg").value="";
+    loadMsg();
+  };
+  xhr.send(val);
 }
 </script>
 </body>
