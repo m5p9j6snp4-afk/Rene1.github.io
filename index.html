@@ -61,7 +61,7 @@
             display:grid;
             grid-template-columns:1fr 1fr;
             gap:12px;
-            margin-bottom:24px;
+            margin-bottom:16px;
         }
         .info-card{
             background:var(--card-bg);
@@ -79,6 +79,43 @@
             font-size:15px;
             color:var(--main-blue);
             font-weight:500;
+        }
+
+        /*世界时钟样式*/
+        .time-box{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+            margin-bottom:24px;
+        }
+        .local-time{
+            font-size:22px;
+            color:var(--main-blue);
+            margin-bottom:16px;
+            text-align:center;
+        }
+        .world-wrap{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+        }
+        .world-item{
+            background:rgba(0,0,0,0.25);
+            padding:12px;
+            border-radius:10px;
+            text-align:center;
+        }
+        .city{
+            font-size:13px;
+            color:var(--text-gray);
+            margin-bottom:4px;
+        }
+        .ctime{
+            font-size:16px;
+        }
+        .full-col{
+            grid-column:1/-1;
         }
 
         .btn-wrap {
@@ -118,6 +155,33 @@
             </div>
         </div>
 
+        <!--新增世界时钟模块-->
+        <div class="time-box">
+            <div class="local-time" id="localTime"></div>
+            <div class="world-wrap">
+                <div class="world-item">
+                    <div class="city">🇭🇰 香港 UTC+8</div>
+                    <div class="ctime" id="hk"></div>
+                </div>
+                <div class="world-item">
+                    <div class="city">🇯🇵 东京 UTC+9</div>
+                    <div class="ctime" id="tokyo"></div>
+                </div>
+                <div class="world-item">
+                    <div class="city">🇬🇧 伦敦 UTC+0</div>
+                    <div class="ctime" id="london"></div>
+                </div>
+                <div class="world-item">
+                    <div class="city">🇺🇸 纽约 UTC-5</div>
+                    <div class="ctime" id="newyork"></div>
+                </div>
+                <div class="world-item full-col">
+                    <div class="city">🇦🇺 悉尼 UTC+10</div>
+                    <div class="ctime" id="sydney"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="btn-wrap">
             <a href="about.html" class="btn">👤 个人资料</a>
             <a href="moments.html" class="btn">📸 动态分享</a>
@@ -154,6 +218,8 @@
             setInterval(updateTimer,1000);
             updateSiteTime();
             getTodayLuck();
+            updateClock();
+            setInterval(updateClock,1000);
         }
 
         //网站存活天数
@@ -208,6 +274,26 @@
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
             document.getElementById('timer').innerHTML = `🎁 距离生日：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+        }
+
+        //世界时钟函数
+        function updateClock(){
+            const now=new Date();
+            const week=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+            //本地完整时间
+            let localStr=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${week[now.getDay()]} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+            document.getElementById('localTime').innerText=localStr;
+
+            //时区换算
+            const getZoneTime = (offsetHour)=>{
+                let t = new Date(now.getTime() + offsetHour * 3600000);
+                return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
+            }
+            document.getElementById('hk').innerText=getZoneTime(0);
+            document.getElementById('tokyo').innerText=getZoneTime(1);
+            document.getElementById('london').innerText=getZoneTime(-8);
+            document.getElementById('newyork').innerText=getZoneTime(-13);
+            document.getElementById('sydney').innerText=getZoneTime(2);
         }
     </script>
 </body>
