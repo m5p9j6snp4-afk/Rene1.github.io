@@ -146,6 +146,102 @@
         .quote-text{
             font-size:15px;color:var(--main-blue);font-style:italic;
         }
+
+        /*=====新增签到模块CSS=====*/
+        .sign-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+            margin-bottom:24px;
+        }
+        .sign-top{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:14px;
+        }
+        .sign-title{
+            font-size:16px;
+            color:var(--text);
+        }
+        .point-info{
+            color:var(--main-blue);
+            font-size:14px;
+        }
+        .sign-input-box{
+            display:flex;
+            gap:10px;
+            margin-bottom:12px;
+        }
+        #signName{
+            flex:1;
+            padding:11px 14px;
+            border-radius:10px;
+            background:rgba(0,0,0,0.25);
+            border:1px solid var(--border);
+            color:var(--text);
+            outline:none;
+        }
+        #signBtn{
+            padding:0 18px;
+            border-radius:10px;
+            border:1px solid var(--main-blue);
+            color:var(--main-blue);
+            background:rgba(80,150,255,.08);
+            cursor:pointer;
+            transition:.2s;
+        }
+        #signBtn:hover{
+            background:rgba(80,150,255,.18);
+        }
+        .sign-desc{
+            font-size:12px;
+            color:var(--text-gray);
+        }
+        .record-btn{
+            margin-top:10px;
+            font-size:12px;
+            color:var(--main-blue);
+            cursor:pointer;
+        }
+        /*签到弹窗*/
+        .mask{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.65);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:999;
+        }
+        .record-pop{
+            width:92%;
+            max-width:520px;
+            max-height:70vh;
+            overflow:auto;
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+        }
+        .pop-head{
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:12px;
+            padding-bottom:8px;
+            border-bottom:1px solid var(--border);
+        }
+        .close-pop{
+            cursor:pointer;
+            color:var(--warn);
+        }
+        .item-row{
+            padding:8px 0;
+            border-bottom:1px solid rgba(80,150,255,0.1);
+            font-size:13px;
+            color:var(--text-gray);
+        }
     </style>
 </head>
 <body>
@@ -168,6 +264,20 @@
                 <div class="info-title">✨ 今日状态运势</div>
                 <div class="info-text" id="dayLuck"></div>
             </div>
+        </div>
+
+        <!--=====新增签到卡片区域=====-->
+        <div class="sign-card">
+            <div class="sign-top">
+                <div class="sign-title">📅 每日签到</div>
+                <div class="point-info">当前总积分：<span id="totalPoint">0</span></div>
+            </div>
+            <div class="sign-input-box">
+                <input placeholder="输入姓名进行签到" id="signName">
+                <button id="signBtn">立即签到</button>
+            </div>
+            <div class="sign-desc">规则：每日签到+1积分｜连续7天额外+7｜连续30天额外+30，同名单日限签一次</div>
+            <div class="record-btn" id="openRecord">点击查看全部签到记录</div>
         </div>
 
         <!--新增世界时钟模块-->
@@ -216,6 +326,17 @@
         </div>
     </div>
 
+    <!--签到记录弹窗-->
+    <div class="mask" id="mask">
+        <div class="record-pop">
+            <div class="pop-head">
+                <span>全部签到台账</span>
+                <span class="close-pop" id="closePop">关闭</span>
+            </div>
+            <div id="recordList"></div>
+        </div>
+    </div>
+
     <script>
         //建站起始日
         const siteStart = new Date("2026/05/27 00:00:00").getTime();
@@ -243,26 +364,107 @@
             "Grow through what you go through.",
             "Focus on progress not perfection.",
             "Be the reason someone smiles today.",
-            "Hard work beats talent when talent doesn't work hard."
-    "The future belongs to those who believe in the beauty of their dreams.",
-    "Stay humble, stay hungry, keep moving forward.",
-    "Small steps every day lead to big changes.",
-    "Everything you’ve ever wanted is on the other side of fear.",
-    "Grow through what you go through.",
-    "Focus on progress not perfection.",
-    "Be the reason someone smiles today.",
-    "Hard work beats talent when talent doesn't work hard.",
-    "Never give up on something you can’t go a day without thinking about.",
-    "Your only limit is the mind you build yourself.",
-    "Quiet progress is still progress.",
-    "Chase your dreams quietly, let success make noise.",
-    "Start where you are, use what you have, do what you can.",
-    "Patience is not waiting, but keeping a good attitude while waiting.",
-    "Mistakes are proof you are trying.",
-    "Life is about making an impact, not making an income.",
-    "Don’t count the days, make the days count.",
-    "Believe you can and you’re halfway there.”,
+            "Hard work beats talent when talent doesn't work hard.",
+            "Never give up on something you can’t go a day without thinking about.",
+            "Your only limit is the mind you build yourself.",
+            "Quiet progress is still progress.",
+            "Chase your dreams quietly, let success make noise.",
+            "Start where you are, use what you have, do what you can.",
+            "Patience is not waiting, but keeping a good attitude while waiting.",
+            "Mistakes are proof you are trying.",
+            "Life is about making an impact, not making an income.",
+            "Don’t count the days, make the days count.",
+            "Believe you can and you’re halfway there."
         ];
+
+        //=================签到逻辑=================
+        let signData = JSON.parse(localStorage.getItem("signLog")) || [];
+        const $ = s => document.querySelector(s);
+        const todayStr = new Date().toLocaleDateString();
+
+        //刷新总积分
+        function refreshPoint(){
+            let allPoint = 0;
+            signData.forEach(item=> allPoint += item.point);
+            $("#totalPoint").innerText = allPoint;
+        }
+
+        //签到执行
+        $("#signBtn").addEventListener("click",()=>{
+            let name = $("#signName").value.trim();
+            if(!name){
+                alert("请输入姓名");
+                return;
+            }
+            //查找此人历史记录
+            let userIdx = signData.findIndex(v=>v.name === name);
+            let userInfo = userIdx>-1 ? signData[userIdx] : {
+                name,
+                lastSign:"",
+                streak:0,
+                point:0,
+                signArr:[]
+            };
+
+            //判断今日已签
+            if(userInfo.signArr.includes(todayStr)){
+                alert(`${name}今日已经完成签到，明天再来~`);
+                return;
+            }
+
+            //计算连续签到
+            let lastDate = userInfo.lastSign;
+            let now = new Date(todayStr);
+            let lastD = new Date(lastDate);
+            let dayGap = (now - lastD)/(1000*3600*24);
+
+            if(lastDate === ""){
+                userInfo.streak =1;
+            }else if(dayGap ===1){
+                userInfo.streak +=1;
+            }else{
+                userInfo.streak =1;
+            }
+
+            //基础+1
+            let add =1;
+            //连签7额外+7
+            if(userInfo.streak ===7) add +=7;
+            //连签30额外+30
+            if(userInfo.streak ===30) add +=30;
+
+            userInfo.point += add;
+            userInfo.lastSign = todayStr;
+            userInfo.signArr.push(todayStr);
+
+            //更新数组
+            if(userIdx>-1) signData[userIdx]=userInfo;
+            else signData.push(userInfo);
+
+            localStorage.setItem("signLog",JSON.stringify(signData));
+            refreshPoint();
+            $("#signName").value="";
+            alert(`签到成功！+${add}积分｜当前连续${userInfo.streak}天`);
+        })
+
+        //打开记录弹窗
+        $("#openRecord").onclick = ()=>{
+            $("#mask").style.display="flex";
+            let html = "";
+            if(signData.length===0){
+                html = "<div class='item-row'>暂无任何签到记录</div>";
+            }else{
+                signData.forEach(item=>{
+                    html += `
+                    <div class="item-row">
+                        姓名：${item.name}｜总积分：${item.point}｜当前连签：${item.streak}天｜累计签到${item.signArr.length}天
+                    </div>
+                    `
+                })
+            }
+            $("#recordList").innerHTML = html;
+        }
+        $("#closePop").onclick = ()=> $("#mask").style.display="none";
 
         window.onload = function(){
             updateTimer();
@@ -274,6 +476,7 @@
             //随机一句英文
             let ranQ = Math.floor(Math.random()*quoteArr.length);
             document.getElementById("enQuote").innerText = quoteArr[ranQ];
+            refreshPoint();
         }
 
         //网站存活天数
