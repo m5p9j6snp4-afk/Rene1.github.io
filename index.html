@@ -185,13 +185,17 @@ const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
 
 //访问统计接口
-(async()=>{
-try{
-let res=await fetch("https://rapid-voice-5ba6.bmk4byvf9b.workers.dev");
-let arr=(await res.text()).split("|");
-document.querySelector("#visitInfo").innerText=`总访问：${arr[0]}｜独立访客：${arr[1]}｜你的IP：${arr[2]}`
-}catch{document.querySelector("#visitInfo").innerText="统计异常"}
-})()
+window.addEventListener('load',function(){
+  fetch("https://rapid-voice-5ba6.bmk4byvf9b.workers.dev")
+  .then(res=>res.text())
+  .then(str=>{
+    let data=str.split('|');
+    document.getElementById('visitInfo').innerText=`总访问：${data[0]}｜独立访客：${data[1]}｜你的IP：${data[2]}`
+  })
+  .catch(e=>{
+    document.getElementById('visitInfo').innerText="统计异常"
+  })
+})
 
 //签到
 $("#signBtn").addEventListener("click",()=>{
