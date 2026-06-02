@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Center | 会员中心</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">Member Center | 会员中心<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet<style>
         * {
             margin: 0;
             padding: 0;
@@ -45,7 +37,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom:24px;
+            margin-bottom:16px;
+            border:1px solid var(--border);
         }
         .header-left h1 {
             font-size:22px;font-weight:500;color:var(--text);margin-bottom:4px;
@@ -55,6 +48,31 @@
         }
         .countdown {
             font-size:14px;color:var(--main-blue);background:rgba(80,150,255,.08);padding:8px 12px;border-radius:10px;
+        }
+
+        /* 新增：数据信息行 */
+        .info-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+            margin-bottom:24px;
+        }
+        .info-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:14px;
+            padding:16px;
+            text-align:center;
+        }
+        .info-title{
+            font-size:12px;
+            color:var(--text-gray);
+            margin-bottom:6px;
+        }
+        .info-text{
+            font-size:15px;
+            color:var(--main-blue);
+            font-weight:500;
         }
 
         /* 功能按钮区 */
@@ -98,69 +116,43 @@
         .forget-text {text-align:right;margin:8px 0;cursor:pointer;font-size:13px;color:var(--main-blue);}
 
         .hide {display:none !important;}
-        .main-content {display:none;}
-    </style>
-</head>
-<body>
-    <!-- 登录弹窗 -->
+        .main-content {display:none</style</head>
+<!-- 登录弹窗 -->
     <div id="loginMask" class="mask">
-        <div class="pop-box">
-            <div id="loginTitle"><h2>账号登录</h2></div>
-            <input type="text" id="username" placeholder="输入账号">
-            <input type="password" id="pwd" placeholder="输入密码">
-            <div class="check-item">
-                <input type="checkbox" id="savePwd">
-                <label for="savePwd">记住账号密码</label>
+       <div class="pop-box<div id<h2</h2></div>
+            <input type="text" id="username" placeholder="输入<input type="password" id="pwd" placeholder="输入密码<div class="check-item">
+               <input type="checkbox" id="savePwd"><label for="savePwd">记住账号</label>
             </div>
-            <div class="forget-text" onclick="openReset()">忘记密码？</div>
-            <p class="tip-text" id="msgTip"></p>
-            <div class="btns-row">
-                <button class="pop-btn" onclick="doLogin()">登录</button>
-                <button class="pop-btn" onclick="switchMode()">注册账号</button>
-            </div>
-        </div>
-    </div>
+            <div class="forget-text" onclick="openReset()">忘记</div>
+<p class="tip-text" id="msgTip"></p>
+            <div class="btns-row<button class="pop-btn" onclick="</button<button class="pop-btn" onclick="switchMode()">注册账号</div</div></div>
 
-    <!-- 重置密码弹窗 -->
-    <div id="resetMask" class="mask hide">
-        <div class="pop-box">
-            <h2>重置密码</h2>
-            <input type="text" id="resetUser" placeholder="输入原注册账号">
-            <input type="password" id="newPwd" placeholder="设置新密码">
-            <p class="tip-text" id="resetTip"></p>
-            <div class="btns-row">
-                <button class="pop-btn" onclick="resetPwd()">确认重置</button>
-                <button class="pop-btn" onclick="closeReset()">取消</button>
-            </div>
-        </div>
-    </div>
+<!-- 重置密码弹窗<div id="resetMask" class="mask hide">
+        <div class="pop-box"><h2></h2><input type="text" id="resetUser" placeholder="输入原注册<input type="password" id="newPwd" placeholder="设置新密码">
+           <p class="tip-text" id="resetTip"><div class="btns-row"><button class="pop-btn" onclick="resetPwd()">确认重置<button class="pop-btn" onclick="closeReset()">取消</div</div></div>
 
-    <!-- 会员主页（已删除头像、倒计时靠右对齐） -->
-    <div class="main-content" id="mainBox">
-        <div class="container">
-            <div class="header-card">
-                <div class="header-left">
-                    <h1>个人中心</h1>
-                    <div class="sub-title">MEMBER AREA</div>
-                </div>
-                <div class="countdown" id="timer">活动倒计时加载中...</div>
+<!-- 会员主页 --><div class="main-content" id="main<div class="container">
+           <div class="header-card<div class="header-left">
+                   <h1>个人中心</h1>
+                   <div class="sub-title">MEMBER AREA</div<div class="countdown" id="timer">活动倒计时加载中...</div>
+            <!-- 新增：建站天数 + 今日运势 -->
+            <div class="info-row"><div class="info-card">
+                    <div class="info-title">🌐 网站存活时长<div class="info-text" id</div></div>
+<div class="info<div class="info-title">✨</div<div class="info-text" id="</div>
+</div>
             </div>
 
-            <div class="btn-wrap">
-                <a href="about.html" class="btn">👤 个人资料</a>
-                <a href="moments.html" class="btn">📸 动态分享</a>
-                <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
-                <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
-                <a href="game.html" class="btn">🎮 休闲专区</a>
-                <a href="chat.html" class="btn">🤖 智能助手</a>
-                <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
+            <div class="btn-wrap"><a href="about.html" class="btn">👤 个人资料</a>
+                <a href="moments.html" class="btn">📸 </a>
+<a href="treehole.html" class="btn">🌙 私人树洞</a>
+                <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝</a><a href="https="163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐</a>
+               <a href="game.html" class="btn">🎮</a><a href="chat.html" class="btn">🤖 智能助手</a>
+                <a href="pay.html" class="btn btn-vip">💳 会员续费 / </a>
             </div>
 
-            <button class="btn btn-logout" onclick="logout()">🚪 退出登录</button>
-        </div>
-    </div>
+            <button class="btn btn-logout" onclick="logout()"></button</div></div>
 
-    <script>
+<script>
         let isRegisterMode = false;
         const loginMask = document.getElementById('loginMask');
         const resetMask = document.getElementById('resetMask');
@@ -170,9 +162,26 @@
         const resetTip = document.getElementById('resetTip');
         const saveCheck = document.getElementById('savePwd');
 
+        // 建站固定日期：2026-05-27
+        const siteStart = new Date("2026/05/27 00:00:00").getTime();
+
+        // 高级冷淡风运势库（无鸡汤、极简高级）
+        const luckList = [
+            "松弛自在，万事顺遂",
+            "情绪稳定，好运常驻",
+            "专注自我，步步安稳",
+            "平平淡淡，即是圆满",
+            "心态平和，事事从容",
+            "向内扎根，默默成长",
+            "保持热爱，静待花开",
+            "今日适宜，温柔且坚定"
+        ];
+
         window.onload = function(){
             updateTimer();
             setInterval(updateTimer,1000);
+            updateSiteTime();
+            getTodayLuck();
 
             // 读取保存的账号密码自动回填
             let loginState = localStorage.getItem("siteLogin");
@@ -181,14 +190,12 @@
             let saveUser = localStorage.getItem("saveUser");
             let savePass = localStorage.getItem("savePass");
 
-            // 勾选记住密码就自动填充
             if(saveUser && savePass){
                 document.getElementById('username').value = saveUser;
                 document.getElementById('pwd').value = savePass;
                 saveCheck.checked = true;
             }
 
-            // 已登录直接进主页
             if(loginState === "ok" && regUser && regPwd){
                 loginMask.classList.add("hide");
                 mainBox.style.display = "block";
@@ -198,15 +205,41 @@
             }
         }
 
+        // 更新网站存活天数
+        function updateSiteTime(){
+            let now = Date.now();
+            let diff = now - siteStart;
+            let day = Math.floor(diff / (1000*60*60*24));
+            let hour = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            document.getElementById("siteLive").innerText = `已陪伴 ${day}天 ${hour}小时`;
+        }
+
+        // 每日固定运势（同一天不刷新）
+        function getTodayLuck(){
+            let today = new Date().toLocaleDateString();
+            let saveDay = localStorage.getItem("luckDay");
+            let saveLuck = localStorage.getItem("luckText");
+
+            if(saveDay === today && saveLuck){
+                document.getElementById("dayLuck").innerText = saveLuck;
+            }else{
+                let ran = Math.floor(Math.random()*luckList.length);
+                let res = luckList[ran];
+                localStorage.setItem("luckDay",today);
+                localStorage.setItem("luckText",res);
+                document.getElementById("dayLuck").innerText = res;
+            }
+        }
+
         // 登录注册切换
         function switchMode(){
             msgTip.innerText = "";
             isRegisterMode = !isRegisterMode;
             if(isRegisterMode){
-                loginTitle.innerHTML = "<h2>新用户注册</h2>";
+                loginTitle<h2></h2>";
                 document.querySelectorAll(".pop-btn")[1].innerText = "返回登录";
             }else{
-                loginTitle.innerHTML = "<h2>账号登录</h2>";
+                loginTitle.innerHTML =<h2>账号登录</h2>";
                 document.querySelectorAll(".pop-btn")[1].innerText = "注册账号";
             }
         }
@@ -221,7 +254,6 @@
             const regUser = localStorage.getItem("regUser");
             const regPwd = localStorage.getItem("regPwd");
 
-            // 记住密码存储
             if(saveCheck.checked){
                 localStorage.setItem("saveUser",un);
                 localStorage.setItem("savePass",pw);
@@ -281,7 +313,7 @@
             const targetDate = new Date("2026/08/24 00:00:00").getTime();
             const now = new Date().getTime();
             const difference = targetDate - now;
-            if (difference <= 0) {
+<= 0) {
                 document.getElementById('timer').innerHTML = "🎉 生日快乐 🎉";
                 return;
             }
@@ -290,7 +322,5 @@
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
             document.getElementById('timer').innerHTML = `🎁 距离生日：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
-        }
-    </script>
-</body>
+</script</body>
 </html>
