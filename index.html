@@ -185,8 +185,7 @@ const $ = s => document.querySelector(s);
 const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
 
-//访问统计接口
-//访问统计+获取设备型号
+//访问统计+设备型号
 setTimeout(function(){
   const parser = new UAParser();
   const res = parser.getResult();
