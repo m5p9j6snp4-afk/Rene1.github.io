@@ -22,6 +22,7 @@
             --text-gray: #a0a8b8;
             --border: rgba(80,150,255,0.2);
             --warn: #ff7777;
+            --success:#63d397;
         }
 
         body {
@@ -147,7 +148,7 @@
             font-size:15px;color:var(--main-blue);font-style:italic;
         }
 
-        /*=====新增签到模块CSS=====*/
+        /*=====签到模块CSS=====*/
         .sign-card{
             background:var(--card-bg);
             border:1px solid var(--border);
@@ -156,18 +157,11 @@
             margin-bottom:24px;
         }
         .sign-top{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
             margin-bottom:14px;
         }
         .sign-title{
             font-size:16px;
             color:var(--text);
-        }
-        .point-info{
-            color:var(--main-blue);
-            font-size:14px;
         }
         .sign-input-box{
             display:flex;
@@ -198,9 +192,38 @@
         .sign-desc{
             font-size:12px;
             color:var(--text-gray);
+            margin-bottom:12px;
+        }
+        /*积分查询*/
+        .query-box{
+            display:flex;
+            gap:10px;
+            margin-bottom:10px;
+        }
+        #queryName{
+            flex:1;
+            padding:9px 12px;
+            border-radius:8px;
+            background:rgba(0,0,0,.25);
+            border:1px solid var(--border);
+            color:var(--text);
+            outline:none;
+        }
+        #queryBtn{
+            padding:0 14px;
+            border-radius:8px;
+            border:1px solid var(--success);
+            color:var(--success);
+            background:rgba(99,211,151,.08);
+            cursor:pointer;
+        }
+        .query-result{
+            font-size:13px;
+            color:var(--main-blue);
+            min-height:20px;
+            margin-bottom:10px;
         }
         .record-btn{
-            margin-top:10px;
             font-size:12px;
             color:var(--main-blue);
             cursor:pointer;
@@ -242,10 +265,54 @@
             font-size:13px;
             color:var(--text-gray);
         }
+        /*积分商城*/
+        .shop-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+            margin-bottom:24px;
+        }
+        .shop-title{
+            font-size:16px;margin-bottom:14px;
+        }
+        .shop-list{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+        }
+        .shop-item{
+            padding:12px;
+            border:1px solid var(--border);
+            border-radius:10px;
+            font-size:13px;
+        }
+        .shop-btn{
+            margin-top:8px;
+            padding:5px 10px;
+            border-radius:6px;
+            border:1px solid var(--main-blue);
+            color:var(--main-blue);
+            background:transparent;
+            cursor:pointer;
+        }
+        /*访客统计面板*/
+        .visit-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+            margin-bottom:24px;
+        }
+        .visit-title{
+            font-size:16px;margin-bottom:12px;
+        }
+        .visit-text{
+            font-size:13px;color:var(--text-gray);line-height:1.7;
+        }
     </style>
 </head>
 <body>
-    <!-- 会员主页直接展示 -->
     <div class="container">
         <div class="header-card">
             <div class="header-left">
@@ -266,21 +333,50 @@
             </div>
         </div>
 
-        <!--=====新增签到卡片区域=====-->
+        <!--签到卡片-->
         <div class="sign-card">
             <div class="sign-top">
                 <div class="sign-title">📅 每日签到</div>
-                <div class="point-info">当前总积分：<span id="totalPoint">0</span></div>
             </div>
             <div class="sign-input-box">
                 <input placeholder="输入姓名进行签到" id="signName">
                 <button id="signBtn">立即签到</button>
             </div>
-            <div class="sign-desc">规则：每日签到+1积分｜连续7天额外+7｜连续30天额外+30，同名单日限签一次</div>
-            <div class="record-btn" id="openRecord">点击查看全部签到记录</div>
+            <div class="sign-desc">规则：每日签到+1积分｜连续7天额外+7｜连续30天额外+30，同名单日限签一次，各用户积分独立互不干扰</div>
+            <!--积分查询-->
+            <div class="query-box">
+                <input placeholder="输入姓名查询个人积分" id="queryName">
+                <button id="queryBtn">查询</button>
+            </div>
+            <div class="query-result" id="queryRes"></div>
+            <div class="record-btn" id="openRecord">点击查看全部签到台账</div>
         </div>
 
-        <!--新增世界时钟模块-->
+        <!--积分兑换商城-->
+        <div class="shop-card">
+            <div class="shop-title">🎁 积分兑换商城</div>
+            <div class="shop-list">
+                <div class="shop-item">
+                    <div>5次AI额外对话 / 解锁1篇隐藏随笔</div>
+                    <div>消耗：7积分</div>
+                    <button class="shop-btn" data-cost="7" data-name="随笔/AI次数">立即兑换</button>
+                </div>
+                <div class="shop-item">
+                    <div>7天普通会员 + 补签卡×2</div>
+                    <div>消耗：30积分</div>
+                    <button class="shop-btn" data-cost="30" data-name="7天会员+补签卡">立即兑换</button>
+                </div>
+            </div>
+            <div style="font-size:12px;color:#a0a8b8;margin-top:10px;">兑换前先在上方输入姓名查询积分，消耗对应积分自动扣减</div>
+        </div>
+
+        <!--访客统计面板-->
+        <div class="visit-card">
+            <div class="visit-title">📊 本站访客统计（本地记录）</div>
+            <div class="visit-text" id="visitInfo"></div>
+        </div>
+
+        <!--世界时钟模块-->
         <div class="time-box">
             <div class="local-time" id="localTime"></div>
             <div class="world-wrap">
@@ -319,7 +415,6 @@
             <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
         </div>
 
-        <!--底部英文座右铭卡片-->
         <div class="quote-card">
             <div class="quote-tit">Daily English Motto</div>
             <div class="quote-text" id="enQuote"></div>
@@ -340,7 +435,6 @@
     <script>
         //建站起始日
         const siteStart = new Date("2026/05/27 00:00:00").getTime();
-        //生日固定 8.24
         const birthMonth = 8;
         const birthDay = 24;
 
@@ -355,7 +449,6 @@
             "今日适宜，温柔且坚定"
         ];
 
-        //英文格言库
         const quoteArr = [
             "The future belongs to those who believe in the beauty of their dreams.",
             "Stay humble, stay hungry, keep moving forward.",
@@ -377,106 +470,129 @@
             "Believe you can and you’re halfway there."
         ];
 
-        //=================签到逻辑=================
+        //=================数据存储=================
         let signData = JSON.parse(localStorage.getItem("signLog")) || [];
+        let visitLog = JSON.parse(localStorage.getItem("visitLog")) || [];
+        let exchangeLog = JSON.parse(localStorage.getItem("exchangeLog")) || [];
         const $ = s => document.querySelector(s);
         const todayStr = new Date().toLocaleDateString();
+        const nowDate = new Date();
 
-        //刷新总积分
-        function refreshPoint(){
-            let allPoint = 0;
-            signData.forEach(item=> allPoint += item.point);
-            $("#totalPoint").innerText = allPoint;
+        //访客统计写入
+        function saveVisitInfo(){
+            let ua = navigator.userAgent;
+            let source = document.referrer || "直接访问";
+            let hour = nowDate.getHours();
+            let info = {
+                time:todayStr + " "+nowDate.toLocaleTimeString(),
+                source:source,
+                hour:hour,
+                ua:ua.includes("Mobile")?"移动端":"PC端"
+            }
+            visitLog.push(info);
+            localStorage.setItem("visitLog",JSON.stringify(visitLog));
+            renderVisit();
+        }
+        //渲染访客面板
+        function renderVisit(){
+            let html = `累计访问：${visitLog.length} 人次<br/>最近5条访问记录：<br/>`;
+            let last5 = visitLog.slice(-5);
+            last5.forEach(v=>{
+                html += `${v.time} | ${v.ua} | 来源：${v.source}<br/>`
+            })
+            $("#visitInfo").innerHTML = html;
         }
 
-        //签到执行
+        //签到
         $("#signBtn").addEventListener("click",()=>{
             let name = $("#signName").value.trim();
-            if(!name){
-                alert("请输入姓名");
-                return;
-            }
-            //查找此人历史记录
+            if(!name){alert("请输入姓名");return;}
             let userIdx = signData.findIndex(v=>v.name === name);
             let userInfo = userIdx>-1 ? signData[userIdx] : {
-                name,
-                lastSign:"",
-                streak:0,
-                point:0,
-                signArr:[]
+                name,lastSign:"",streak:0,point:0,signArr:[]
             };
-
-            //判断今日已签
             if(userInfo.signArr.includes(todayStr)){
-                alert(`${name}今日已经完成签到，明天再来~`);
-                return;
+                alert(`${name}今日已签到`);return;
             }
-
-            //计算连续签到
+            //连续签到计算
             let lastDate = userInfo.lastSign;
-            let now = new Date(todayStr);
-            let lastD = new Date(lastDate);
-            let dayGap = (now - lastD)/(1000*3600*24);
-
-            if(lastDate === ""){
-                userInfo.streak =1;
-            }else if(dayGap ===1){
-                userInfo.streak +=1;
+            let dayAdd = 1;
+            if(lastDate){
+                let gapDay = (nowDate - new Date(lastDate))/(1000*3600*24);
+                if(gapDay === 1) userInfo.streak +=1;
+                else userInfo.streak =1;
             }else{
                 userInfo.streak =1;
             }
-
-            //基础+1
-            let add =1;
-            //连签7额外+7
-            if(userInfo.streak ===7) add +=7;
-            //连签30额外+30
-            if(userInfo.streak ===30) add +=30;
-
-            userInfo.point += add;
+            //阶梯奖励
+            if(userInfo.streak ===7) dayAdd +=7;
+            if(userInfo.streak ===30) dayAdd +=30;
+            userInfo.point += dayAdd;
             userInfo.lastSign = todayStr;
             userInfo.signArr.push(todayStr);
-
-            //更新数组
             if(userIdx>-1) signData[userIdx]=userInfo;
             else signData.push(userInfo);
-
             localStorage.setItem("signLog",JSON.stringify(signData));
-            refreshPoint();
             $("#signName").value="";
-            alert(`签到成功！+${add}积分｜当前连续${userInfo.streak}天`);
+            alert(`签到成功+${dayAdd}积分，连续${userInfo.streak}天`);
         })
 
-        //打开记录弹窗
+        //姓名查积分
+        $("#queryBtn").addEventListener("click",()=>{
+            let n = $("#queryName").value.trim();
+            if(!n){$("#queryRes").innerText="请输入名字";return;}
+            let u = signData.find(i=>i.name===n);
+            if(!u){
+                $("#queryRes").innerText="暂无该用户签到数据";
+            }else{
+                $("#queryRes").innerText=`${n}｜总积分：${u.point}｜连签：${u.streak}天｜累计签到${u.signArr.length}天`;
+            }
+        })
+
+        //打开签到台账
         $("#openRecord").onclick = ()=>{
             $("#mask").style.display="flex";
-            let html = "";
-            if(signData.length===0){
-                html = "<div class='item-row'>暂无任何签到记录</div>";
-            }else{
-                signData.forEach(item=>{
-                    html += `
-                    <div class="item-row">
-                        姓名：${item.name}｜总积分：${item.point}｜当前连签：${item.streak}天｜累计签到${item.signArr.length}天
-                    </div>
-                    `
-                })
-            }
-            $("#recordList").innerHTML = html;
+            let h = "";
+            if(signData.length===0) h="<div class='item-row'>暂无记录</div>";
+            else signData.forEach(i=>{
+                h +=`<div class='item-row'>姓名:${i.name}｜积分${i.point}｜连签${i.streak}｜签到${i.signArr.length}天</div>`
+            })
+            $("#recordList").innerHTML = h;
         }
         $("#closePop").onclick = ()=> $("#mask").style.display="none";
 
+        //积分商城兑换
+        document.querySelectorAll(".shop-btn").forEach(btn=>{
+            btn.onclick=()=>{
+                let cost = Number(btn.dataset.cost);
+                let goods = btn.dataset.name;
+                let uname = $("#queryName").value.trim();
+                if(!uname){alert("先在查询框输入姓名再兑换");return;}
+                let user = signData.find(x=>x.name===uname);
+                if(!user){alert("不存在该用户");return;}
+                if(user.point < cost){alert(`积分不足，需要${cost}，当前${user.point}`);return;}
+                //扣积分
+                user.point -= cost;
+                localStorage.setItem("signLog",JSON.stringify(signData));
+                //保存兑换记录
+                exchangeLog.push({name:uname,goods:goods,cost:cost,time:todayStr});
+                localStorage.setItem("exchangeLog",JSON.stringify(exchangeLog));
+                alert(`兑换${goods}成功，扣除${cost}积分，剩余${user.point}积分`);
+                $("#queryRes").innerText=`${uname}｜总积分：${user.point}｜连签：${user.streak}天｜累计签到${user.signArr.length}天`;
+            }
+        })
+
         window.onload = function(){
+            saveVisitInfo();
+            renderVisit();
             updateTimer();
             setInterval(updateTimer,1000);
             updateSiteTime();
             getTodayLuck();
             updateClock();
             setInterval(updateClock,1000);
-            //随机一句英文
             let ranQ = Math.floor(Math.random()*quoteArr.length);
             document.getElementById("enQuote").innerText = quoteArr[ranQ];
-            refreshPoint();
         }
 
         //网站存活天数
@@ -488,7 +604,7 @@
             document.getElementById("siteLive").innerText = `已陪伴 ${day}天 ${hour}小时`;
         }
 
-        //生日判断+运势
+        //生日+运势
         function getTodayLuck(){
             const nowDate = new Date();
             const m = nowDate.getMonth()+1;
@@ -496,8 +612,6 @@
             const todayStr = nowDate.toLocaleDateString();
             let saveDay = localStorage.getItem("luckDay");
             let saveLuck = localStorage.getItem("luckText");
-
-            //生日当天固定文案
             if(m === birthMonth && d === birthDay){
                 let birthText = "生辰喜乐，万事顺心，专属好运全天在线";
                 document.getElementById("dayLuck").innerText = birthText;
@@ -505,7 +619,6 @@
                 localStorage.setItem("luckText",birthText);
                 return;
             }
-
             if(saveDay === todayStr && saveLuck){
                 document.getElementById("dayLuck").innerText = saveLuck;
             }else{
@@ -533,15 +646,12 @@
             document.getElementById('timer').innerHTML = `🎁 距离生日：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
         }
 
-        //世界时钟函数
+        //世界时钟
         function updateClock(){
             const now=new Date();
             const week=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
-            //本地完整时间
             let localStr=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${week[now.getDay()]} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
             document.getElementById('localTime').innerText=localStr;
-
-            //时区换算
             const getZoneTime = (offsetHour)=>{
                 let t = new Date(now.getTime() + offsetHour * 3600000);
                 return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
