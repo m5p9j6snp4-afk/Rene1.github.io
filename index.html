@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Center | 小空间</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * {margin:0;padding:0;box-sizing:border-box}
         :root {
             --main-blue: #5096ff;
             --bg-dark: #1c1f26;
@@ -24,644 +18,280 @@
             --warn: #ff7777;
             --success:#63d397;
         }
-
         body {
             font-family: "Noto Sans SC", "Montserrat", sans-serif;
-            background-color: var(--bg-dark);
-            min-height: 100vh;
-            color: var(--text);
-            padding: 30px 16px;
+            background:var(--bg-dark);min-height:100vh;color:var(--text);padding:30px 16px;
         }
-
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
+        .container{max-width:960px;margin:0 auto}
+        .header-card{
+            background:var(--card-bg);border-radius:16px;padding:24px 26px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border:1px solid var(--border);
         }
-
-        .header-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px 26px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom:16px;
-            border:1px solid var(--border);
-        }
-        .header-left h1 {
-            font-size:22px;font-weight:500;color:var(--text);margin-bottom:4px;
-        }
-        .sub-title {
-            font-size:13px;color:var(--text-gray);
-        }
-        .countdown {
-            font-size:14px;color:var(--main-blue);background:rgba(80,150,255,.08);padding:8px 12px;border-radius:10px;
-        }
-
-        .info-row{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:12px;
-            margin-bottom:16px;
-        }
-        .info-card{
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:14px;
-            padding:16px;
-            text-align:center;
-        }
-        .info-title{
-            font-size:12px;
-            color:var(--text-gray);
-            margin-bottom:6px;
-        }
-        .info-text{
-            font-size:15px;
-            color:var(--main-blue);
-            font-weight:500;
-        }
-
-        /*世界时钟样式*/
-        .time-box{
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:20px;
-            margin-bottom:24px;
-        }
-        .local-time{
-            font-size:22px;
-            color:var(--main-blue);
-            margin-bottom:16px;
-            text-align:center;
-        }
-        .world-wrap{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:12px;
-        }
-        .world-item{
-            background:rgba(0,0,0,0.25);
-            padding:12px;
-            border-radius:10px;
-            text-align:center;
-        }
-        .city{
-            font-size:13px;
-            color:var(--text-gray);
-            margin-bottom:4px;
-        }
-        .ctime{
-            font-size:16px;
-        }
-        .full-col{
-            grid-column:1/-1;
-        }
-
-        .btn-wrap {
-            display:grid;
-            grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
-            gap:12px;
-            margin-bottom:26px;
-        }
-        .btn {
-            padding:15px 10px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);text-decoration:none;text-align:center;font-size:14px;transition:.25s;
-        }
-        .btn:hover {
-            background:rgba(80,150,255,.07);border-color:var(--main-blue);
-        }
-        .btn-vip {color:var(--main-blue);}
-
-        /*英文格言卡片*/
-        .quote-card{
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:20px;
-            text-align:center;
-        }
-        .quote-tit{
-            font-size:13px;color:var(--text-gray);margin-bottom:8px;
-        }
-        .quote-text{
-            font-size:15px;color:var(--main-blue);font-style:italic;
-        }
-
-        /*=====签到模块CSS=====*/
-        .sign-card{
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:20px;
-            margin-bottom:24px;
-        }
-        .sign-top{
-            margin-bottom:14px;
-        }
-        .sign-title{
-            font-size:16px;
-            color:var(--text);
-        }
-        .sign-input-box{
-            display:flex;
-            gap:10px;
-            margin-bottom:12px;
-        }
-        #signName{
-            flex:1;
-            padding:11px 14px;
-            border-radius:10px;
-            background:rgba(0,0,0,0.25);
-            border:1px solid var(--border);
-            color:var(--text);
-            outline:none;
-        }
-        #signBtn{
-            padding:0 18px;
-            border-radius:10px;
-            border:1px solid var(--main-blue);
-            color:var(--main-blue);
-            background:rgba(80,150,255,.08);
-            cursor:pointer;
-            transition:.2s;
-        }
-        #signBtn:hover{
-            background:rgba(80,150,255,.18);
-        }
-        .sign-desc{
-            font-size:12px;
-            color:var(--text-gray);
-            margin-bottom:12px;
-        }
-        /*积分查询*/
-        .query-box{
-            display:flex;
-            gap:10px;
-            margin-bottom:10px;
-        }
-        #queryName{
-            flex:1;
-            padding:9px 12px;
-            border-radius:8px;
-            background:rgba(0,0,0,.25);
-            border:1px solid var(--border);
-            color:var(--text);
-            outline:none;
-        }
-        #queryBtn{
-            padding:0 14px;
-            border-radius:8px;
-            border:1px solid var(--success);
-            color:var(--success);
-            background:rgba(99,211,151,.08);
-            cursor:pointer;
-        }
-        .query-result{
-            font-size:13px;
-            color:var(--main-blue);
-            min-height:20px;
-            margin-bottom:10px;
-        }
-        .record-btn{
-            font-size:12px;
-            color:var(--main-blue);
-            cursor:pointer;
-        }
-        /*签到弹窗*/
-        .mask{
-            position:fixed;
-            inset:0;
-            background:rgba(0,0,0,0.65);
-            display:none;
-            align-items:center;
-            justify-content:center;
-            z-index:999;
-        }
-        .record-pop{
-            width:92%;
-            max-width:520px;
-            max-height:70vh;
-            overflow:auto;
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:20px;
-        }
-        .pop-head{
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:12px;
-            padding-bottom:8px;
-            border-bottom:1px solid var(--border);
-        }
-        .close-pop{
-            cursor:pointer;
-            color:var(--warn);
-        }
-        .item-row{
-            padding:8px 0;
-            border-bottom:1px solid rgba(80,150,255,0.1);
-            font-size:13px;
-            color:var(--text-gray);
-        }
-        /*积分商城*/
-        .shop-card{
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:20px;
-            margin-bottom:24px;
-        }
-        .shop-title{
-            font-size:16px;margin-bottom:14px;
-        }
-        .shop-list{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:10px;
-        }
-        .shop-item{
-            padding:12px;
-            border:1px solid var(--border);
-            border-radius:10px;
-            font-size:13px;
-        }
-        .shop-btn{
-            margin-top:8px;
-            padding:5px 10px;
-            border-radius:6px;
-            border:1px solid var(--main-blue);
-            color:var(--main-blue);
-            background:transparent;
-            cursor:pointer;
-        }
-        /*访客统计面板*/
-        .visit-card{
-            background:var(--card-bg);
-            border:1px solid var(--border);
-            border-radius:16px;
-            padding:20px;
-            margin-bottom:24px;
-        }
-        .visit-title{
-            font-size:16px;margin-bottom:12px;
-        }
-        .visit-text{
-            font-size:13px;color:var(--text-gray);line-height:1.7;
-        }
+        .header-left h1{font-size:22px;font-weight:500;margin-bottom:4px}
+        .sub-title{font-size:13px;color:var(--text-gray)}
+        .countdown{font-size:14px;color:var(--main-blue);background:rgba(80,150,255,.08);padding:8px 12px;border-radius:10px}
+        .info-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+        .info-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+        .info-title{font-size:12px;color:var(--text-gray);margin-bottom:6px}
+        .info-text{font-size:15px;color:var(--main-blue);font-weight:500}
+        .time-box{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
+        .local-time{font-size:22px;color:var(--main-blue);margin-bottom:16px;text-align:center}
+        .world-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .world-item{background:rgba(0,0,0,.25);padding:12px;border-radius:10px;text-align:center}
+        .city{font-size:13px;color:var(--text-gray);margin-bottom:4px}
+        .ctime{font-size:16px}
+        .full-col{grid-column:1/-1}
+        .btn-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:26px}
+        .btn{padding:15px 10px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);text-decoration:none;text-align:center;font-size:14px;transition:.25s}
+        .btn:hover{background:rgba(80,150,255,.07);border-color:var(--main-blue)}
+        .btn-vip{color:var(--main-blue)}
+        .quote-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
+        .quote-tit{font-size:13px;color:var(--text-gray);margin-bottom:8px}
+        .quote-text{font-size:15px;color:var(--main-blue);font-style:italic}
+        .sign-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
+        .sign-top{margin-bottom:14px}
+        .sign-title{font-size:16px}
+        .sign-input-box{display:flex;gap:10px;margin-bottom:12px}
+        #signName{flex:1;padding:11px 14px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:var(--text);outline:none}
+        #signBtn{padding:0 18px;border-radius:10px;border:1px solid var(--main-blue);color:var(--main-blue);background:rgba(80,150,255,.08);cursor:pointer;transition:.2s}
+        #signBtn:hover{background:rgba(80,150,255,.18)}
+        .sign-desc{font-size:12px;color:var(--text-gray);margin-bottom:12px}
+        .query-box{display:flex;gap:10px;margin-bottom:10px}
+        #queryName{flex:1;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:var(--text);outline:none}
+        #queryBtn{padding:0 14px;border-radius:8px;border:1px solid var(--success);color:var(--success);background:rgba(99,211,151,.08);cursor:pointer}
+        .query-result{font-size:13px;color:var(--main-blue);min-height:20px;margin-bottom:10px}
+        .record-btn{font-size:12px;color:var(--main-blue);cursor:pointer}
+        .mask{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:999}
+        .record-pop{width:92%;max-width:520px;max-height:70vh;overflow:auto;background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px}
+        .pop-head{display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+        .close-pop{cursor:pointer;color:var(--warn)}
+        .item-row{padding:8px 0;border-bottom:1px solid rgba(80,150,255,.1);font-size:13px;color:var(--text-gray)}
+        .shop-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
+        .shop-title{font-size:16px;margin-bottom:14px}
+        .shop-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+        .shop-item{padding:12px;border:1px solid var(--border);border-radius:10px;font-size:13px}
+        .shop-btn{margin-top:8px;padding:5px 10px;border-radius:6px;border:1px solid var(--main-blue);color:var(--main-blue);background:transparent;cursor:pointer}
+        .visit-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
+        .visit-title{font-size:16px;margin-bottom:12px}
+        .visit-text{font-size:16px;color:var(--main-blue)}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-card">
-            <div class="header-left">
-                <h1>个人中心</h1>
-                <div class="sub-title">MEMBER AREA</div>
-            </div>
-            <div class="countdown" id="timer">活动倒计时加载中...</div>
+<div class="container">
+    <div class="header-card">
+        <div class="header-left">
+            <h1>个人中心</h1>
+            <div class="sub-title">MEMBER AREA</div>
         </div>
+        <div class="countdown" id="timer">活动倒计时加载中...</div>
+    </div>
 
-        <div class="info-row">
-            <div class="info-card">
-                <div class="info-title">🌐 网站存活时长</div>
-                <div class="info-text" id="siteLive"></div>
-            </div>
-            <div class="info-card">
-                <div class="info-title">✨ 今日状态运势</div>
-                <div class="info-text" id="dayLuck"></div>
-            </div>
+    <div class="info-row">
+        <div class="info-card">
+            <div class="info-title">🌐 网站存活时长</div>
+            <div class="info-text" id="siteLive"></div>
         </div>
-
-        <!--签到卡片-->
-        <div class="sign-card">
-            <div class="sign-top">
-                <div class="sign-title">📅 每日签到</div>
-            </div>
-            <div class="sign-input-box">
-                <input placeholder="输入姓名进行签到" id="signName">
-                <button id="signBtn">立即签到</button>
-            </div>
-            <div class="sign-desc">规则：每日签到+1积分｜连续7天额外+7｜连续30天额外+30，同名单日限签一次，各用户积分独立互不干扰</div>
-            <!--积分查询-->
-            <div class="query-box">
-                <input placeholder="输入姓名查询个人积分" id="queryName">
-                <button id="queryBtn">查询</button>
-            </div>
-            <div class="query-result" id="queryRes"></div>
-            <div class="record-btn" id="openRecord">点击查看全部签到台账</div>
-        </div>
-
-        <!--积分兑换商城-->
-        <div class="shop-card">
-            <div class="shop-title">🎁 积分兑换商城</div>
-            <div class="shop-list">
-                <div class="shop-item">
-                    <div>5次AI额外对话 / 解锁1篇隐藏随笔</div>
-                    <div>消耗：7积分</div>
-                    <button class="shop-btn" data-cost="7" data-name="随笔/AI次数">立即兑换</button>
-                </div>
-                <div class="shop-item">
-                    <div>7天普通会员 + 补签卡×2</div>
-                    <div>消耗：30积分</div>
-                    <button class="shop-btn" data-cost="30" data-name="7天会员+补签卡">立即兑换</button>
-                </div>
-            </div>
-            <div style="font-size:12px;color:#a0a8b8;margin-top:10px;">兑换前先在上方输入姓名查询积分，消耗对应积分自动扣减</div>
-        </div>
-
-        <!--访客统计面板-->
-        <div class="visit-card">
-            <div class="visit-title">📊 本站访客统计（本地记录）</div>
-            <div class="visit-text" id="visitInfo"></div>
-        </div>
-
-        <!--世界时钟模块-->
-        <div class="time-box">
-            <div class="local-time" id="localTime"></div>
-            <div class="world-wrap">
-                <div class="world-item">
-                    <div class="city">🇭🇰 香港 UTC+8</div>
-                    <div class="ctime" id="hk"></div>
-                </div>
-                <div class="world-item">
-                    <div class="city">🇯🇵 东京 UTC+9</div>
-                    <div class="ctime" id="tokyo"></div>
-                </div>
-                <div class="world-item">
-                    <div class="city">🇬🇧 伦敦 UTC+0</div>
-                    <div class="ctime" id="london"></div>
-                </div>
-                <div class="world-item">
-                    <div class="city">🇺🇸 纽约 UTC-5</div>
-                    <div class="ctime" id="newyork"></div>
-                </div>
-                <div class="world-item full-col">
-                    <div class="city">🇦🇺 悉尼 UTC+10</div>
-                    <div class="ctime" id="sydney"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="btn-wrap">
-            <a href="about.html" class="btn">👤 个人资料</a>
-            <a href="moments.html" class="btn">📸 动态分享</a>
-            <a href="treehole.html" class="btn">🌙 私人树洞</a>
-            <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
-            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
-            <a href="game.html" class="btn">🎮 休闲专区</a>
-            <a href="chat.html" class="btn">🤖 智能助手</a>
-            <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
-            <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
-        </div>
-
-        <div class="quote-card">
-            <div class="quote-tit">Daily English Motto</div>
-            <div class="quote-text" id="enQuote"></div>
+        <div class="info-card">
+            <div class="info-title">✨ 今日状态运势</div>
+            <div class="info-text" id="dayLuck"></div>
         </div>
     </div>
 
-    <!--签到记录弹窗-->
-    <div class="mask" id="mask">
-        <div class="record-pop">
-            <div class="pop-head">
-                <span>全部签到台账</span>
-                <span class="close-pop" id="closePop">关闭</span>
+    <div class="sign-card">
+        <div class="sign-top"><div class="sign-title">📅 每日签到</div></div>
+        <div class="sign-input-box">
+            <input placeholder="输入姓名进行签到" id="signName">
+            <button id="signBtn">立即签到</button>
+        </div>
+        <div class="sign-desc">规则：每日签到+1积分｜连续7天额外+7｜连续30天额外+30，同名单日限签一次，各用户积分独立互不干扰</div>
+        <div class="query-box">
+            <input placeholder="输入姓名查询个人积分" id="queryName">
+            <button id="queryBtn">查询</button>
+        </div>
+        <div class="query-result" id="queryRes"></div>
+        <div class="record-btn" id="openRecord">点击查看全部签到台账</div>
+    </div>
+
+    <div class="shop-card">
+        <div class="shop-title">🎁 积分兑换商城</div>
+        <div class="shop-list">
+            <div class="shop-item">
+                <div>解锁1篇隐藏随笔</div>
+                <div>消耗：7积分</div>
+                <button class="shop-btn" data-cost="7" data-name="隐藏随笔">立即兑换</button>
             </div>
-            <div id="recordList"></div>
+            <div class="shop-item">
+                <div>7天普通会员 + 补签卡×2</div>
+                <div>消耗：30积分</div>
+                <button class="shop-btn" data-cost="30" data-name="7天会员+补签卡">立即兑换</button>
+            </div>
+        </div>
+        <div style="font-size:12px;color:#a0a8b8;margin-top:10px;">兑换前先在上方输入姓名查询积分，消耗对应积分自动扣减</div>
+    </div>
+
+    <div class="visit-card">
+        <div class="visit-title">📊 本站访客统计</div>
+        <div class="visit-text" id="visitInfo"></div>
+    </div>
+
+    <div class="time-box">
+        <div class="local-time" id="localTime"></div>
+        <div class="world-wrap">
+            <div class="world-item"><div class="city">🇭🇰 香港 UTC+8</div><div class="ctime" id="hk"></div></div>
+            <div class="world-item"><div class="city">🇯🇵 东京 UTC+9</div><div class="ctime" id="tokyo"></div></div>
+            <div class="world-item"><div class="city">🇬🇧 伦敦 UTC+0</div><div class="ctime" id="london"></div></div>
+            <div class="world-item"><div class="city">🇺🇸 纽约 UTC-5</div><div class="ctime" id="newyork"></div></div>
+            <div class="world-item full-col"><div class="city">🇦🇺 悉尼 UTC+10</div><div class="ctime" id="sydney"></div></div>
         </div>
     </div>
 
-    <script>
-        //建站起始日
-        const siteStart = new Date("2026/05/27 00:00:00").getTime();
-        const birthMonth = 8;
-        const birthDay = 24;
+    <div class="btn-wrap">
+        <a href="about.html" class="btn">👤 个人资料</a>
+        <a href="moments.html" class="btn">📸 动态分享</a>
+        <a href="treehole.html" class="btn">🌙 私人树洞</a>
+        <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
+        <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
+        <a href="game.html" class="btn">🎮 休闲专区</a>
+        <a href="chat.html" class="btn">🤖 智能助手</a>
+        <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
+        <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
+    </div>
 
-        const luckList = [
-            "松弛自在，万事顺遂",
-            "情绪稳定，好运常驻",
-            "专注自我，步步安稳",
-            "平平淡淡，即是圆满",
-            "心态平和，事事从容",
-            "向内扎根，默默成长",
-            "保持热爱，静待花开",
-            "今日适宜，温柔且坚定"
-        ];
+    <div class="quote-card">
+        <div class="quote-tit">Daily English Motto</div>
+        <div class="quote-text" id="enQuote"></div>
+    </div>
+</div>
 
-        const quoteArr = [
-            "The future belongs to those who believe in the beauty of their dreams.",
-            "Stay humble, stay hungry, keep moving forward.",
-            "Small steps every day lead to big changes.",
-            "Everything you’ve ever wanted is on the other side of fear.",
-            "Grow through what you go through.",
-            "Focus on progress not perfection.",
-            "Be the reason someone smiles today.",
-            "Hard work beats talent when talent doesn't work hard.",
-            "Never give up on something you can’t go a day without thinking about.",
-            "Your only limit is the mind you build yourself.",
-            "Quiet progress is still progress.",
-            "Chase your dreams quietly, let success make noise.",
-            "Start where you are, use what you have, do what you can.",
-            "Patience is not waiting, but keeping a good attitude while waiting.",
-            "Mistakes are proof you are trying.",
-            "Life is about making an impact, not making an income.",
-            "Don’t count the days, make the days count.",
-            "Believe you can and you’re halfway there."
-        ];
+<div class="mask" id="mask">
+    <div class="record-pop">
+        <div class="pop-head">
+            <span>全部签到台账</span>
+            <span class="close-pop" id="closePop">关闭</span>
+        </div>
+        <div id="recordList"></div>
+    </div>
+</div>
 
-        //=================数据存储=================
-        let signData = JSON.parse(localStorage.getItem("signLog")) || [];
-        let visitLog = JSON.parse(localStorage.getItem("visitLog")) || [];
-        let exchangeLog = JSON.parse(localStorage.getItem("exchangeLog")) || [];
-        const $ = s => document.querySelector(s);
-        const todayStr = new Date().toLocaleDateString();
-        const nowDate = new Date();
+<script>
+const siteStart = new Date("2026/05/27 00:00:00").getTime();
+const birthMonth = 8;const birthDay = 24;
+const luckList = ["松弛自在，万事顺遂","情绪稳定，好运常驻","专注自我，步步安稳","平平淡淡，即是圆满","心态平和，事事从容","向内扎根，默默成长","保持热爱，静待花开","今日适宜，温柔且坚定"];
+const quoteArr = ["The future belongs to those who believe in the beauty of their dreams.","Stay humble, stay hungry, keep moving forward.","Small steps every day lead to big changes.","Everything you’ve ever wanted is on the other side of fear.","Grow through what you go through.","Focus on progress not perfection.","Be the reason someone smiles today.","Hard work beats talent when talent doesn't work hard.","Never give up on something you can’t go a day without thinking about.","Your only limit is the mind you build yourself.","Quiet progress is still progress.","Chase your dreams quietly, let success make noise.","Start where you are, use what you have, do what you can.","Patience is not waiting, but keeping a good attitude while waiting.","Mistakes are proof you are trying.","Life is about making an impact, not making an income.","Don’t count the days, make the days count.","Believe you can and you’re halfway there."];
 
-        //访客统计写入
-        function saveVisitInfo(){
-            let ua = navigator.userAgent;
-            let source = document.referrer || "直接访问";
-            let hour = nowDate.getHours();
-            let info = {
-                time:todayStr + " "+nowDate.toLocaleTimeString(),
-                source:source,
-                hour:hour,
-                ua:ua.includes("Mobile")?"移动端":"PC端"
-            }
-            visitLog.push(info);
-            localStorage.setItem("visitLog",JSON.stringify(visitLog));
-            renderVisit();
-        }
-        //渲染访客面板
-        function renderVisit(){
-            let html = `累计访问：${visitLog.length} 人次<br/>最近5条访问记录：<br/>`;
-            let last5 = visitLog.slice(-5);
-            last5.forEach(v=>{
-                html += `${v.time} | ${v.ua} | 来源：${v.source}<br/>`
-            })
-            $("#visitInfo").innerHTML = html;
-        }
+let signData = JSON.parse(localStorage.getItem("signLog")) || [];
+let exchangeLog = JSON.parse(localStorage.getItem("exchangeLog")) || [];
+const $ = s => document.querySelector(s);
+const todayStr = new Date().toLocaleDateString();
+const nowDate = new Date();
 
-        //签到
-        $("#signBtn").addEventListener("click",()=>{
-            let name = $("#signName").value.trim();
-            if(!name){alert("请输入姓名");return;}
-            let userIdx = signData.findIndex(v=>v.name === name);
-            let userInfo = userIdx>-1 ? signData[userIdx] : {
-                name,lastSign:"",streak:0,point:0,signArr:[]
-            };
-            if(userInfo.signArr.includes(todayStr)){
-                alert(`${name}今日已签到`);return;
-            }
-            //连续签到计算
-            let lastDate = userInfo.lastSign;
-            let dayAdd = 1;
-            if(lastDate){
-                let gapDay = (nowDate - new Date(lastDate))/(1000*3600*24);
-                if(gapDay === 1) userInfo.streak +=1;
-                else userInfo.streak =1;
-            }else{
-                userInfo.streak =1;
-            }
-            //阶梯奖励
-            if(userInfo.streak ===7) dayAdd +=7;
-            if(userInfo.streak ===30) dayAdd +=30;
-            userInfo.point += dayAdd;
-            userInfo.lastSign = todayStr;
-            userInfo.signArr.push(todayStr);
-            if(userIdx>-1) signData[userIdx]=userInfo;
-            else signData.push(userInfo);
-            localStorage.setItem("signLog",JSON.stringify(signData));
-            $("#signName").value="";
-            alert(`签到成功+${dayAdd}积分，连续${userInfo.streak}天`);
-        })
+//访问计数
+let total = Number(localStorage.getItem('visitTotal')||0)+1;
+localStorage.setItem('visitTotal',total);
+$("#visitInfo").innerText = "全站访问人数："+total;
 
-        //姓名查积分
-        $("#queryBtn").addEventListener("click",()=>{
-            let n = $("#queryName").value.trim();
-            if(!n){$("#queryRes").innerText="请输入名字";return;}
-            let u = signData.find(i=>i.name===n);
-            if(!u){
-                $("#queryRes").innerText="暂无该用户签到数据";
-            }else{
-                $("#queryRes").innerText=`${n}｜总积分：${u.point}｜连签：${u.streak}天｜累计签到${u.signArr.length}天`;
-            }
-        })
+//签到
+$("#signBtn").addEventListener("click",()=>{
+    let name = $("#signName").value.trim();
+    if(!name){alert("请输入姓名");return;}
+    let userIdx = signData.findIndex(v=>v.name === name);
+    let userInfo = userIdx>-1 ? signData[userIdx] : {name,lastSign:"",streak:0,point:0,signArr:[]};
+    if(userInfo.signArr.includes(todayStr)){alert(`${name}今日已签到`);return;}
+    let lastDate = userInfo.lastSign;
+    let dayAdd =1;
+    if(lastDate){
+        let gapDay = (nowDate - new Date(lastDate))/(1000*3600*24);
+        gapDay===1?userInfo.streak++:userInfo.streak=1;
+    }else userInfo.streak=1;
+    if(userInfo.streak===7)dayAdd+=7;
+    if(userInfo.streak===30)dayAdd+=30;
+    userInfo.point += dayAdd;
+    userInfo.lastSign=todayStr;
+    userInfo.signArr.push(todayStr);
+    userIdx>-1?signData[userIdx]=userInfo:signData.push(userInfo);
+    localStorage.setItem("signLog",JSON.stringify(signData));
+    $("#signName").value="";
+    alert(`签到成功+${dayAdd}积分，连续${userInfo.streak}天`);
+})
 
-        //打开签到台账
-        $("#openRecord").onclick = ()=>{
-            $("#mask").style.display="flex";
-            let h = "";
-            if(signData.length===0) h="<div class='item-row'>暂无记录</div>";
-            else signData.forEach(i=>{
-                h +=`<div class='item-row'>姓名:${i.name}｜积分${i.point}｜连签${i.streak}｜签到${i.signArr.length}天</div>`
-            })
-            $("#recordList").innerHTML = h;
-        }
-        $("#closePop").onclick = ()=> $("#mask").style.display="none";
+//查积分
+$("#queryBtn").onclick=()=>{
+    let n=$("#queryName").value.trim();
+    if(!n){$("#queryRes").innerText="请输入名字";return;}
+    let u=signData.find(i=>i.name===n);
+    $("#queryRes").innerText=u?`${n}｜总积分：${u.point}｜连签：${u.streak}天｜累计签到${u.signArr.length}天`:"暂无该用户签到数据";
+}
 
-        //积分商城兑换
-        document.querySelectorAll(".shop-btn").forEach(btn=>{
-            btn.onclick=()=>{
-                let cost = Number(btn.dataset.cost);
-                let goods = btn.dataset.name;
-                let uname = $("#queryName").value.trim();
-                if(!uname){alert("先在查询框输入姓名再兑换");return;}
-                let user = signData.find(x=>x.name===uname);
-                if(!user){alert("不存在该用户");return;}
-                if(user.point < cost){alert(`积分不足，需要${cost}，当前${user.point}`);return;}
-                //扣积分
-                user.point -= cost;
-                localStorage.setItem("signLog",JSON.stringify(signData));
-                //保存兑换记录
-                exchangeLog.push({name:uname,goods:goods,cost:cost,time:todayStr});
-                localStorage.setItem("exchangeLog",JSON.stringify(exchangeLog));
-                alert(`兑换${goods}成功，扣除${cost}积分，剩余${user.point}积分`);
-                $("#queryRes").innerText=`${uname}｜总积分：${user.point}｜连签：${user.streak}天｜累计签到${user.signArr.length}天`;
-            }
-        })
+//台账弹窗
+$("#openRecord").onclick=()=>{
+    $("#mask").style.display="flex";
+    let h="";
+    signData.length===0?h="<div class='item-row'>暂无记录</div>":signData.forEach(i=>h+=`<div class='item-row'>姓名:${i.name}｜积分${i.point}｜连签${i.streak}｜签到${i.signArr.length}天</div>`);
+    $("#recordList").innerHTML=h;
+}
+$("#closePop").onclick=()=>$("#mask").style.display="none";
 
-        window.onload = function(){
-            saveVisitInfo();
-            renderVisit();
-            updateTimer();
-            setInterval(updateTimer,1000);
-            updateSiteTime();
-            getTodayLuck();
-            updateClock();
-            setInterval(updateClock,1000);
-            let ranQ = Math.floor(Math.random()*quoteArr.length);
-            document.getElementById("enQuote").innerText = quoteArr[ranQ];
-        }
+//商城兑换
+document.querySelectorAll(".shop-btn").forEach(btn=>{
+    btn.onclick=()=>{
+        let cost=Number(btn.dataset.cost),goods=btn.dataset.name,uname=$("#queryName").value.trim();
+        if(!uname){alert("先在查询框输入姓名再兑换");return;}
+        let user=signData.find(x=>x.name===uname);
+        if(!user){alert("不存在该用户");return;}
+        if(user.point<cost){alert(`积分不足，需要${cost}，当前${user.point}`);return;}
+        user.point-=cost;
+        localStorage.setItem("signLog",JSON.stringify(signData));
+        exchangeLog.push({name:uname,goods,cost,time:todayStr});
+        localStorage.setItem("exchangeLog",JSON.stringify(exchangeLog));
+        alert(`兑换${goods}成功，扣除${cost}积分，剩余${user.point}积分`);
+        $("#queryRes").innerText=`${uname}｜总积分：${user.point}｜连签：${user.streak}天｜累计签到${user.signArr.length}天`;
+    }
+})
 
-        //网站存活天数
-        function updateSiteTime(){
-            let now = Date.now();
-            let diff = now - siteStart;
-            let day = Math.floor(diff / (1000*60*60*24));
-            let hour = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-            document.getElementById("siteLive").innerText = `已陪伴 ${day}天 ${hour}小时`;
-        }
+window.onload = function(){
+    updateTimer();setInterval(updateTimer,1000);
+    updateSiteTime();getTodayLuck();
+    updateClock();setInterval(updateClock,1000);
+    let ranQ = Math.floor(Math.random()*quoteArr.length);
+    document.getElementById("enQuote").innerText = quoteArr[ranQ];
+}
 
-        //生日+运势
-        function getTodayLuck(){
-            const nowDate = new Date();
-            const m = nowDate.getMonth()+1;
-            const d = nowDate.getDate();
-            const todayStr = nowDate.toLocaleDateString();
-            let saveDay = localStorage.getItem("luckDay");
-            let saveLuck = localStorage.getItem("luckText");
-            if(m === birthMonth && d === birthDay){
-                let birthText = "生辰喜乐，万事顺心，专属好运全天在线";
-                document.getElementById("dayLuck").innerText = birthText;
-                localStorage.setItem("luckDay",todayStr);
-                localStorage.setItem("luckText",birthText);
-                return;
-            }
-            if(saveDay === todayStr && saveLuck){
-                document.getElementById("dayLuck").innerText = saveLuck;
-            }else{
-                let ran = Math.floor(Math.random()*luckList.length);
-                let res = luckList[ran];
-                localStorage.setItem("luckDay",todayStr);
-                localStorage.setItem("luckText",res);
-                document.getElementById("dayLuck").innerText = res;
-            }
-        }
+function updateSiteTime(){
+    let now=Date.now(),diff=now-siteStart;
+    let day=Math.floor(diff/(1000*60*60*24));
+    let hour=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    document.getElementById("siteLive").innerText=`已陪伴 ${day}天 ${hour}小时`;
+}
 
-        //生日倒计时
-        function updateTimer() {
-            const targetDate = new Date("2026/08/24 00:00:00").getTime();
-            const now = new Date().getTime();
-            const difference = targetDate - now;
-            if (difference <= 0) {
-                document.getElementById('timer').innerHTML = "🎉 生日快乐 🎉";
-                return;
-            }
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-            document.getElementById('timer').innerHTML = `🎁 距离生日：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
-        }
+function getTodayLuck(){
+    const nowDate=new Date(),m=nowDate.getMonth()+1,d=nowDate.getDate(),todayStr=nowDate.toLocaleDateString();
+    let saveDay=localStorage.getItem("luckDay"),saveLuck=localStorage.getItem("luckText");
+    if(m===birthMonth&&d===birthDay){
+        let birthText="生辰喜乐，万事顺心，专属好运全天在线";
+        document.getElementById("dayLuck").innerText=birthText;
+        localStorage.setItem("luckDay",todayStr);localStorage.setItem("luckText",birthText);return;
+    }
+    if(saveDay===todayStr&&saveLuck) document.getElementById("dayLuck").innerText=saveLuck;
+    else{
+        let ran=Math.floor(Math.random()*luckList.length),res=luckList[ran];
+        localStorage.setItem("luckDay",todayStr);localStorage.setItem("luckText",res);
+        document.getElementById("dayLuck").innerText=res;
+    }
+}
 
-        //世界时钟
-        function updateClock(){
-            const now=new Date();
-            const week=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
-            let localStr=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${week[now.getDay()]} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-            document.getElementById('localTime').innerText=localStr;
-            const getZoneTime = (offsetHour)=>{
-                let t = new Date(now.getTime() + offsetHour * 3600000);
-                return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
-            }
-            document.getElementById('hk').innerText=getZoneTime(0);
-            document.getElementById('tokyo').innerText=getZoneTime(1);
-            document.getElementById('london').innerText=getZoneTime(-8);
-            document.getElementById('newyork').innerText=getZoneTime(-13);
-            document.getElementById('sydney').innerText=getZoneTime(2);
-        }
-    </script>
+function updateTimer(){
+    const target=new Date("2026/08/24 00:00:00").getTime(),now=Date.now(),diff=target-now;
+    if(diff<=0){document.getElementById('timer').innerHTML="🎉 生日快乐 🎉";return;}
+    let d=Math.floor(diff/(1000*86400)),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    document.getElementById('timer').innerHTML=`🎁 距离生日：${d}天 ${h}时 ${m}分 ${s}秒`;
+}
+
+function updateClock(){
+    const now=new Date(),week=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    let local=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${week[now.getDay()]} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    document.getElementById('localTime').innerText=local;
+    const getT=o=>{let t=new Date(now.getTime()+o*3600000);return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`};
+    $("#hk").innerText=getT(0);$("#tokyo").innerText=getT(1);$("#london").innerText=getT(-8);$("#newyork").innerText=getT(-13);$("#sydney").innerText=getT(2);
+}
+</script>
 </body>
 </html>
