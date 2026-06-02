@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纪念日备忘</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-blue: #5096ff;
+            --bg-dark: #1c1f26;
+            --card-bg: #272b35;
+            --text: #f1f3f9;
+            --text-gray: #a0a8b8;
+            --border: rgba(80,150,255,0.2);
+            --warn: #ff7777;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family: "Noto Sans SC", "Montserrat", sans-serif;
+            background:var(--bg-dark);
+            min-height:100vh;
+            padding:30px 16px;
+        }
+        .container{max-width:700px;margin:0 auto;}
+        .top-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:24px;
+            margin-bottom:22px;
+        }
+        h2{color:var(--main-blue);margin-bottom:16px;font-weight:500;}
+        .inp-wrap{display:grid;gap:12px;margin-bottom:16px;}
+        input{
+            width:100%;
+            padding:12px 14px;
+            background:rgba(0,0,0,.22);
+            border:1px solid var(--border);
+            border-radius:12px;
+            color:var(--text);
+            outline:none;
+        }
+        .btn-add{
+            padding:11px;
+            border-radius:12px;
+            border:1px solid var(--border);
+            background:transparent;
+            color:var(--text);
+            cursor:pointer;
+            transition:.24s;
+        }
+        .btn-add:hover{background:rgba(80,150,255,.07);border-color:var(--main-blue);}
+        .item{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:14px;
+            padding:18px;
+            margin-bottom:14px;
+        }
+        .item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+        .name{color:var(--text);font-size:15px;}
+        .del{
+            font-size:12px;
+            color:var(--warn);
+            border:1px solid rgba(255,119,119,.25);
+            padding:3px 8px;
+            border-radius:7px;
+            cursor:pointer;
+        }
+        .time-info{color:var(--text-gray);font-size:13px;margin-bottom:4px;}
+        .count{color:var(--main-blue);font-size:15px;}
+        .back{
+            display:block;
+            text-align:center;
+            margin-top:30px;
+            text-decoration:none;
+            padding:11px;
+            border:1px solid var(--border);
+            border-radius:12px;
+            color:var(--text-gray);
+        }
+        .back:hover{background:rgba(80,150,255,.07);color:var(--text);border-color:var(--main-blue);}
+    </style>
+    <script>
+        if(localStorage.getItem("siteLogin")!=='ok')location.href='index.html';
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="top-card">
+        <h2>📅 私人纪念日</h2>
+        <div class="inp-wrap">
+            <input id="name" placeholder="纪念日名称">
+            <input id="dt" type="datetime-local">
+        </div>
+        <button class="btn-add" onclick="saveItem()">新增纪念日</button>
+    </div>
+
+    <div id="list"></div>
+    <a href="index.html" class="back">🏠 返回主页</a>
+</div>
+
+<script>
+let listData = [];
+let timer;
+function getData(){
+    let raw = localStorage.getItem('anniList');
+    return raw?JSON.parse(raw):[];
+}
+function saveLocal(arr){
+    localStorage.setItem('anniList',JSON.stringify(arr));
+}
+function saveItem(){
+    let n = document.getElementById('name').value.trim();
+    let d = document.getElementById('dt').value;
+    if(!n||!d)return alert('名称、日期不能为空');
+    listData = getData();
+    listData.push({name:n,date:d});
+    saveLocal(listData);
+    document.getElementById('name').value='';
+    document.getElementById('dt').value='';
+    render();
+}
+function del(idx){
+    if(!confirm('删除这条纪念日？'))return;
+    listData.splice(idx,1);
+    saveLocal(listData);
+    render();
+}
+function render(){
+    listData = getData();
+    //按剩余时间升序（近的在前）
+    listData.sort((a,b)=>{
+        let t1 = new Date(a.date).getTime();
+        let t2 = new Date(b.date).getTime();
+        return t1-t2;
+    })
+    let box = document.getElementById('list');
+    box.innerHTML='';
+    let now = Date.now();
+    listData.forEach((item,i)=>{
+        let target = new Date(item.date).getTime();
+        let diff = target-now;
+        if(diff<0)diff=0;
+        let day = Math.floor(diff/(1000*60*60*24));
+        let h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+        let m = Math.floor((diff%(1000*60*60))/(1000*60));
+        let s = Math.floor((diff%(1000*60))/1000);
+        let str = `${day}天 ${h}时 ${m}分 ${s}秒`;
+        box.innerHTML +=`
+        <div class="item">
+            <div class="item-top">
+                <span class="name">${item.name}</span>
+                <span class="del" onclick="del(${i})">删除</span>
+            </div>
+            <div class="time-info">目标：${item.date.replace('T',' ')}</div>
+            <div class="count">${diff>0?'距离纪念日：':'纪念日已过！'} ${str}</div>
+        </div>`;
+    })
+}
+//每秒刷新倒计时
+window.onload=()=>{
+    render();
+    timer=setInterval(render,1000);
+}
+window.onunload=()=>clearInterval(timer);
+</script>
+</body>
+</html>
