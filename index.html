@@ -184,8 +184,7 @@ const $ = s => document.querySelector(s);
 const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
 
-//访问计数
-<script>
+//访问统计接口
 (async()=>{
   try{
     let res=await fetch("https://rapid-voice-5ba6.bmk4byvf9b.workers.dev");
@@ -195,7 +194,6 @@ const nowDate = new Date();
     document.getElementById("visitInfo").innerText="全站访问人数：获取失败";
   }
 })()
-</script>
 
 //签到
 $("#signBtn").addEventListener("click",()=>{
