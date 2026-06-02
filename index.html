@@ -185,27 +185,12 @@ const $ = s => document.querySelector(s);
 const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
 
-//访问统计+设备型号
-setTimeout(function(){
-  const parser = new UAParser();
-  const res = parser.getResult();
-  let deviceInfo = `${res.os.name||"未知系统"} ${res.os.version||""}｜${res.device.vendor||"未知品牌"}${res.device.model||""}`;
-
-  let xhr=new XMLHttpRequest();
-  xhr.open("GET","https://rapid-voice-5ba6.bmk4byvf9b.workers.dev?device="+encodeURIComponent(deviceInfo),true);
-  xhr.onload=function(){
-    if(xhr.status==200){
-      let arr=xhr.responseText.split("|");
-      document.getElementById("visitInfo").innerText=`总访问：${arr[0]}｜独立：${arr[1]}｜IP：${arr[2]}｜设备：${arr[3]}`;
-    }else{
-      document.getElementById("visitInfo").innerText="统计异常";
-    }
-  }
-  xhr.onerror=function(){
-    document.getElementById("visitInfo").innerText="统计异常";
-  }
-  xhr.send();
-},300);
+<div class="visit-card">
+    <div class="visit-title">📝访客留言板</div>
+    <div id="msgBox" style="max-height:240px;overflow:auto;margin:12px 0;"></div>
+    <input id="inputMsg" placeholder="写下留言" style="width:72%;padding:7px;">
+    <button onclick="sendMsg()" style="padding:7px 14px;">发送</button>
+</div>
 
 //签到
 $("#signBtn").addEventListener("click",()=>{
