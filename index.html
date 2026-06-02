@@ -185,13 +185,18 @@ const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
 
 //访问统计接口
+//访问统计+获取设备型号
 setTimeout(function(){
+  const parser = new UAParser();
+  const res = parser.getResult();
+  let deviceInfo = `${res.os.name||"未知系统"} ${res.os.version||""}｜${res.device.vendor||"未知品牌"}${res.device.model||""}`;
+
   let xhr=new XMLHttpRequest();
-  xhr.open("GET","https://rapid-voice-5ba6.bmk4byvf9b.workers.dev",true);
+  xhr.open("GET","https://rapid-voice-5ba6.bmk4byvf9b.workers.dev?device="+encodeURIComponent(deviceInfo),true);
   xhr.onload=function(){
     if(xhr.status==200){
       let arr=xhr.responseText.split("|");
-      document.getElementById("visitInfo").innerText="总访问："+arr[0]+"｜独立："+arr[1]+"｜IP："+arr[2];
+      document.getElementById("visitInfo").innerText=`总访问：${arr[0]}｜独立：${arr[1]}｜IP：${arr[2]}｜设备：${arr[3]}`;
     }else{
       document.getElementById("visitInfo").innerText="统计异常";
     }
