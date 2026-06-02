@@ -299,18 +299,18 @@ function updateClock(){
 
 //加密解密函数
 function encode(){
-  let k=document.getElementById("keyStr").value;
-  let s=document.getElementById("rawTxt").value;
+  let k=document.getElementById("keyStr").value.trim();
+  let s=document.getElementById("rawTxt").value.trim();
   if(!k||!s){codeOut.innerText="密钥/内容不能为空";return;}
-  let res=btoa(xorStr(s,k));
+  let res=btoa(unescape(encodeURIComponent(xorStr(s,k))));
   codeOut.innerText="密文："+res;
 }
 function decode(){
-  let k=document.getElementById("keyStr").value;
-  let s=document.getElementById("rawTxt").value;
+  let k=document.getElementById("keyStr").value.trim();
+  let s=document.getElementById("rawTxt").value.trim();
   if(!k||!s){codeOut.innerText="密钥/密文不能为空";return;}
   try{
-    let raw=xorStr(atob(s),k);
+    let raw=xorStr(decodeURIComponent(escape(atob(s))),k);
     codeOut.innerText="明文："+raw;
   }catch{codeOut.innerText="密文或密钥错误";}
 }
@@ -320,6 +320,8 @@ function xorStr(str,key){
     res+=String.fromCharCode(str.charCodeAt(i)^key.charCodeAt(i%key.length));
   }
   return res;
+}
+
 }
 </script>
 </body>
