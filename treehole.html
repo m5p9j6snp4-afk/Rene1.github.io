@@ -80,14 +80,26 @@
             padding:18px;
             margin-bottom:14px;
         }
+        .item-head{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:8px;
+        }
         .item-time{
             font-size:12px;
             color:var(--text-gray);
-            margin-bottom:8px;
+        }
+        .del-btn{
+            font-size:12px;
+            color:var(--warn);
+            border:1px solid rgba(255,119,119,0.25);
+            padding:2px 7px;
+            border-radius:7px;
+            cursor:pointer;
         }
         .item-text{color:var(--text);line-height:1.6;font-size:14px;}
     </style>
-    <!-- 未登录跳转主页 -->
     <script>
         if(localStorage.getItem("siteLogin") !== "ok") location.href="index.html";
     </script>
@@ -110,42 +122,52 @@
     </div>
 
     <script>
-        //读取树洞数据
         function getList(){
-            let raw = localStorage.getItem("treeData");
-            return raw ? JSON.parse(raw) : [];
+            let d = localStorage.getItem("treeData");
+            return d ? JSON.parse(d) : [];
         }
-        //渲染列表
+
         function render(){
             let arr = getList();
             let box = document.getElementById("listBox");
             box.innerHTML = "";
-            arr.reverse().forEach(item=>{
-                let html = `
+            arr.reverse().forEach((v,i)=>{
+                let originIdx = arr.length - 1 - i;
+                box.innerHTML += `
                 <div class="hole-item">
-                    <div class="item-time">${item.time}</div>
-                    <div class="item-text">${item.content}</div>
+                    <div class="item-head">
+                        <span class="item-time">${v.time}</span>
+                        <span class="del-btn" onclick="removeOne(${originIdx})">删除</span>
+                    </div>
+                    <div class="item-text">${v.content}</div>
                 </div>`;
-                box.innerHTML += html;
             })
         }
-        //新增留言
+
+        function removeOne(idx){
+            let arr = getList();
+            if(!confirm("确定删除这条？"))return;
+            arr.splice(idx,1);
+            localStorage.setItem("treeData",JSON.stringify(arr));
+            render();
+        }
+
         function saveMsg(){
             let val = document.getElementById("inputTxt").value.trim();
-            if(!val) return alert("内容不能为空");
+            if(!val){alert("不能空白");return;}
             let arr = getList();
-            let now = new Date().toLocaleString();
-            arr.push({time:now,content:val});
+            arr.push({time:new Date().toLocaleString(),content:val});
             localStorage.setItem("treeData",JSON.stringify(arr));
             document.getElementById("inputTxt").value = "";
             render();
         }
-        //全部清空
+
         function clearAll(){
-            if(!confirm("确定清空所有树洞内容？无法恢复！"))return;
+            if(!confirm("全部清空不可恢复！"))return;
             localStorage.removeItem("treeData");
             render();
         }
+
         window.onload = render;
     </script>
 </body>
