@@ -131,6 +131,21 @@
             background:rgba(80,150,255,.07);border-color:var(--main-blue);
         }
         .btn-vip {color:var(--main-blue);}
+
+        /*英文格言卡片*/
+        .quote-card{
+            background:var(--card-bg);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+            text-align:center;
+        }
+        .quote-tit{
+            font-size:13px;color:var(--text-gray);margin-bottom:8px;
+        }
+        .quote-text{
+            font-size:15px;color:var(--main-blue);font-style:italic;
+        }
     </style>
 </head>
 <body>
@@ -193,6 +208,12 @@
             <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
             <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
         </div>
+
+        <!--底部英文座右铭卡片-->
+        <div class="quote-card">
+            <div class="quote-tit">Daily English Motto</div>
+            <div class="quote-text" id="enQuote"></div>
+        </div>
     </div>
 
     <script>
@@ -213,6 +234,18 @@
             "今日适宜，温柔且坚定"
         ];
 
+        //英文格言库
+        const quoteArr = [
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Stay humble, stay hungry, keep moving forward.",
+            "Small steps every day lead to big changes.",
+            "Everything you’ve ever wanted is on the other side of fear.",
+            "Grow through what you go through.",
+            "Focus on progress not perfection.",
+            "Be the reason someone smiles today.",
+            "Hard work beats talent when talent doesn't work hard."
+        ];
+
         window.onload = function(){
             updateTimer();
             setInterval(updateTimer,1000);
@@ -220,6 +253,9 @@
             getTodayLuck();
             updateClock();
             setInterval(updateClock,1000);
+            //随机一句英文
+            let ranQ = Math.floor(Math.random()*quoteArr.length);
+            document.getElementById("enQuote").innerText = quoteArr[ranQ];
         }
 
         //网站存活天数
