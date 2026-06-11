@@ -66,6 +66,16 @@
             color: #666;
             flex-shrink: 0;
         }
+
+        /* ========== 新增：定位标签样式 ========== */
+        .location {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
     </style>
 </head>
 <body>
@@ -77,6 +87,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年6月11日 12:01</div>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">这是今天最寂寞的时候🎵</div>
                     <!-- 音乐卡片 - 卢广仲《最寂寞的时候》 -->
                     <a href="https://163cn.tv/8MSFQNn" target="_blank" class="music-card">
@@ -102,6 +114,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月31日 02:10</div>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">折腾许久，两套AI助手终于搞定🎉 智囊&治愈双模式，一个犀利高冷，一个温柔陪伴。</div>
                     <img src="ai.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -118,6 +132,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月29日 12:10</div>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">有点无聊 给自己做个摸鱼小游戏</div>
                     <img src="office04.JPG.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -127,12 +143,15 @@
                 </div>
             </div>
         </div>
-        <!-- 第二条动态 -->
-        <div class="circle-header">
+        <!-- 第二条动态（修复缺失 friend-circle-item 标签） -->
+        <div class="friend-circle-item">
+            <div class="circle-header">
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月29日 10:20</div>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">早上好</div>
                     <img src="office03.JPG.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -150,6 +169,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月28日 21:05</div>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">晚上好</div>
                     <img src="图片" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
