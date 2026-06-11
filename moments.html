@@ -21,7 +21,7 @@
         .back-home-link { display: block; margin: 10px 0; font-size: 13px; color: #576b95; text-decoration: none; }
         .comment-widget { padding-top: 5px; }
 
-        /* 音乐卡片 */
+        /* ========== 新增：朋友圈音乐卡片样式（和整体风格统一） ========== */
         .music-card {
             display: flex;
             align-items: center;
@@ -67,32 +67,28 @@
             flex-shrink: 0;
         }
 
-        /* 可点击定位：蓝色、可点、hover下划线 */
+        /* ========== 新增：定位标签样式 ========== */
         .location {
             font-size: 12px;
-            color: #007AFF; /* 微信蓝 */
+            color: #666;
             margin-bottom: 8px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 4px;
-            text-decoration: none;
-        }
-        .location:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <!-- 最新一条 - 分享网易云歌曲 -->
+        <!-- 【新增：最新一条 - 分享网易云歌曲】放在最顶部 -->
         <div class="friend-circle-item">
             <div class="circle-header">
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年6月11日 12:01</div>
-                    <!-- 可点击定位：手机打开地图App，电脑打开网页地图 -->
-                    <a href="https://maps.app.goo.gl/QiK2pD4dXpiJrHPt7?g_st=ic" target="_blank" class="location">📍 香港</a>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">这是今天最寂寞的时候🎵</div>
                     <!-- 音乐卡片 - 卢广仲《最寂寞的时候》 -->
                     <a href="https://163cn.tv/8MSFQNn" target="_blank" class="music-card">
@@ -118,7 +114,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月31日 02:10</div>
-                    <a href="https://www.google.com/maps/place/Hong+Kong" target="_blank" class="location">📍 香港</a>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">折腾许久，两套AI助手终于搞定🎉 智囊&治愈双模式，一个犀利高冷，一个温柔陪伴。</div>
                     <img src="ai.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -135,7 +132,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月29日 12:10</div>
-                    <a href="https://www.google.com/maps/place/Hong+Kong" target="_blank" class="location">📍 香港</a>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">有点无聊 给自己做个摸鱼小游戏</div>
                     <img src="office04.JPG.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -145,14 +143,15 @@
                 </div>
             </div>
         </div>
-        <!-- 第二条动态 -->
+        <!-- 第二条动态（修复缺失 friend-circle-item 标签） -->
         <div class="friend-circle-item">
             <div class="circle-header">
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月29日 10:20</div>
-                    <a href="https://www.google.com/maps/place/Hong+Kong" target="_blank" class="location">📍 香港</a>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">早上好</div>
                     <img src="office03.JPG.jpg" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
@@ -170,7 +169,8 @@
                 <div class="main-content">
                     <div class="nickname">Rene</div>
                     <div class="publishing-time">2026年5月28日 21:05</div>
-                    <a href="https://www.google.com/maps/place/Hong+Kong" target="_blank" class="location">📍 香港</a>
+                    <!-- 定位标签 -->
+                    <div class="location">📍 香港</div>
                     <div class="circle-text">晚上好</div>
                     <img src="图片" class="circle-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                     
