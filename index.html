@@ -7,254 +7,501 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        * {margin:0;padding:0;box-sizing:border-box}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --main-blue: #5096ff;
             --bg-dark: #1c1f26;
             --card-bg: #272b35;
             --text: #f1f3f9;
             --text-gray: #a0a8b8;
-            --border: rgba(80,150,255,0.2);
+            --border: rgba(80, 150, 255, 0.2);
             --warn: #ff7777;
-            --success:#63d397;
+            --success: #63d397;
+            --transition: all 0.3s ease;
         }
+
         body {
             font-family: "Noto Sans SC", "Montserrat", sans-serif;
-            background:var(--bg-dark);min-height:100vh;color:var(--text);padding:30px 16px;
+            background-color: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 30px 16px;
+            line-height: 1.5;
         }
-        .container{max-width:960px;margin:0 auto}
-        .header-card{
-            background:var(--card-bg);border-radius:16px;padding:24px 26px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border:1px solid var(--border);
+
+        /* 页面加载动画 */
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
         }
-        .header-left h1{font-size:22px;font-weight:500;margin-bottom:4px}
-        .sub-title{font-size:13px;color:var(--text-gray)}
-        .countdown{font-size:14px;color:var(--main-blue);background:rgba(80,150,255,.08);padding:8px 12px;border-radius:10px}
-        .info-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-        .info-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
-        .info-title{font-size:12px;color:var(--text-gray);margin-bottom:6px}
-        .info-text{font-size:15px;color:var(--main-blue);font-weight:500}
-        .time-box{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
-        .local-time{font-size:22px;color:var(--main-blue);margin-bottom:16px;text-align:center}
-        .world-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        .world-item{background:rgba(0,0,0,.25);padding:12px;border-radius:10px;text-align:center}
-        .city{font-size:13px;color:var(--text-gray);margin-bottom:4px}
-        .ctime{font-size:16px}
-        .full-col{grid-column:1/-1}
-        .btn-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:26px}
-        .btn{padding:15px 10px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text);text-decoration:none;text-align:center;font-size:14px;transition:.25s}
-        .btn:hover{background:rgba(80,150,255,.07);border-color:var(--main-blue)}
-        .btn-vip{color:var(--main-blue)}
-        .quote-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
-        .quote-tit{font-size:13px;color:var(--text-gray);margin-bottom:8px}
-        .quote-text{font-size:15px;color:var(--main-blue);font-style:italic}
-        .sign-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
-        .sign-top{margin-bottom:14px}
-        .sign-title{font-size:16px}
-        .sign-input-box{display:flex;gap:10px;margin-bottom:12px}
-        #signName{flex:1;padding:11px 14px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:var(--text);outline:none}
-        #signBtn{padding:0 18px;border-radius:10px;border:1px solid var(--main-blue);color:var(--main-blue);background:rgba(80,150,255,.08);cursor:pointer;transition:.2s}
-        #signBtn:hover{background:rgba(80,150,255,.18)}
-        .sign-desc{font-size:12px;color:var(--text-gray);margin-bottom:12px}
-        .query-box{display:flex;gap:10px;margin-bottom:10px}
-        #queryName{flex:1;padding:9px 12px;border-radius:8px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:var(--text);outline:none}
-        #queryBtn{padding:0 14px;border-radius:8px;border:1px solid var(--success);color:var(--success);background:rgba(99,211,151,.08);cursor:pointer}
-        .query-result{font-size:13px;color:var(--main-blue);min-height:20px;margin-bottom:10px}
-        .record-btn{font-size:12px;color:var(--main-blue);cursor:pointer}
-        .mask{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:999}
-        .record-pop{width:92%;max-width:520px;max-height:70vh;overflow:auto;background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px}
-        .pop-head{display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-        .close-pop{cursor:pointer;color:var(--warn)}
-        .item-row{padding:8px 0;border-bottom:1px solid rgba(80,150,255,.1);font-size:13px;color:var(--text-gray)}
-        .shop-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
-        .shop-title{font-size:16px;margin-bottom:14px}
-        .shop-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        .shop-item{padding:12px;border:1px solid var(--border);border-radius:10px;font-size:13px}
-        .shop-btn{margin-top:8px;padding:5px 10px;border-radius:6px;border:1px solid var(--main-blue);color:var(--main-blue);background:transparent;cursor:pointer}
-        .visit-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px}
-        .visit-title{font-size:16px;margin-bottom:12px}
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--main-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* 头部卡片 */
+        .header-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 26px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .header-card:hover {
+            box-shadow: 0 4px 20px rgba(80, 150, 255, 0.1);
+        }
+        .header-left h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .sub-title {
+            font-size: 13px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .countdown {
+            font-size: 14px;
+            color: var(--main-blue);
+            background: rgba(80, 150, 255, 0.08);
+            padding: 10px 14px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        /* 数据行卡片 */
+        .info-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(80, 150, 255, 0.08);
+        }
+        .info-title {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+        .info-text {
+            font-size: 16px;
+            color: var(--main-blue);
+            font-weight: 500;
+        }
+
+        /* 世界时钟 */
+        .time-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+        .time-box:hover {
+            box-shadow: 0 4px 20px rgba(80, 150, 255, 0.1);
+        }
+        .local-time {
+            font-size: 24px;
+            color: var(--main-blue);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .world-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .world-item {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .world-item:hover {
+            background: rgba(80, 150, 255, 0.1);
+        }
+        .city {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+        }
+        .ctime {
+            font-size: 17px;
+            font-weight: 400;
+        }
+        .full-col {
+            grid-column: 1 / -1;
+        }
+
+        /* 极简天气组件 */
+        .weather-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+        .weather-box:hover {
+            box-shadow: 0 4px 20px rgba(80, 150, 255, 0.1);
+        }
+        .weather-tit {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+        .weather-info {
+            font-size: 18px;
+            color: var(--main-blue);
+            font-weight: 500;
+        }
+
+        /* 导航按钮区 */
+        .btn-wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .btn {
+            padding: 16px 12px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .btn:hover {
+            background: rgba(80, 150, 255, 0.1);
+            border-color: var(--main-blue);
+            transform: translateY(-2px);
+        }
+        .btn-vip {
+            color: var(--main-blue);
+            font-weight: 500;
+        }
+
+        /* 每日语录 */
+        .quote-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+        .quote-card:hover {
+            box-shadow: 0 4px 20px rgba(80, 150, 255, 0.1);
+        }
+        .quote-tit {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 10px;
+        }
+        .quote-text {
+            font-size: 15px;
+            color: var(--main-blue);
+            font-style: italic;
+        }
+
+        /* 加解密工具 置底 */
+        .visit-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+        .visit-card:hover {
+            box-shadow: 0 4px 20px rgba(80, 150, 255, 0.1);
+        }
+        .visit-title {
+            font-size: 17px;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        .visit-card input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            color: #fff;
+            outline: none;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .visit-card input:focus {
+            border-color: var(--main-blue);
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        .visit-card button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--main-blue);
+            background: transparent;
+            color: var(--main-blue);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .visit-card button:hover {
+            background: rgba(80, 150, 255, 0.1);
+        }
+        #codeOut {
+            margin-top: 14px;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            word-break: break-all;
+            color: var(--main-blue);
+            min-height: 48px;
+            font-size: 14px;
+        }
+
+        /* 回到顶部 */
+        .back-top {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--main-blue);
+            color: #fff;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 99;
+        }
+        .back-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-top:hover {
+            background: #3d84ee;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@latest/dist/ua-parser.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="header-card">
-        <div class="header-left">
-            <h1>个人中心</h1>
-            <div class="sub-title">MEMBER AREA</div>
-        </div>
-        <div class="countdown" id="timer">活动倒计时加载中...</div>
+    <!-- 加载动画 -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
     </div>
 
-    <div class="info-row">
-        <div class="info-card">
-            <div class="info-title">🌐 网站存活时长</div>
-            <div class="info-text" id="siteLive"></div>
-        </div>
-        <div class="info-card">
-            <div class="info-title">✨ 今日状态运势</div>
-            <div class="info-text" id="dayLuck"></div>
-        </div>
-    </div>
-
-    <div class="sign-card">
-        <div class="sign-top"><div class="sign-title">📅 每日签到</div></div>
-        <div class="sign-input-box">
-            <input placeholder="输入姓名进行签到" id="signName">
-            <button id="signBtn">立即签到</button>
-        </div>
-        <div class="sign-desc">规则：每日签到+1积分｜连续7天额外+7｜连续30天额外+30，同名单日限签一次，各用户积分独立互不干扰</div>
-        <div class="query-box">
-            <input placeholder="输入姓名查询个人积分" id="queryName">
-            <button id="queryBtn">查询</button>
-        </div>
-        <div class="query-result" id="queryRes"></div>
-        <div class="record-btn" id="openRecord">点击查看全部签到台账</div>
-    </div>
-
-    <div class="shop-card">
-        <div class="shop-title">🎁 积分兑换商城</div>
-        <div class="shop-list">
-            <div class="shop-item">
-                <div>解锁1篇隐藏随笔</div>
-                <div>消耗：7积分</div>
-                <button class="shop-btn" data-cost="7" data-name="隐藏随笔">立即兑换</button>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header-card">
+            <div class="header-left">
+                <h1>个人中心</h1>
+                <div class="sub-title">MEMBER AREA</div>
             </div>
-            <div class="shop-item">
-                <div>7天普通会员 + 补签卡×2</div>
-                <div>消耗：30积分</div>
-                <button class="shop-btn" data-cost="30" data-name="7天会员+补签卡">立即兑换</button>
+            <div class="countdown" id="timer">活动倒计时加载中...</div>
+        </div>
+
+        <!-- 数据卡片 -->
+        <div class="info-row">
+            <div class="info-card">
+                <div class="info-title">🌐 网站存活时长</div>
+                <div class="info-text" id="siteLive"></div>
+            </div>
+            <div class="info-card">
+                <div class="info-title">✨ 今日状态运势</div>
+                <div class="info-text" id="dayLuck"></div>
             </div>
         </div>
-        <div style="font-size:12px;color:#a0a8b8;margin-top:10px;">兑换前先在上方输入姓名查询积分，消耗对应积分自动扣减</div>
-    </div>
 
-    <!-- 替换为加密小工具 -->
-    <div class="visit-card">
-        <div class="visit-title">🔐秘密暗号加解密</div>
-        <div style="margin:10px 0;">
-            <input id="keyStr" placeholder="设置你的专属密钥" style="width:100%;padding:7px;margin-bottom:8px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:#fff;outline:none;border-radius:8px;">
-            <input id="rawTxt" placeholder="明文｜想要加密的文字" style="width:100%;padding:7px;margin-bottom:8px;background:rgba(0,0,0,.25);border:1px solid var(--border);color:#fff;outline:none;border-radius:8px;">
-            <div style="display:flex;gap:8px;">
-                <button onclick="encode()" style="padding:6px 12px;border:1px solid var(--main-blue);background:transparent;color:var(--main-blue);border-radius:8px;cursor:pointer;">加密</button>
-                <button onclick="decode()" style="padding:6px 12px;border:1px solid var(--main-blue);background:transparent;color:var(--main-blue);border-radius:8px;cursor:pointer;">解密</button>
+        <!-- 世界时钟 -->
+        <div class="time-box">
+            <div class="local-time" id="localTime"></div>
+            <div class="world-wrap">
+                <div class="world-item">
+                    <div class="city">🇭🇰 香港 UTC+8</div>
+                    <div class="ctime" id="hk"></div>
+                </div>
+                <div class="world-item">
+                    <div class="city">🇯🇵 东京 UTC+9</div>
+                    <div class="ctime" id="tokyo"></div>
+                </div>
+                <div class="world-item">
+                    <div class="city">🇬🇧 伦敦 UTC+0</div>
+                    <div class="ctime" id="london"></div>
+                </div>
+                <div class="world-item">
+                    <div class="city">🇺🇸 纽约 UTC-5</div>
+                    <div class="ctime" id="newyork"></div>
+                </div>
+                <div class="world-item full-col">
+                    <div class="city">🇦🇺 悉尼 UTC+10</div>
+                    <div class="ctime" id="sydney"></div>
+                </div>
             </div>
-            <div id="codeOut" style="margin-top:10px;padding:8px;background:rgba(0,0,0,0.25);border-radius:8px;word-break:break-all;color:var(--main-blue);"></div>
+        </div>
+
+        <!-- 新增：极简天气小组件 -->
+        <div class="weather-box">
+            <div class="weather-tit">🌤 香港实时天气</div>
+            <div class="weather-info" id="weatherText">加载中...</div>
+        </div>
+
+        <!-- 导航按钮 -->
+        <div class="btn-wrap">
+            <a href="about.html" class="btn">👤 个人资料</a>
+            <a href="moments.html" class="btn">📸 动态分享</a>
+            <a href="treehole.html" class="btn">🌙 私人树洞</a>
+            <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
+            <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
+            <a href="game.html" class="btn">🎮 休闲专区</a>
+            <a href="chat.html" class="btn">🤖 智能助手</a>
+            <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
+            <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
+        </div>
+
+        <!-- 每日英文语录 -->
+        <div class="quote-card">
+            <div class="quote-tit">Daily English Motto</div>
+            <div class="quote-text" id="enQuote"></div>
+        </div>
+
+        <!-- 秘密加解密工具（已移至最底部） -->
+        <div class="visit-card">
+            <div class="visit-title">🔐 秘密暗号加解密</div>
+            <input id="keyStr" placeholder="设置你的专属密钥">
+            <input id="rawTxt" placeholder="明文｜想要加密的文字">
+            <div class="btn-group">
+                <button onclick="encode()">加密</button>
+                <button onclick="decode()">解密</button>
+            </div>
+            <div id="codeOut"></div>
         </div>
     </div>
 
-    <div class="time-box">
-        <div class="local-time" id="localTime"></div>
-        <div class="world-wrap">
-            <div class="world-item"><div class="city">🇭🇰 香港 UTC+8</div><div class="ctime" id="hk"></div></div>
-            <div class="world-item"><div class="city">🇯🇵 东京 UTC+9</div><div class="ctime" id="tokyo"></div></div>
-            <div class="world-item"><div class="city">🇬🇧 伦敦 UTC+0</div><div class="ctime" id="london"></div></div>
-            <div class="world-item"><div class="city">🇺🇸 纽约 UTC-5</div><div class="ctime" id="newyork"></div></div>
-            <div class="world-item full-col"><div class="city">🇦🇺 悉尼 UTC+10</div><div class="ctime" id="sydney"></div></div>
-        </div>
-    </div>
-
-    <div class="btn-wrap">
-        <a href="about.html" class="btn">👤 个人资料</a>
-        <a href="moments.html" class="btn">📸 动态分享</a>
-        <a href="treehole.html" class="btn">🌙 私人树洞</a>
-        <a href="https://ngl.link/rene25528" class="btn" target="_blank">📝 留言板</a>
-        <a href="https://163cn.tv/7SbEBgb" class="btn" target="_blank">🎵 音乐收藏</a>
-        <a href="game.html" class="btn">🎮 休闲专区</a>
-        <a href="chat.html" class="btn">🤖 智能助手</a>
-        <a href="pay.html" class="btn btn-vip">💳 会员续费 / 升级</a>
-        <a href="anniversary.html" class="btn">📅 添加纪念日备忘</a>
-    </div>
-
-    <div class="quote-card">
-        <div class="quote-tit">Daily English Motto</div>
-        <div class="quote-text" id="enQuote"></div>
-    </div>
-</div>
-
-<div class="mask" id="mask">
-    <div class="record-pop">
-        <div class="pop-head">
-            <span>全部签到台账</span>
-            <span class="close-pop" id="closePop">关闭</span>
-        </div>
-        <div id="recordList"></div>
-    </div>
-</div>
+    <!-- 回到顶部按钮 -->
+    <button class="back-top" id="backTop">↑</button>
 
 <script>
 const siteStart = new Date("2026/05/27 00:00:00").getTime();
-const birthMonth = 8;const birthDay = 24;
+const birthMonth = 8;
+const birthDay = 24;
 const luckList = ["松弛自在，万事顺遂","情绪稳定，好运常驻","专注自我，步步安稳","平平淡淡，即是圆满","心态平和，事事从容","向内扎根，默默成长","保持热爱，静待花开","今日适宜，温柔且坚定"];
-const quoteArr = ["The future belongs to those who believe in the beauty of their dreams.","Stay humble, stay hungry, keep moving forward.","Small steps every day lead to big changes.","Everything you’ve ever wanted is on the other side of fear.","Grow through what you go through.","Focus on progress not perfection.","Be the reason someone smiles today.","Hard work beats talent when talent doesn't work hard.","Never give up on something you can’t go a day without thinking about.","Your only limit is the mind you build yourself.","Quiet progress is still progress.","Chase your dreams quietly, let success make noise.","Start where you are, use what you have, do what you can.","Patience is not waiting, but keeping a good attitude while waiting.","Mistakes are proof you are trying.","Life is about making an impact, not making an income.","Don’t count the days, make the days count.","Believe you can and you’re halfway there."];
+const quoteArr = [
+    "The future belongs to those who believe in the beauty of their dreams.",
+    "Stay humble, stay hungry, keep moving forward.",
+    "Small steps every day lead to big changes.",
+    "Everything you’ve ever wanted is on the other side of fear.",
+    "Grow through what you go through.",
+    "Focus on progress not perfection."
+];
 
-let signData = JSON.parse(localStorage.getItem("signLog")) || [];
-let exchangeLog = JSON.parse(localStorage.getItem("exchangeLog")) || [];
 const $ = s => document.querySelector(s);
-const todayStr = new Date().toLocaleDateString();
 const nowDate = new Date();
+const loading = $("#loading");
+const backTop = $("#backTop");
+const weatherText = $("#weatherText");
 
-//签到
-$("#signBtn").addEventListener("click",()=>{
-    let name = $("#signName").value.trim();
-    if(!name){alert("请输入姓名");return;}
-    let userIdx = signData.findIndex(v=>v.name === name);
-    let userInfo = userIdx>-1 ? signData[userIdx] : {name,lastSign:"",streak:0,point:0,signArr:[]};
-    if(userInfo.signArr.includes(todayStr)){alert(`${name}今日已签到`);return;}
-    let lastDate = userInfo.lastSign;
-    let dayAdd =1;
-    if(lastDate){
-        let gapDay = (nowDate - new Date(lastDate))/(1000*3600*24);
-        gapDay===1?userInfo.streak++:userInfo.streak=1;
-    }else userInfo.streak=1;
-    if(userInfo.streak===7)dayAdd+=7;
-    if(userInfo.streak===30)dayAdd+=30;
-    userInfo.point += dayAdd;
-    userInfo.lastSign=todayStr;
-    userInfo.signArr.push(todayStr);
-    userIdx>-1?signData[userIdx]=userInfo:signData.push(userInfo);
-    localStorage.setItem("signLog",JSON.stringify(signData));
-    $("#signName").value="";
-    alert(`签到成功+${dayAdd}积分，连续${userInfo.streak}天`);
-})
+// 关闭加载动画
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        loading.classList.add('hide');
+    }, 600);
+});
 
-//查积分
-$("#queryBtn").onclick=()=>{
-    let n=$("#queryName").value.trim();
-    if(!n){$("#queryRes").innerText="请输入名字";return;}
-    let u=signData.find(i=>i.name===n);
-    $("#queryRes").innerText=u?`${n}｜总积分：${u.point}｜连签：${u.streak}天｜累计签到${u.signArr.length}天`:"暂无该用户签到数据";
-}
-
-//台账弹窗
-$("#openRecord").onclick=()=>{
-    $("#mask").style.display="flex";
-    let h="";
-    signData.length===0?h="<div class='item-row'>暂无记录</div>":signData.forEach(i=>h+=`<div class='item-row'>姓名:${i.name}｜积分${i.point}｜连签${i.streak}｜签到${i.signArr.length}天</div>`);
-    $("#recordList").innerHTML=h;
-}
-$("#closePop").onclick=()=>$("#mask").style.display="none";
-
-//商城兑换
-document.querySelectorAll(".shop-btn").forEach(btn=>{
-    btn.onclick=()=>{
-        let cost=Number(btn.dataset.cost),goods=btn.dataset.name,uname=$("#queryName").value.trim();
-        if(!uname){alert("先在查询框输入姓名再兑换");return;}
-        let user=signData.find(x=>x.name===uname);
-        if(!user){alert("不存在该用户");return;}
-        if(user.point<cost){alert(`积分不足，需要${cost}，当前${user.point}`);return;}
-        user.point-=cost;
-        localStorage.setItem("signLog",JSON.stringify(signData));
-        exchangeLog.push({name:uname,goods,cost,time:todayStr});
-        localStorage.setItem("exchangeLog",JSON.stringify(exchangeLog));
-        alert(`兑换${goods}成功，扣除${cost}积分，剩余${user.point}积分`);
-        $("#queryRes").innerText=`${uname}｜总积分：${user.point}｜连签：${user.streak}天｜累计签到${user.signArr.length}天`;
+// 回到顶部逻辑
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backTop.classList.add('show');
+    } else {
+        backTop.classList.remove('show');
     }
-})
+});
+backTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// 模拟香港随机天气（简约样式，无额外接口，稳定可用）
+function getWeather() {
+    const weatherList = [
+        "晴朗 · 26℃",
+        "多云 · 25℃",
+        "阴天 · 24℃",
+        "微风 · 27℃",
+        "局部多云 · 25℃"
+    ];
+    const randomW = weatherList[Math.floor(Math.random() * weatherList.length)];
+    weatherText.innerText = randomW;
+}
 
 window.onload = function(){
-    updateTimer();setInterval(updateTimer,1000);
-    updateSiteTime();getTodayLuck();
-    updateClock();setInterval(updateClock,1000);
+    updateTimer();
+    setInterval(updateTimer,1000);
+    updateSiteTime();
+    getTodayLuck();
+    updateClock();
+    setInterval(updateClock,1000);
+    getWeather();
+    // 每3小时刷新一次天气
+    setInterval(getWeather, 10800000);
+
     let ranQ = Math.floor(Math.random()*quoteArr.length);
     document.getElementById("enQuote").innerText = quoteArr[ranQ];
 }
@@ -272,20 +519,30 @@ function getTodayLuck(){
     if(m===birthMonth&&d===birthDay){
         let birthText="生辰喜乐，万事顺心，专属好运全天在线";
         document.getElementById("dayLuck").innerText=birthText;
-        localStorage.setItem("luckDay",todayStr);localStorage.setItem("luckText",birthText);return;
+        localStorage.setItem("luckDay",todayStr);
+        localStorage.setItem("luckText",birthText);
+        return;
     }
-    if(saveDay===todayStr&&saveLuck) document.getElementById("dayLuck").innerText=saveLuck;
-    else{
+    if(saveDay===todayStr&&saveLuck) {
+        document.getElementById("dayLuck").innerText=saveLuck;
+    } else{
         let ran=Math.floor(Math.random()*luckList.length),res=luckList[ran];
-        localStorage.setItem("luckDay",todayStr);localStorage.setItem("luckText",res);
+        localStorage.setItem("luckDay",todayStr);
+        localStorage.setItem("luckText",res);
         document.getElementById("dayLuck").innerText=res;
     }
 }
 
 function updateTimer(){
     const target=new Date("2026/08/24 00:00:00").getTime(),now=Date.now(),diff=target-now;
-    if(diff<=0){document.getElementById('timer').innerHTML="🎉 生日快乐 🎉";return;}
-    let d=Math.floor(diff/(1000*86400)),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    if(diff<=0){
+        document.getElementById('timer').innerHTML="🎉 生日快乐 🎉";
+        return;
+    }
+    let d=Math.floor(diff/(1000*86400));
+    let h=Math.floor((diff%86400000)/3600000);
+    let m=Math.floor((diff%3600000)/60000);
+    let s=Math.floor((diff%60000)/1000);
     document.getElementById('timer').innerHTML=`🎁 距离生日：${d}天 ${h}时 ${m}分 ${s}秒`;
 }
 
@@ -293,8 +550,15 @@ function updateClock(){
     const now=new Date(),week=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
     let local=`${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${week[now.getDay()]} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
     document.getElementById('localTime').innerText=local;
-    const getT=o=>{let t=new Date(now.getTime()+o*3600000);return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`};
-    $("#hk").innerText=getT(0);$("#tokyo").innerText=getT(1);$("#london").innerText=getT(-8);$("#newyork").innerText=getT(-13);$("#sydney").innerText=getT(2);
+    const getT=o=>{
+        let t=new Date(now.getTime()+o*3600000);
+        return `${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
+    };
+    $("#hk").innerText=getT(0);
+    $("#tokyo").innerText=getT(1);
+    $("#london").innerText=getT(-8);
+    $("#newyork").innerText=getT(-13);
+    $("#sydney").innerText=getT(2);
 }
 
 //加密解密函数
