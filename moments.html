@@ -20,10 +20,81 @@
         .comment-line { height: 1px; background: #f1f1f1; margin: 10px 0; }
         .back-home-link { display: block; margin: 10px 0; font-size: 13px; color: #576b95; text-decoration: none; }
         .comment-widget { padding-top: 5px; }
+
+        /* ========== 新增：朋友圈音乐卡片样式（和整体风格统一） ========== */
+        .music-card {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 12px;
+            text-decoration: none;
+            color: #333;
+        }
+        .music-cover {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .music-info {
+            flex: 1;
+            margin: 0 12px;
+            overflow: hidden;
+        }
+        .song-name {
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .song-singer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+        }
+        .play-btn {
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            border: 1px solid #999;
+            border-radius: 50%;
+            font-size: 12px;
+            color: #666;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
+        <!-- 【新增：最新一条 - 分享网易云歌曲】放在最顶部 -->
+        <div class="friend-circle-item">
+            <div class="circle-header">
+                <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
+                <div class="main-content">
+                    <div class="nickname">Rene</div>
+                    <div class="publishing-time">刚刚</div>
+                    <div class="circle-text">分享一首喜欢的歌🎵</div>
+                    <!-- 音乐卡片 - 卢广仲《最寂寞的时候》 -->
+                    <a href="https://163cn.tv/8MSFQNn" target="_blank" class="music-card">
+                        <img src="https://p1.music.126.net/4lD9H2XZ7q9QdH2w==/109951167232360464.jpg" class="music-cover">
+                        <div class="music-info">
+                            <div class="song-name">最寂寞的时候</div>
+                            <div class="song-singer">卢广仲</div>
+                        </div>
+                        <div class="play-btn">▶</div>
+                    </a>
+
+                    <a href="index.html" class="back-home-link">返回主頁</a>
+                    <div class="comment-line"></div>
+                    <div class="comment-widget" data-page-id="moment_005"></div> 
+                </div>
+            </div>
+        </div>
+
         <!-- 第四条动态 -->
         <div class="friend-circle-item">
             <div class="circle-header">
@@ -57,8 +128,7 @@
             </div>
         </div>
         <!-- 第二条动态 -->
-        <div class="friend-circle-item">
-            <div class="circle-header">
+        <div class="circle-header">
                 <img src="tx.JPG.JPG" class="avatar" onerror="this.style.display='none'">
                 <div class="main-content">
                     <div class="nickname">Rene</div>
