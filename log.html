@@ -3,105 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我的日记</title>
+<title>日记</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
-  background:#fff;
+  background:#1c1f26;
   font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
-  padding: 48px 28px;
-  max-width: 440px;
-  margin: 0 auto;
-  color: #000;
+  color:#f1f3f9;
+  padding:20px;
+}
+.container{
+  max-width:960px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:20px;
+}
+.back-link{
+  grid-column:1 / -1;
+  margin-bottom:20px;
+}
+.back-link a{
+  color:#a0a8b8;
+  text-decoration:none;
+}
+/* 左侧列表 */
+.sidebar{
+  background:#272b35;
+  border-radius:12px;
+  padding:16px;
+  border:1px solid rgba(80,150,255,0.2);
+}
+.sidebar h3{
+  font-size:16px;
+  margin-bottom:12px;
+  color:#5096ff;
+}
+.diary-list{
+  list-style:none;
+}
+.diary-item{
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:8px;
+  background:rgba(0,0,0,0.25);
+  cursor:pointer;
+  font-size:14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.diary-item:hover{
+  background:rgba(80,150,255,0.1);
+}
+.diary-item.active{
+  border:1px solid #5096ff;
+}
+/* 右侧编辑区 */
+.main{
+  background:#272b35;
+  border-radius:12px;
+  padding:20px;
+  border:1px solid rgba(80,150,255,0.2);
 }
 .date{
-  font-size: 28px;
-  font-weight: 500;
-  margin-bottom: 22px;
-  outline: none;
-  border: none;
-  background: transparent;
-  width: 100%;
+  font-size:22px;
+  font-weight:500;
+  margin-bottom:16px;
+  outline:none;
+  border:none;
+  background:transparent;
+  width:100%;
+  color:#f1f3f9;
 }
 .content{
-  font-size: 19px;
-  line-height: 1.85;
-  min-height: 320px;
-  width: 100%;
-  border: none;
-  background: transparent;
-  outline: none;
-  resize: none;
-  margin-bottom: 20px;
-}
-.bottom-text{
-  font-size: 15px;
-  color: #555;
-}
-.tags{
-  margin-top: 10px;
-  font-size: 15px;
-  color: #333;
+  font-size:16px;
+  line-height:1.8;
+  min-height:300px;
+  width:100%;
+  border:none;
+  background:transparent;
+  outline:none;
+  resize:none;
+  margin-bottom:20px;
+  color:#f1f3f9;
 }
 .btn-group{
-  margin: 20px 0;
-  display: flex;
-  gap: 12px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
 }
 button{
-  padding: 6px 16px;
-  border: 1px solid #ccc;
-  background: #f8f8f8;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
+  padding:8px 16px;
+  border:1px solid #5096ff;
+  background:transparent;
+  color:#5096ff;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
 }
 button:hover{
-  background: #eee;
+  background:rgba(80,150,255,0.1);
+}
+button.del{
+  border-color:#ff7777;
+  color:#ff7777;
+}
+button.del:hover{
+  background:rgba(255,119,119,0.1);
 }
 </style>
 </head>
 <body>
-<!-- 日期（可编辑） -->
-<input class="date" id="diaryDate" placeholder="填写日期 例：2026.06.14">
+<div class="container">
+  <div class="back-link">
+    <a href="index.html">← 返回个人中心</a>
+  </div>
 
-<!-- 日记正文（可编辑多行文本） -->
-<textarea class="content" id="diaryContent" placeholder="在这里写下你的日记..."></textarea>
+  <!-- 左侧：日记列表 -->
+  <div class="sidebar">
+    <h3>我的日记</h3>
+    <ul class="diary-list" id="diaryList"></ul>
+    <button style="width:100%;margin-top:10px" onclick="newDiary()">+ 新建日记</button>
+  </div>
 
-<!-- 操作按钮 -->
-<div class="btn-group">
-  <button onclick="saveDiary()">保存日记</button>
-  <button onclick="clearDiary()">清空内容</button>
+  <!-- 右侧：编辑区 -->
+  <div class="main">
+    <input class="date" id="diaryDate" placeholder="日期 例：2026.06.14">
+    <textarea class="content" id="diaryContent" placeholder="写点什么..."></textarea>
+    <div class="btn-group">
+      <button onclick="saveDiary()">保存</button>
+      <button onclick="clearEditor()">清空</button>
+      <button class="del" onclick="delDiary()">删除本篇</button>
+    </div>
+  </div>
 </div>
 
-<!-- 底部固定文案&标签 -->
-<div class="bottom-text">Created from iCity | 我的日记</div>
-<div class="tags">#自述感受 #iCity</div>
-
 <script>
-// 读取本地存储数据，页面加载自动回填
+let currentId = null; // 当前正在编辑的日记ID
+
+// 页面加载：渲染列表
 window.onload = function(){
-  let date = localStorage.getItem('diaryDate') || '';
-  let content = localStorage.getItem('diaryContent') || '';
-  document.getElementById('diaryDate').value = date;
-  document.getElementById('diaryContent').value = content;
+  renderList();
+  newDiary(); // 默认新建一篇
+};
+
+// 读取所有日记（数组）
+function getDiaries(){
+  let raw = localStorage.getItem("diaries");
+  return raw ? JSON.parse(raw) : [];
 }
 
-// 保存到本地存储
+// 保存所有日记（数组）
+function saveDiaries(arr){
+  localStorage.setItem("diaries", JSON.stringify(arr));
+}
+
+// 渲染左侧列表
+function renderList(){
+  let arr = getDiaries();
+  let ul = document.getElementById("diaryList");
+  ul.innerHTML = "";
+  // 按时间倒序
+  arr.sort((a,b)=>b.id - a.id);
+  arr.forEach(item=>{
+    let li = document.createElement("li");
+    li.className = "diary-item";
+    if(item.id === currentId) li.classList.add("active");
+    li.innerText = item.date || "无标题";
+    li.onclick = ()=> loadDiary(item.id);
+    ul.appendChild(li);
+  });
+}
+
+// 新建日记
+function newDiary(){
+  currentId = null;
+  document.getElementById("diaryDate").value = "";
+  document.getElementById("diaryContent").value = "";
+  renderList();
+}
+
+// 加载某一篇
+function loadDiary(id){
+  let arr = getDiaries();
+  let item = arr.find(x=>x.id===id);
+  if(!item) return;
+  currentId = id;
+  document.getElementById("diaryDate").value = item.date;
+  document.getElementById("diaryContent").value = item.content;
+  renderList();
+}
+
+// 保存（新增/修改）
 function saveDiary(){
-  let d = document.getElementById('diaryDate').value;
-  let c = document.getElementById('diaryContent').value;
-  localStorage.setItem('diaryDate', d);
-  localStorage.setItem('diaryContent', c);
-  alert('日记已保存！');
+  let date = document.getElementById("diaryDate").value.trim();
+  let content = document.getElementById("diaryContent").value.trim();
+  if(!date && !content){
+    alert("内容不能为空");
+    return;
+  }
+  let arr = getDiaries();
+  if(currentId){
+    // 修改
+    let idx = arr.findIndex(x=>x.id===currentId);
+    if(idx!==-1){
+      arr[idx].date = date;
+      arr[idx].content = content;
+      arr[idx].updateTime = Date.now();
+    }
+  }else{
+    // 新增：用时间戳当唯一ID
+    let newItem = {
+      id: Date.now(),
+      date: date,
+      content: content,
+      createTime: Date.now()
+    };
+    arr.unshift(newItem); // 插到最前面
+    currentId = newItem.id;
+  }
+  saveDiaries(arr);
+  renderList();
+  alert("保存成功！");
 }
 
-// 清空内容
-function clearDiary(){
-  document.getElementById('diaryDate').value = '';
-  document.getElementById('diaryContent').value = '';
-  localStorage.removeItem('diaryDate');
-  localStorage.removeItem('diaryContent');
+// 清空编辑器
+function clearEditor(){
+  document.getElementById("diaryDate").value = "";
+  document.getElementById("diaryContent").value = "";
+}
+
+// 删除当前篇
+function delDiary(){
+  if(!currentId){
+    alert("请先选择一篇日记");
+    return;
+  }
+  if(!confirm("确定要删除这篇吗？")) return;
+  let arr = getDiaries().filter(x=>x.id!==currentId);
+  saveDiaries(arr);
+  newDiary();
+  alert("已删除");
 }
 </script>
 </body>
