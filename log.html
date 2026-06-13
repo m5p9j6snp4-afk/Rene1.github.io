@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的日记</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#fff;
+  font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
+  padding: 48px 28px;
+  max-width: 440px;
+  margin: 0 auto;
+  color: #000;
+}
+.date{
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 22px;
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+}
+.content{
+  font-size: 19px;
+  line-height: 1.85;
+  min-height: 320px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: none;
+  margin-bottom: 20px;
+}
+.bottom-text{
+  font-size: 15px;
+  color: #555;
+}
+.tags{
+  margin-top: 10px;
+  font-size: 15px;
+  color: #333;
+}
+.btn-group{
+  margin: 20px 0;
+  display: flex;
+  gap: 12px;
+}
+button{
+  padding: 6px 16px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+button:hover{
+  background: #eee;
+}
+</style>
+</head>
+<body>
+<!-- 日期（可编辑） -->
+<input class="date" id="diaryDate" placeholder="填写日期 例：2026.06.14">
+
+<!-- 日记正文（可编辑多行文本） -->
+<textarea class="content" id="diaryContent" placeholder="在这里写下你的日记..."></textarea>
+
+<!-- 操作按钮 -->
+<div class="btn-group">
+  <button onclick="saveDiary()">保存日记</button>
+  <button onclick="clearDiary()">清空内容</button>
+</div>
+
+<!-- 底部固定文案&标签 -->
+<div class="bottom-text">Created from iCity | 我的日记</div>
+<div class="tags">#自述感受 #iCity</div>
+
+<script>
+// 读取本地存储数据，页面加载自动回填
+window.onload = function(){
+  let date = localStorage.getItem('diaryDate') || '';
+  let content = localStorage.getItem('diaryContent') || '';
+  document.getElementById('diaryDate').value = date;
+  document.getElementById('diaryContent').value = content;
+}
+
+// 保存到本地存储
+function saveDiary(){
+  let d = document.getElementById('diaryDate').value;
+  let c = document.getElementById('diaryContent').value;
+  localStorage.setItem('diaryDate', d);
+  localStorage.setItem('diaryContent', c);
+  alert('日记已保存！');
+}
+
+// 清空内容
+function clearDiary(){
+  document.getElementById('diaryDate').value = '';
+  document.getElementById('diaryContent').value = '';
+  localStorage.removeItem('diaryDate');
+  localStorage.removeItem('diaryContent');
+}
+</script>
+</body>
+</html>
