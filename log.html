@@ -10,29 +10,33 @@ body{
   background:#1c1f26;
   font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
   color:#f1f3f9;
-  padding:20px;
+  padding:16px;
 }
 .container{
   max-width:960px;
   margin:0 auto;
+  /* 默认桌面端：左右布局 */
   display:grid;
-  grid-template-columns:280px 1fr;
-  gap:20px;
+  grid-template-columns:260px 1fr;
+  gap:16px;
 }
 .back-link{
   grid-column:1 / -1;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 .back-link a{
   color:#a0a8b8;
   text-decoration:none;
+  font-size:15px;
 }
-/* 左侧列表 */
+
+/* 左侧列表面板 */
 .sidebar{
   background:#272b35;
   border-radius:12px;
   padding:16px;
   border:1px solid rgba(80,150,255,0.2);
+  height:fit-content;
 }
 .sidebar h3{
   font-size:16px;
@@ -41,6 +45,8 @@ body{
 }
 .diary-list{
   list-style:none;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 .diary-item{
   padding:10px;
@@ -59,7 +65,13 @@ body{
 .diary-item.active{
   border:1px solid #5096ff;
 }
-/* 右侧编辑区 */
+.sidebar button{
+  width:100%;
+  margin-top:10px;
+  padding:8px;
+}
+
+/* 右侧编辑面板 */
 .main{
   background:#272b35;
   border-radius:12px;
@@ -112,6 +124,19 @@ button.del{
 button.del:hover{
   background:rgba(255,119,119,0.1);
 }
+
+/* 手机端适配：单列上下布局 */
+@media (max-width: 768px) {
+  .container{
+    grid-template-columns: 1fr;
+  }
+  .sidebar{
+    margin-bottom:16px;
+  }
+  .diary-list{
+    max-height: 200px;
+  }
+}
 </style>
 </head>
 <body>
@@ -124,7 +149,7 @@ button.del:hover{
   <div class="sidebar">
     <h3>我的日记</h3>
     <ul class="diary-list" id="diaryList"></ul>
-    <button style="width:100%;margin-top:10px" onclick="newDiary()">+ 新建日记</button>
+    <button onclick="newDiary()">+ 新建日记</button>
   </div>
 
   <!-- 右侧：编辑区 -->
@@ -140,31 +165,26 @@ button.del:hover{
 </div>
 
 <script>
-let currentId = null; // 当前正在编辑的日记ID
+let currentId = null;
 
-// 页面加载：渲染列表
 window.onload = function(){
   renderList();
-  newDiary(); // 默认新建一篇
+  newDiary();
 };
 
-// 读取所有日记（数组）
 function getDiaries(){
   let raw = localStorage.getItem("diaries");
   return raw ? JSON.parse(raw) : [];
 }
 
-// 保存所有日记（数组）
 function saveDiaries(arr){
   localStorage.setItem("diaries", JSON.stringify(arr));
 }
 
-// 渲染左侧列表
 function renderList(){
   let arr = getDiaries();
   let ul = document.getElementById("diaryList");
   ul.innerHTML = "";
-  // 按时间倒序
   arr.sort((a,b)=>b.id - a.id);
   arr.forEach(item=>{
     let li = document.createElement("li");
@@ -176,7 +196,6 @@ function renderList(){
   });
 }
 
-// 新建日记
 function newDiary(){
   currentId = null;
   document.getElementById("diaryDate").value = "";
@@ -184,7 +203,6 @@ function newDiary(){
   renderList();
 }
 
-// 加载某一篇
 function loadDiary(id){
   let arr = getDiaries();
   let item = arr.find(x=>x.id===id);
@@ -195,7 +213,6 @@ function loadDiary(id){
   renderList();
 }
 
-// 保存（新增/修改）
 function saveDiary(){
   let date = document.getElementById("diaryDate").value.trim();
   let content = document.getElementById("diaryContent").value.trim();
@@ -205,7 +222,6 @@ function saveDiary(){
   }
   let arr = getDiaries();
   if(currentId){
-    // 修改
     let idx = arr.findIndex(x=>x.id===currentId);
     if(idx!==-1){
       arr[idx].date = date;
@@ -213,14 +229,13 @@ function saveDiary(){
       arr[idx].updateTime = Date.now();
     }
   }else{
-    // 新增：用时间戳当唯一ID
     let newItem = {
       id: Date.now(),
       date: date,
       content: content,
       createTime: Date.now()
     };
-    arr.unshift(newItem); // 插到最前面
+    arr.unshift(newItem);
     currentId = newItem.id;
   }
   saveDiaries(arr);
@@ -228,13 +243,11 @@ function saveDiary(){
   alert("保存成功！");
 }
 
-// 清空编辑器
 function clearEditor(){
   document.getElementById("diaryDate").value = "";
   document.getElementById("diaryContent").value = "";
 }
 
-// 删除当前篇
 function delDiary(){
   if(!currentId){
     alert("请先选择一篇日记");
