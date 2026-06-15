@@ -400,7 +400,7 @@
 
         <!-- 极简天气小组件 -->
         <div class="weather-box">
-            <div class="weather-tit">🌤 香港实时天气</div>
+            <div class="weather-tit" id="weatherTit">🌤 定位中...</div>
             <div class="weather-info" id="weatherText">加载中...</div>
         </div>
 
@@ -459,6 +459,13 @@ const nowDate = new Date();
 const loading = $("#loading");
 const backTop = $("#backTop");
 const weatherText = $("#weatherText");
+const weatherTit = $("#weatherTit");
+
+// 城市经纬度配置
+const cityConfig = {
+    hongkong: { lat: 22.3193, lon: 114.1694, name: "香港" },
+    shenzhen: { lat: 22.5429, lon: 114.0617, name: "深圳" }
+};
 
 // 关闭加载动画
 window.addEventListener('load', () => {
@@ -479,17 +486,70 @@ backTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// 模拟香港随机天气（简约样式，无额外接口，稳定可用）
-function getWeather() {
-    const weatherList = [
-        "晴朗 · 26℃",
-        "多云 · 25℃",
-        "阴天 · 24℃",
-        "微风 · 27℃",
-        "局部多云 · 25℃"
-    ];
-    const randomW = weatherList[Math.floor(Math.random() * weatherList.length)];
-    weatherText.innerText = randomW;
+// 自动定位 + 获取真实天气
+async function getLocalWeather() {
+    try {
+        // 1. IP 定位
+        const ipRes = await fetch("https://ip-api.com/json/?fields=status,regionName,city");
+        const ipData = await ipRes.json();
+
+        let targetCity = cityConfig.hongkong; // 默认香港
+        if (ipData.status === "success") {
+            const city = (ipData.city || "").toLowerCase();
+            const region = (ipData.regionName || "").toLowerCase();
+
+            if (city.includes("shenzhen") || region.includes("guangdong")) {
+                targetCity = cityConfig.shenzhen;
+            } else if (city.includes("hong kong") || region.includes("hong kong")) {
+                targetCity = cityConfig.hongkong;
+            }
+        }
+
+        // 更新标题
+        weatherTit.innerText = `🌤 ${targetCity.name}实时天气`;
+
+        // 2. 请求天气接口
+        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${targetCity.lat}&longitude=${targetCity.lon}&current=temperature_2m,relative_humidity_2m,weather_code&timezone=auto`;
+        const weatherRes = await fetch(weatherUrl);
+        const weatherData = await weatherRes.json();
+
+        const temp = weatherData.current.temperature_2m;
+        const hum = weatherData.current.relative_humidity_2m;
+        const code = weatherData.current.weather_code;
+
+        let weatherDesc = "未知天气";
+        let tip = ""; // 新增提示变量
+
+        if (code === 0) {
+  weatherDesc = "☀️ 晴天";
+  tip = "注意防晒";
+}
+if (code >= 1 && code <= 3) {
+  weatherDesc = "⛅ 多云";
+  tip = "天气舒适";
+}
+if (code >= 45 && code <= 48) {
+  weatherDesc = "🌫️ 有雾";
+  tip = "能见度低，小心慢行";
+}
+if (code >= 51 && code <= 67) {
+  weatherDesc = "🌧️ 降雨";
+  tip = "出门记得带伞";
+}
+if (code >= 80 && code <= 82) {
+  weatherDesc = "⛈️ 阵雨";
+  tip = "短时降雨，备好雨具";
+}
+
+// 最后拼接提示语
+
+        weatherText.innerText = `${weatherDesc} · ${temp}℃ · 湿度 ${hum}%`;
+
+    } catch (err) {
+        weatherTit.innerText = "🌤 天气";
+        weatherText.innerText = "天气获取失败";
+        console.error(err);
+    }
 }
 
 window.onload = function(){
@@ -499,9 +559,10 @@ window.onload = function(){
     getTodayLuck();
     updateClock();
     setInterval(updateClock,1000);
-    getWeather();
-    // 每3小时刷新一次天气
-    setInterval(getWeather, 10800000);
+    // 初始化天气
+    getLocalWeather();
+    // 每10分钟自动刷新天气
+    setInterval(getLocalWeather, 600000);
 
     let ranQ = Math.floor(Math.random()*quoteArr.length);
     document.getElementById("enQuote").innerText = quoteArr[ranQ];
