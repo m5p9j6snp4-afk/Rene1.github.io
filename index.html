@@ -486,70 +486,62 @@ backTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// 自动定位 + 获取真实天气
 async function getLocalWeather() {
-    try {
-        // 1. IP 定位
-        const ipRes = await fetch("https://ip-api.com/json/?fields=status,regionName,city");
-        const ipData = await ipRes.json();
+  try {
+    // 1. IP静默定位（无需授权）→ 拿到城市名
+    const ipRes = await fetch("https://ip-api.com/json/?fields=status,country,city,lat,lon");
+    const ipData = await ipRes.json();
 
-        let targetCity = cityConfig.hongkong; // 默认香港
-        if (ipData.status === "success") {
-            const city = (ipData.city || "").toLowerCase();
-            const region = (ipData.regionName || "").toLowerCase();
+    let cityName = "北京"; // 兜底
+    let lat, lon;
 
-            if (city.includes("shenzhen") || region.includes("guangdong")) {
-                targetCity = cityConfig.shenzhen;
-            } else if (city.includes("hong kong") || region.includes("hong kong")) {
-                targetCity = cityConfig.hongkong;
-            }
-        }
-
-        // 更新标题
-        weatherTit.innerText = `🌤 ${targetCity.name}实时天气`;
-
-        // 2. 请求天气接口
-        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${targetCity.lat}&longitude=${targetCity.lon}&current=temperature_2m,relative_humidity_2m,weather_code&timezone=auto`;
-        const weatherRes = await fetch(weatherUrl);
-        const weatherData = await weatherRes.json();
-
-        const temp = weatherData.current.temperature_2m;
-        const hum = weatherData.current.relative_humidity_2m;
-        const code = weatherData.current.weather_code;
-
-        let weatherDesc = "未知天气";
-        let tip = ""; // 新增提示变量
-
-        if (code === 0) {
-  weatherDesc = "☀️ 晴天";
-  tip = "注意防晒";
-}
-if (code >= 1 && code <= 3) {
-  weatherDesc = "⛅ 多云";
-  tip = "天气舒适";
-}
-if (code >= 45 && code <= 48) {
-  weatherDesc = "🌫️ 有雾";
-  tip = "能见度低，小心慢行";
-}
-if (code >= 51 && code <= 67) {
-  weatherDesc = "🌧️ 降雨";
-  tip = "出门记得带伞";
-}
-if (code >= 80 && code <= 82) {
-  weatherDesc = "⛈️ 阵雨";
-  tip = "短时降雨，备好雨具";
-}
-
-// 最后拼接提示语
-
-        weatherText.innerText = `${weatherDesc} · ${temp}℃ · 湿度 ${hum}%`;
-
-    } catch (err) {
-        weatherTit.innerText = "🌤 天气";
-        weatherText.innerText = "天气获取失败";
-        console.error(err);
+    if (ipData.status === "success") {
+      cityName = ipData.city || ipData.country;
+      lat = ipData.lat;
+      lon = ipData.lon;
     }
+
+    weatherTit.innerText = `🌤 ${cityName}实时天气`;
+
+    // 2. 拿天气（直接用IP返回的经纬度，全球任意城市）
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code&timezone=auto`;
+    const weatherRes = await fetch(weatherUrl);
+    const weatherData = await weatherRes.json();
+
+    const temp = weatherData.current.temperature_2m;
+    const hum = weatherData.current.relative_humidity_2m;
+    const code = weatherData.current.weather_code;
+
+    // 天气描述 + 出行提示
+    let weatherDesc = "未知天气";
+    let tip = "";
+    if (code === 0) {
+      weatherDesc = "☀️ 晴天";
+      tip = "注意防晒";
+    } else if (code >= 1 && code <= 3) {
+      weatherDesc = "⛅ 多云";
+      tip = "天气舒适";
+    } else if (code >= 45 && code <= 48) {
+      weatherDesc = "🌫️ 有雾";
+      tip = "能见度低，减速慢行";
+    } else if (code >= 51 && code <= 67) {
+      weatherDesc = "🌧️ 降雨";
+      tip = "出门记得带伞";
+    } else if (code >= 80 && code <= 82) {
+      weatherDesc = "⛈️ 阵雨";
+      tip = "注意防雷防雨";
+    } else {
+      weatherDesc = "🌤️ 多变天气";
+      tip = "出门看天";
+    }
+
+    weatherText.innerText = `${weatherDesc} · ${temp}℃ · 湿度 ${hum}% · ${tip}`;
+
+  } catch (err) {
+    weatherTit.innerText = "🌤 天气";
+    weatherText.innerText = "天气获取失败";
+    console.error(err);
+  }
 }
 
 window.onload = function(){
