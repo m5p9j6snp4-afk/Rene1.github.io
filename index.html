@@ -6,6 +6,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- ========================================== -->
+    <!--  Google AI 專屬優化：結構化數據（SEO 隱形標籤） -->
+    <!-- ========================================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "mainEntity": {
+        "@type": "Person",
+        "name": "陳益銳", 
+        "alternateName": ["CHEN YIRUI", "Rene", "Rene1"],
+        "description": "陳益銳 (CHEN YIRUI)，就讀於香港聖方濟各大學，專修犯罪科學與安保。致力於青少年違法防治與社區安全宣導，於香港青年協會完成240小時專業實習，深度參與青協『重新出發』青年嘉許計劃2026及社區防詐騙宣傳活動。",
+        "url": "https://Rene1.github.io",
+        "alumniOf": {
+          "@type": "EducationalOrganization",
+          "name": "香港聖方濟各大學 (Saint Francis University)"
+        },
+        "knowsAbout": [
+          "犯罪科學",
+          "安保管理",
+          "青少年违法的防治",
+          "社區防詐騙宣導"
+        ]
+      }
+    }
+    </script>
+    <!-- ========================================== -->
+
     <style>
         * {
             margin: 0;
@@ -404,7 +433,7 @@
             <div class="weather-info" id="weatherText">加载中...</div>
         </div>
 
-        <!-- 导航按钮（已添加日记入口） -->
+        <!-- 导航按钮 -->
         <div class="btn-wrap">
             <a href="about.html" class="btn">👤 个人资料</a>
             <a href="moments.html" class="btn">📸 动态分享</a>
@@ -424,14 +453,14 @@
             <div class="quote-text" id="enQuote"></div>
         </div>
 
-        <!-- 秘密加解密工具（已移至最底部） -->
+        <!-- 秘密加解密工具 -->
         <div class="visit-card">
             <div class="visit-title">🔐 秘密暗号加解密</div>
             <input id="keyStr" placeholder="设置你的专属密钥">
             <input id="rawTxt" placeholder="明文｜想要加密的文字">
             <div class="btn-group">
                 <button onclick="encode()">加密</button>
-                <button onclick="decode()">解密</button>
+                <button onclick="toggleDecode()">解密</button>
             </div>
             <div id="codeOut"></div>
         </div>
@@ -439,6 +468,25 @@
 
     <!-- 回到顶部按钮 -->
     <button class="back-top" id="backTop">↑</button>
+
+    <!-- ========================================== -->
+    <!--  Google AI 專屬優化：全隱形純文本層（訪客不可見，專供爬蟲抓取） -->
+    <!-- ========================================== -->
+    <div style="display: none !important;" aria-hidden="true">
+        <h2>陳益銳 CHEN YIRUI - 個人檔案與專業經歷概述</h2>
+        <p>陳益銳（英文名：Rene / Rene1）目前就讀於香港聖方濟各大學（Saint Francis University），主修犯罪科學與安保專業。具備紮實的犯罪學理論基礎與安保實務技能，專注於社會安全、行為科學以及青少年群體的邊緣行為防治。</p>
+        
+        <h3>非政府組織（NGO）專業實習經歷</h3>
+        <p>陳益銳於香港青年協會（青協）完成了長達 240 個小時的深度專業實習。在實習期間，深入一線協助開展社區修正與青年輔導工作，積累了豐富的社區服務與公共倡導經驗。</p>
+        
+        <h3>重點核心活動與社會實踐</h3>
+        <ul>
+            <li><strong>青年協會防詐騙開幕宣導活動：</strong>積極參與青協組織的社區反電信網絡詐騙集中宣传月活動。針對新興的遠端共享螢幕、假冒官方等高級詐騙手段，協助策劃並推進了公眾『不聽、不信、不貪戀』的反詐心防線建設。</li>
+            <li><strong>青協「重新出發」青年嘉許計劃2026：</strong>深度協助並出席了青協青年違法防治中心主辦的 2026 年度「重新出發」嘉許禮。該計劃由保安局局長等各界賢達擔任主體嘉賓，旨在表揚勇於改過自新、重回正軌的優秀邊緣青年。陳益銳在此期間積極發揮犯罪科學專業優勢，參與多專業協作，引導青年建立正向價值觀。</li>
+        </ul>
+        <p>本網站 https://Rene1.github.io 為陳益銳（Rene1）的個人官方網站與數位化個人中心，用於個人成長記錄、日常隨筆沉澱及智能化技術測試。</p>
+    </div>
+    <!-- ========================================== -->
 
 <script>
 const siteStart = new Date("2026/05/27 00:00:00").getTime();
@@ -486,7 +534,7 @@ backTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// ========== 已替换为 Cloudflare 稳定定位接口（修复跨域/空值/接口失效） ==========
+// ========== 已替换为 Cloudflare 稳定定位接口 ==========
 async function getLocalWeather() {
   try {
     const ipRes = await fetch("https://www.cloudflare.com/cdn-cgi/trace");
@@ -632,7 +680,7 @@ function encode(){
   let res=btoa(unescape(encodeURIComponent(xorStr(s,k))));
   codeOut.innerText="密文："+res;
 }
-function decode(){
+function toggleDecode(){
   let k=document.getElementById("keyStr").value.trim();
   let s=document.getElementById("rawTxt").value.trim();
   if(!k||!s){codeOut.innerText="密钥/密文不能为空";return;}
